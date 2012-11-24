@@ -21,11 +21,18 @@ body {
 
 }
 
+.pagetitle {
+	position: absolute;
+	top: 5px;
+	color: white;
+}
+
 /**
 HEADER
 **/
 
 #top-header {
+	z-index: 5;
 	background-color: #1b1b1b;
 	border-bottom: 3px solid #252525;
 	height: 55px;
@@ -62,8 +69,9 @@ SIDEBAR
 	border-left: 1px solid #e5e5e5;
 	border-right: 1px solid #e5e5e5;
 	position:absolute; 
-	height: 80%;
+	top: 0;
 	width: 220px;
+	bottom: 0;
 }
 
 #sidebar li a {
@@ -82,6 +90,11 @@ SIDEBAR
 REGISER
 **/
 
+.register {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
 .register .control-label {
 	float: left;
 	width: 100px;
@@ -96,7 +109,7 @@ MAIN IRC
 **/
 
 #main-irc {
-	margin-right: 250px; 
+	margin-right: 203px; 
 	height: 80%;
 }
 
@@ -105,7 +118,8 @@ MAIN IRC
 	right: 0;
 	width: 200px;
 	border-left: 1px solid #e5e5e5;
-	height: 80%;
+	top: 60px;
+	bottom: -20px;
 }
 
 .list i {
@@ -116,8 +130,24 @@ MAIN IRC
 	padding-left: 75px;
 }
 
+.tab-content .active {
+	
+}
+
 .bufferchan {
- width: 100%;
+	position: absolute;
+	left: 273px;
+	right: 201px;
+	bottom: 40px;
+	top: 60px;
+ 	overflow:auto;
+}
+
+.bufferchan table {
+}
+
+.bufferchan tr {
+	padding: 2px;
 }
 
 .bufferchan .pseudo {
@@ -130,15 +160,18 @@ MAIN IRC
 }
 
 .bufferchan .time {
-	float: right;
+	text-align: center;
+	
 }
 
 .send-message {
-	width: 80%;
 	position: absolute;
 	bottom: 0;
+	left: 280px;
+	right: 200px;
 }
 
 .send-message input {
-	width: 70%;
+	width: 92%;
 }
+
