@@ -2,7 +2,7 @@ package main
 
 import (
 	//"code.google.com/p/go-mysql-driver/mysql"
-	"database/sql"
+	//"database/sql"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -34,18 +34,10 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	db, err := sql.Open("mysql", "goirc:rRfCKB6eMnDXNVZw@tcp(vayan.fr:5555)/goirc?charset=utf8")
-	if err {
-		fmt.Print("error")
-	}
-	tx, _ := db.Begin()
-
-	row, _ := tx.Query("SELECT * FROM preference")
-
-	fmt.Print(row)
-
 	fmt.Print("Start goric web server\n")
 	http.Handle("/css/", http.StripPrefix("/css/", http.FileServer(http.Dir("css"))))
+	http.Handle("/img/", http.StripPrefix("/img/", http.FileServer(http.Dir("img"))))
+	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("js"))))
 	http.HandleFunc("/", IndexHandler)
 	http.ListenAndServe(":1111", nil)
 }
