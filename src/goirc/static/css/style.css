@@ -1,0 +1,177 @@
+/***********************
+Default style by yann
+v 0.2
+***********************/
+
+/**
+GLOBAL
+**/
+
+body {
+	font-family: 'Mako', sans-serif;
+}
+
+#wrap {
+	margin: 0 auto 0 50px;
+}
+
+#content {
+	padding-top: 2px;
+	margin-left: 225px; 
+
+}
+
+.pagetitle {
+	position: absolute;
+	top: 5px;
+	color: white;
+}
+
+/**
+HEADER
+**/
+
+#top-header {
+	z-index: 5;
+	background-color: #1b1b1b;
+	border-bottom: 3px solid #252525;
+	height: 55px;
+	box-shadow: 0 4px 2px -2px gray;
+}
+
+
+/**
+LOGO
+**/
+
+#logo {
+border-left: 1px solid #e5e5e5;
+border-right: 1px solid #e5e5e5;
+text-align: center;
+padding-top: 20px;
+color: black;
+font-family: 'Oswald', sans-serif;
+font-size: 4.5em;
+position: absolute;
+top: 0;
+background-color: white;
+width: 220px;
+height: 50px;
+}
+
+
+/**
+SIDEBAR
+**/
+
+#sidebar {
+	padding-top: 75px;
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+	position:absolute; 
+	top: 0;
+	width: 220px;
+	bottom: 0;
+}
+
+#sidebar li a {
+ padding: 8px 14px;
+}
+
+#sidebar .active {
+
+}
+
+#sidebar .icon-chevron-right {
+	float: right;
+}
+
+/**
+REGISER
+**/
+
+.register {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.register .control-label {
+	float: left;
+	width: 100px;
+}
+
+.register .controls {
+	margin-left: 100px;
+}
+
+/**
+MAIN IRC
+**/
+
+#main-irc {
+	margin-right: 203px; 
+	height: 80%;
+}
+
+.list {
+	position: absolute;
+	right: 0;
+	width: 200px;
+	border-left: 1px solid #e5e5e5;
+	top: 60px;
+	bottom: -20px;
+}
+
+.list i {
+	float: left;
+}
+
+.list a {
+	padding-left: 75px;
+}
+
+.tab-content .active {
+	
+}
+
+.bufferchan {
+	position: absolute;
+	left: 273px;
+	right: 201px;
+	bottom: 40px;
+	top: 60px;
+ 	overflow:auto;
+}
+
+.bufferchan table {
+}
+
+.bufferchan tr {
+	padding: 2px;
+}
+
+.bufferchan .pseudo {
+	
+}
+
+
+.bufferchan .message {
+	
+}
+
+.bufferchan .time {
+	text-align: center;
+	
+}
+
+.send-message {
+	position: absolute;
+	bottom: 0;
+	left: 280px;
+	right: 200px;
+}
+
+.send-message input {
+	width: 92%;
+}
+
