@@ -15,7 +15,7 @@ ws.onopen = function() {
 };
 
 ws.onmessage = function(e) {
-  console.log("receive :" + e.data);
+  console.log("receive : " + e.data);
 
 };
 
