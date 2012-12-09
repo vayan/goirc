@@ -14,7 +14,7 @@ const (
 	DB_NAME = "goirc"
 	DB_USER = "goirc"
 	DB_PASS = "rRfCKB6eMnDXNVZw"
-	DB_SERV = "88.191.131.171"
+	DB_SERV = "69.85.88.161"
 )
 
 type Page struct {
@@ -34,7 +34,7 @@ func loadPage() *Page {
 }
 
 func RenderHtml(w http.ResponseWriter, tmpl string, p *Page) {
-	root_web := os.Getenv("GOPATH") + "/www/"
+	root_web := os.Getenv("GOIRC") + "/www/"
 	t, _ := template.ParseFiles(root_web + tmpl + ".html")
 	t.Execute(w, p)
 }
@@ -45,9 +45,9 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	root_web := os.Getenv("GOPATH") + "/www/"
+	root_web := os.Getenv("GOIRC") + "/www/"
 	if root_web == "" {
-		log.Fatal("Set Root goric GOPATH plz")
+		log.Fatal("Set Root goric GOIRC plz")
 	}
 
 	fmt.Print("========Start connexion DB========\n\n")
