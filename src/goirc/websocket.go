@@ -52,7 +52,7 @@ func parsemsg(id_user int, msg string) {
 }
 
 func WsHandle(ws *websocket.Conn) {
-	fmt.Printf("\nNouveau client %s\n", ws.Request().RemoteAddr)
+	log.Printf("Nouveau client %s\n", ws.Request().RemoteAddr)
 	us := &User{"goricvayan", make(map[string]*irc.Connection), ws}
 	all_users[1] = us
 	for {

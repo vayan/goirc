@@ -3,20 +3,11 @@ package main
 import (
 	_ "code.google.com/p/go-mysql-driver/mysql"
 	"code.google.com/p/go.net/websocket"
-	"fmt"
 	"github.com/gorilla/mux"
 	"html/template"
+	"log"
 	"net/http"
 )
-
-const (
-	root_web = "templates/"
-)
-
-type Page struct {
-	Title string
-	Data  map[string]string
-}
 
 func loadPage() *Page {
 	title := "test"
@@ -43,19 +34,39 @@ func IrcHandler(w http.ResponseWriter, r *http.Request) {
 	RenderHtml(w, "ajx/irc", p)
 }
 
+func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	use := new(RegisteringUser)
+	decoder.Decode(use, r.Form)
+
+	http.Redirect(w, r, "/", http.StatusFound)
+}
+
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	p := &Page{Title: "Home", Data: get_preference()}
+	p := &Page{
+		Title: "Home",
+		Data:  map[string]string{"name": Pref.name, "descr": Pref.descr, "short_descr": Pref.short_descr, "long_descr": Pref.long_descr, "base_url": Pref.base_url}}
 	RenderHtml(w, "ajx/home", p)
 }
 
 func start_http_server() {
-	fmt.Print("\n\n========Start goric web server========\n")
+	log.Println("========Start goric web server========")
 	r := mux.NewRouter()
 	r.HandleFunc("/", IndexHandler)
+
+	//ajx html
 	r.HandleFunc("/ajx/home", HomeHandler)
 	r.HandleFunc("/ajx/register", RegisterHandler)
 	r.HandleFunc("/ajx/irc", IrcHandler)
+
+	//action form
+	r.HandleFunc("/register", ActionRegisterHandler)
+
+	//wesocket
 	r.Handle("/ws", websocket.Handler(WsHandle))
+
+	//all js/img/stuff
 	r.PathPrefix("/static/").Handler(http.FileServer(http.Dir(".")))
+
 	http.ListenAndServe(":1111", r)
 }

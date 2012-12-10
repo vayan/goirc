@@ -6,23 +6,6 @@ import (
 	"log"
 )
 
-var db *sql.DB
-
-const (
-	DB_NAME = "goirc"
-	DB_USER = "goirc"
-	DB_PASS = "rRfCKB6eMnDXNVZw"
-	DB_SERV = "69.85.88.161"
-)
-
-type Preference struct {
-	name        string
-	descr       string
-	short_descr string
-	long_descr  string
-	base_url    string
-}
-
 func HandleErrorSql(er error) bool {
 	if er != nil {
 		log.Println(er)
@@ -38,7 +21,12 @@ func connect_sql() {
 	HandleErrorSql(err)
 }
 
-func get_preference() map[string]string {
+func insert_new_user(user RegisteringUser) {
+	//ar, err := db.Query("SELECT * FROM user WHERE pseudo='" + user.InputPseudo + "' OR email='" + user.InputMail + "' ")
+	//HandleErrorSql(err)
+}
+
+func get_preference() {
 	var name string
 	var descr string
 	var short_descr string
@@ -49,14 +37,5 @@ func get_preference() map[string]string {
 	HandleErrorSql(err)
 	ar.Next()
 	err = ar.Scan(&name, &descr, &short_descr, &long_descr, &base_url)
-
-	var pref = map[string]string{
-		"name":        name,
-		"descr":       descr,
-		"short_descr": short_descr,
-		"long_descr":  long_descr,
-		"base_url":    base_url,
-	}
-
-	return pref
+	Pref = Preference{name: name, descr: descr, short_descr: short_descr, long_descr: long_descr, base_url: base_url}
 }
