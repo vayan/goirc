@@ -1,7 +1,7 @@
 //piou piou
 
 function actionmenu(page) {
-		$('#content').load('ajx/'+page);
+	$('#content').load('ajx/'+page);
 }
 
 

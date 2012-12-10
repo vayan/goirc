@@ -5,17 +5,8 @@ import (
 	"fmt"
 	"github.com/thoj/go-ircevent"
 	"log"
-	"math/rand"
-	"strconv"
+	"strings"
 )
-
-var client = make(map[Connection]int)
-
-type Connection struct {
-	ws       *websocket.Conn
-	clientip string
-	irc      *irc.Connection
-}
 
 func ws_send(buf string, ws *websocket.Conn) {
 	if err := websocket.Message.Send(ws, buf); err != nil {
@@ -30,9 +21,9 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 
 	if err := websocket.Message.Receive(ws, &buf); err != nil {
 		erri = 1
-		for pl, _ := range client {
-			if pl.ws == ws {
-				delete(client, pl)
+		for pl, _ := range all_users {
+			if all_users[pl].ws == ws {
+				all_users[pl].ws = nil
 				break
 			}
 		}
@@ -42,18 +33,33 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 	return buf, erri
 }
 
+func parsemsg(id_user int, msg string) {
+	// if user connect 
+	buff := strings.Split(msg, " ")
+	switch buff[0] {
+	case "/connect":
+		go connect_server(buff[1], id_user)
+		return
+	case "/join":
+		go join_channel(id_user, "irc.epitech.net:6667", buff[1])
+		return
+	case "/msg":
+		go send_msg(id_user, "irc.epitech.net:6667", "#goirc", buff[1])
+		return
+
+	}
+
+}
+
 func WsHandle(ws *websocket.Conn) {
-	ircobj := irc.IRC("goirctest"+strconv.Itoa(rand.Int()), "arheu")
-	//ircobj.VerboseCallbackHandler = true
-	sock_cli := Connection{ws, ws.Request().RemoteAddr, ircobj}
-	ircobj.Connect("irc.epitech.net:6667")
-	ircobj.AddCallback("001", func(e *irc.Event) { ircobj.Join("#goirc") })
-	ircobj.AddCallback("PRIVMSG", func(e *irc.Event) { ws_send(e.Nick+e.Message, sock_cli.ws) })
-	fmt.Printf("\nNouveau client %s\n", sock_cli.clientip)
-	client[sock_cli] = 0
+	fmt.Printf("\nNouveau client %s\n", ws.Request().RemoteAddr)
+	us := &User{"goricvayan", make(map[string]*irc.Connection), ws}
+	all_users[1] = us
 	for {
 
-		if _, err := ws_recv(ws); err == 1 {
+		if buff, err := ws_recv(ws); err != 1 {
+			parsemsg(1, buff)
+		} else {
 			return
 		}
 

@@ -4,3 +4,9 @@ $(document).ready(function() {
   $(".bufferchan").scrollbars();
 });
 
+
+$(".formirc button").click(function () {
+	ws.send($(".formirc input").val());
+	$(".formirc input").val("");
+});
+
