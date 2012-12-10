@@ -22,6 +22,7 @@ func connect_sql() {
 }
 
 func insert_new_user(user RegisteringUser) {
+	//verif user et tout
 	//ar, err := db.Query("SELECT * FROM user WHERE pseudo='" + user.InputPseudo + "' OR email='" + user.InputMail + "' ")
 	//HandleErrorSql(err)
 }
