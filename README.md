@@ -3,9 +3,9 @@ Comment build le projet :
 * Set un env GOPATH qui link à la racine du projet  (ex: `export GOPATH=D:\My Documents\Git\goric` )
 
 * dans votre dossier de projet 
-** `mkdir bin`
-** `mkdir src`
-** `mkdir pkg`
+* `mkdir bin`
+* `mkdir src`
+* `mkdir pkg`
 
 * rajouter le dossier bin crée precedement a votre PATH (ex : `export PATH=$PATH:/path/to/goirc/bin` )
 
