@@ -38,7 +38,7 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	use := new(RegisteringUser)
 	decoder.Decode(use, r.Form)
-
+	insert_new_user(*use)
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
@@ -50,7 +50,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func start_http_server() {
-	log.Println("========Start goric web server========")
+	log.Println("========Starting goric web server========")
 	r := mux.NewRouter()
 	r.HandleFunc("/", IndexHandler)
 
@@ -68,5 +68,7 @@ func start_http_server() {
 	//all js/img/stuff
 	r.PathPrefix("/static/").Handler(http.FileServer(http.Dir(".")))
 
-	http.ListenAndServe(":1111", r)
+	log.Println("========Listening on " + port_http + "========")
+	log.Fatal(http.ListenAndServe(":"+port_http, r))
+
 }
