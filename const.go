@@ -6,5 +6,5 @@ const (
 	DB_PASS   = "rRfCKB6eMnDXNVZw"
 	DB_SERV   = "69.85.88.161"
 	root_web  = "templates/"
-	port_http = "1112"
+	port_http = "1111"
 )

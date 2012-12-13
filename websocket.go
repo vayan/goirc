@@ -33,8 +33,9 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 	return buf, erri
 }
 
+//parse les message client pour commande
 func parsemsg(id_user int, msg string) {
-	// if user connect 
+	// if user is login 
 	buff := strings.Split(msg, " ")
 	switch buff[0] {
 	case "/connect":

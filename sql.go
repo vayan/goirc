@@ -31,15 +31,10 @@ func connect_sql() {
 }
 
 func insert_new_user(user RegisteringUser) int {
-	//a finir insert user db
-	if !(strings.Contains(user.InputMail, "@")) {
-		log.Println("Erreur mail")
-	}
-	if !(user.InputPass == user.InputPassVerif) {
-		log.Println("Erreur pass")
-	}
-	if !(len(user.InputPseudo) <= Pref.max_lenght_pseudo) {
-		log.Println("Erreur pseudo")
+	//verif pseudo / mail pas deja existant
+	if (strings.Contains(user.InputMail, "@")) && (user.InputPass == user.InputPassVerif) && (len(user.InputPseudo) <= Pref.max_lenght_pseudo) {
+		_, err := db.Query("INSERT INTO users (pseudo, mail, password) VALUES ('" + user.InputPseudo + "', '" + user.InputMail + "',  '" + EncryptPass(user.InputPass) + "')")
+		HandleErrorSql(err)
 	}
 	return -1
 }

@@ -105,6 +105,24 @@ REGISER
 }
 
 /**
+LOGIN
+**/
+
+.login {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.login .control-label {
+	float: left;
+	width: 100px;
+}
+
+.login .controls {
+	margin-left: 100px;
+}
+
+/**
 MAIN IRC
 **/
 
