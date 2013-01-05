@@ -1,17 +1,16 @@
 <h2 class="pagetitle"> Client IRC </h2>
 <div id="main-irc">
+	<input type="hidden" name="activeserver" value="" />
+	<input type="hidden" name="activechannel" value="" />
 	<div class="tabbable tabs-right">
-		<ul class="list nav nav-tabs">
+		<ul class="list nav nav-tabs listbuffer">
 			<li class="active">
-				<a href="#tab1" data-toggle="tab">#channel 1</a>
+				<a href="#log" data-toggle="tab">log</a>
 			</li>
-			<li><a href="#tab2" data-toggle="tab">#channel 2</a></li>
-			<li><a href="#tab3" data-toggle="tab">#channel 3</a></li>
-			<li><a href="#tab4" data-toggle="tab">#channel 4</a></li>
 		</ul>
-		<div class="tab-content">
-				<div class="bufferchan tab-pane active" id="tab1">
-					<table class="table table-striped">
+		<div class="tab-content contentbuffer">
+				<div class="bufferchan tab-pane active" id="log">
+					<table class="table table-striped allmsg">
 						<tr class="msg">
 							<td class="pseudo">Fastolph</td>
 							<td class="message">y'avait cours doc EIP ce matin, pis mon lit m'a dit "nope"</td>
@@ -19,18 +18,7 @@
 						</tr>
 						
 					</table>
-				</div>
-				<div class="tab-pane" id="tab2">
-					<p>Server 2 coucou</p>
-				</div>
-				<div class="tab-pane" id="tab3">
-					<p>Server 3 coucou</p>
-				</div>
-				<div class="tab-pane" id="tab4">
-					<p>Server 4 coucou</p>
-				</div>
-
-			
+				</div>		
 		</div>
 			<div class="input-append send-message formirc">
 				<input class="span2" id="appendedInputButton" type="text">

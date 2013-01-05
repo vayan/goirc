@@ -6,7 +6,7 @@ if(ws != null) {
 }
 
 var host = window.location.hostname;
-ws = new WebSocket("ws://" + host + ":1111/ws");
+ws = new WebSocket("ws://" + host + ":1112/ws");
 
 
 ws.onopen = function() {
@@ -16,6 +16,7 @@ ws.onopen = function() {
 
 ws.onmessage = function(e) {
   console.log("receive : " + e.data);
+  parse_irc(e.data);
 
 };
 

@@ -44,7 +44,7 @@ HEADER
 LOGO
 **/
 
-#logo {
+.logo {
 border-left: 1px solid #e5e5e5;
 border-right: 1px solid #e5e5e5;
 text-align: center;
@@ -58,6 +58,8 @@ background-color: white;
 width: 220px;
 height: 50px;
 }
+
+
 
 
 /**
@@ -84,6 +86,44 @@ SIDEBAR
 
 #sidebar .icon-chevron-right {
 	float: right;
+}
+
+
+/** 
+HOME
+**/
+
+#pres {
+	width: 100%;
+	text-align: center;
+}
+
+#prescontent {
+	background-image: url('../img/bg_home.png');
+	margin: -2px 0 0 -3px;
+	padding-left: 3px;
+	padding: 50px;
+}
+
+#pres .logogen {
+margin: 0 auto 0 auto;
+padding-top: 20px;
+color: white;
+font-family: 'Oswald', sans-serif;
+font-size: 4.5em;
+height: 50px;
+}
+
+.prestxt {
+	color: white;
+	font-size: 2em;
+}
+
+#social {
+	height: 50px;
+	margin-left: -3px;
+	border-bottom: 1px solid #ddd;
+	background-color: #f5f5f5;
 }
 
 /**

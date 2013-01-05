@@ -8,8 +8,13 @@ import (
 
 type User struct {
 	Nick   string
-	ircObj map[string]*irc.Connection
+	ircObj map[string]*IrcConnec
 	ws     *websocket.Conn
+}
+
+type IrcConnec struct {
+	irc  *irc.Connection
+	Nick string
 }
 
 type Preference struct {

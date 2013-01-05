@@ -1,25 +1,17 @@
 <h2 class="pagetitle"> {{.Title}} </h2>
-{{.Data.long_descr}}
 
-<form class="login" method="POST" action="login">
-	<div class="control-group">
-		<label class="control-label" for="inputMail">Mail</label>
-		<div class="controls">
-			<div class="input-prepend">
-				<span class="add-on"><i class="icon-envelope"></i></span>
-				<input class="span2" name="InputMail" id="inputMail" type="text">
-			</div>
+
+<div id="pres">
+	<div id="prescontent">
+		<div class="logogen">
+			GO#IRC
 		</div>
+
+		<div class="prestxt">{{.Data.long_descr}}</div>
 	</div>
-	<div class="control-group">
-		<label class="control-label" for="inputPass">Password</label>
-		<div class="controls">
-			<div class="input-prepend">
-				<span class="add-on"><i class="icon-lock"></i></span>
-				<input class="span2" name="InputPass" id="inputPass" type="password">
-			</div>
-		</div>
+	<div id="social">
+
 	</div>
-	<button type="submit" class="btn">Submit</button>
-</form>
+</div>
+
 

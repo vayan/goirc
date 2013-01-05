@@ -29,6 +29,11 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	RenderHtml(w, "ajx/register", p)
 }
 
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
+	p := loadPage()
+	RenderHtml(w, "ajx/login", p)
+}
+
 func IrcHandler(w http.ResponseWriter, r *http.Request) {
 	p := loadPage()
 	RenderHtml(w, "ajx/irc", p)
@@ -44,7 +49,7 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	p := &Page{
-		Title: "Home",
+		Title: "IRC in your browser",
 		Data:  map[string]string{"name": Pref.name, "descr": Pref.descr, "short_descr": Pref.short_descr, "long_descr": Pref.long_descr, "base_url": Pref.base_url}}
 	RenderHtml(w, "ajx/home", p)
 }
@@ -57,6 +62,7 @@ func start_http_server() {
 	//ajx html
 	r.HandleFunc("/ajx/home", HomeHandler)
 	r.HandleFunc("/ajx/register", RegisterHandler)
+	r.HandleFunc("/ajx/login", LoginHandler)
 	r.HandleFunc("/ajx/irc", IrcHandler)
 
 	//action form
