@@ -6,15 +6,27 @@ import (
 	"github.com/thoj/go-ircevent"
 )
 
+/*
+int of ircObj is the id of the buffer 
+*/
+
 type User struct {
-	Nick   string
-	ircObj map[string]*IrcConnec
-	ws     *websocket.Conn
+	Nick    string
+	ircObj  map[int]*IrcConnec
+	Buffers map[int]*Buffer
+	ws      *websocket.Conn
 }
 
 type IrcConnec struct {
 	irc  *irc.Connection
 	Nick string
+}
+
+type Buffer struct {
+	name    string
+	addr    string
+	id      int
+	id_serv int
 }
 
 type Preference struct {

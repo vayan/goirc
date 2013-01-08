@@ -1,8 +1,8 @@
 function add_new_buffer(buffer) {
-	var id = buffer.replace(/\s/g, "").toLowerCase();
+	var id = buffer[1]
 
-	$('.listbuffer').append('<li><a href="#'+id+'" data-toggle="tab">'+buffer+'</a></li>');
-	$('.contentbuffer').append('<div class="tab-pane bufferchan" id="'+id+'"></div>');
+	$('.listbuffer').append('<li><a href="#'+id+'" data-toggle="tab">'+buffer[2]+'</a></li>');
+	$('.contentbuffer').append('<div class="tab-pane bufferchan" id="'+id+'"><table class="table table-striped allmsg"></table></div>');
 }
 
 function new_message(id_buffer, msg) {
@@ -18,17 +18,14 @@ function parse_irc(msg) {
 		{
 		case "successserv":
 		  console.log("Connect to server "+buff[1]);
-		  add_new_buffer(buff[1])
+		  add_new_buffer(buff)
 		  break;
 		case "successchan":
 		  console.log("Connect to channel "+buff[1]);
-		  var servchan = buff[1].split('?');
-		  add_new_buffer(servchan[0]+" "+servchan[1]);
+		  add_new_buffer(buff);
 		  break;
 		  default :
-		  	var servchan = buff[0].split('?');
-		  	var id_buffer = servchan[0]+servchan[1];
-		 	new_message(id_buffer.toLowerCase(), buff[1]);
+		 	new_message(buff[0], buff[1]);
 		  break
 		}
 }
@@ -44,11 +41,8 @@ $(document).ready(function() {
 $(".formirc button").click(function () {
 	if ($(".formirc input").val() != '') {
 		//console.log($(".active a").html());
-		 var info = $("#main-irc .active a").html().split(' ');
-		 var serv = info[0];
-		 var channel = info[1];
-		//console.log(serv+channel);
-		var msg = serv+"?"+channel+"]"+$(".formirc input").val();
+		 var buffer_id = $("#main-irc .active a").attr('href').substring(1);
+		var msg = buffer_id+"]"+$(".formirc input").val();
 		console.log(msg);
 		ws.send(msg);
 	}
