@@ -5,12 +5,16 @@ function add_new_buffer(buffer) {
 	$('.contentbuffer').append('<div class="tab-pane bufferchan" id="'+id+'"><table class="table table-striped allmsg"></table></div>');
 }
 
-function new_message(id_buffer, msg) {
+function new_message(id_buffer, nick, msg) {
 
-	$('.contentbuffer #'+id_buffer+' .allmsg').append('<tr class="msg"><td class="pseudo">xxx</td><td class="message">'+msg+'</td><td class="time">13h30</td></tr>');
-
+	$('.contentbuffer #'+id_buffer+' .allmsg').append('<tr class="msg"><td class="pseudo">'+nick+'</td><td class="message">'+msg+'</td><td class="time">'+get_timestamp_now()+'</td></tr>');
 }
 
+function get_timestamp_now() {
+	var d = new Date();
+	var timestamp = d.getHours() + ":" + d.getMinutes();
+	return timestamp
+}
 
 function parse_irc(msg) {
 	var buff = msg.split(']');
@@ -25,11 +29,10 @@ function parse_irc(msg) {
 		  add_new_buffer(buff);
 		  break;
 		  default :
-		 	new_message(buff[0], buff[1]);
+		 	new_message(buff[0], buff[1], buff[2]);
 		  break
 		}
 }
-
 
 $(document).ready(function() {
   $("tr:even").css("background-color", "#f7f7f9");
@@ -47,11 +50,13 @@ $(".formirc input").keyup(function(event){
 $(".formirc button").click(function () {
 	if ($(".formirc input").val() != '') {
 		//console.log($(".active a").html());
-		 var buffer_id = $("#main-irc .active a").attr('href').substring(1);
-		var msg = buffer_id+"]"+$(".formirc input").val();
+		var buffer_id = $("#main-irc .active a").attr('href').substring(1);
+		var txt = $(".formirc input").val();
+		var msg = buffer_id+"]"+txt;
+
 		console.log(msg);
 		ws.send(msg);
+		new_message(buffer_id, "me", txt);
 	}
 	$(".formirc input").val("").focus();
 });
-
