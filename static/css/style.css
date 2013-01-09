@@ -126,6 +126,20 @@ height: 50px;
 	background-color: #f5f5f5;
 }
 
+#plan {
+	padding: 5px;
+	margin: 0 auto 0 auto;
+	width: 75%;
+}
+
+#plan th {
+	text-align: center;
+}
+
+#plan td {
+	text-align: center;
+}
+
 /**
 REGISER
 **/
