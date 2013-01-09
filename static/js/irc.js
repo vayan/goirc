@@ -6,7 +6,8 @@ function add_new_buffer(buffer) {
 }
 
 function new_message(id_buffer, nick, msg) {
-
+	if (msg.charAt(0) == '/')
+		return;
 	$('.contentbuffer #'+id_buffer+' .allmsg').append('<tr class="msg"><td class="pseudo">'+nick+'</td><td class="message">'+msg+'</td><td class="time">'+get_timestamp_now()+'</td></tr>');
 }
 
