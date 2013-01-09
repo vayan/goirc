@@ -21,6 +21,10 @@ func (user *User) find_id_buffer(channel string, server int) int {
 	return 0
 }
 
+func (user *User) find_server_by_channel(channel int) int {
+	return user.Buffers[channel].id_serv
+}
+
 func (user *User) add_buffer(name string, addr string, id int, id_serv int) {
 	new_buffer := Buffer{name, addr, id, id_serv}
 	user.Buffers[id] = &new_buffer

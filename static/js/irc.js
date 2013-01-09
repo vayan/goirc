@@ -37,6 +37,12 @@ $(document).ready(function() {
   $(".bufferchan").scrollbars();
 });
 
+$(".formirc input").keyup(function(event){
+    if(event.keyCode == 13){
+        $(".formirc button").click();
+    }
+});
+
 
 $(".formirc button").click(function () {
 	if ($(".formirc input").val() != '') {
@@ -46,6 +52,6 @@ $(".formirc button").click(function () {
 		console.log(msg);
 		ws.send(msg);
 	}
-	$(".formirc input").val("");
+	$(".formirc input").val("").focus();
 });
 
