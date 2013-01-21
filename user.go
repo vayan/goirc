@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+// Retourne un ID pas utiliser pour buffer
 func (user *User) get_new_id_buffer() int {
 	if len(user.Buffers) == 0 {
 		return 0
@@ -13,6 +14,7 @@ func (user *User) get_new_id_buffer() int {
 	return len(user.Buffers) + 1
 }
 
+// Retourne ID buffer base sur son nom + server
 func (user *User) find_id_buffer(channel string, server int) int {
 	for _, buff := range user.Buffers {
 		if buff.name == channel && buff.id_serv == server {
@@ -22,6 +24,7 @@ func (user *User) find_id_buffer(channel string, server int) int {
 	return 0
 }
 
+// Retour l'id du serveur base sur l'id channel
 func (user *User) find_server_by_channel(channel int) int {
 	return user.Buffers[channel].id_serv
 }

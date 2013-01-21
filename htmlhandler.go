@@ -68,7 +68,7 @@ func start_http_server() {
 	//action form
 	r.HandleFunc("/register", ActionRegisterHandler)
 
-	//wesocket
+	//websocket
 	r.Handle("/ws", websocket.Handler(WsHandle))
 
 	//all js/img/stuff
