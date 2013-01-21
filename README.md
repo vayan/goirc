@@ -1,12 +1,4 @@
-
-#last commit
-
-* better readme
-* TODO formating
-* Move import JS
-
-
-Comment build le projet : 
+# Comment build le projet : 
 
 * Set un env GOPATH qui link à la racine du projet  
  (ex: `export GOPATH=D:\My Documents\Git\go` )
