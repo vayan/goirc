@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "code.google.com/p/go-mysql-driver/mysql"
 	"database/sql"
+	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/gorilla/schema"
 )
 

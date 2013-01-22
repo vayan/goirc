@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "code.google.com/p/go-mysql-driver/mysql"
 	"code.google.com/p/go.net/websocket"
+	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/gorilla/mux"
 	"html/template"
 	"log"

@@ -15,6 +15,7 @@
 * `go get github.com/gorilla/schema`
 * `go get github.com/gorilla/mux`
 * `go get github.com/thoj/go-ircevent`
+* `go get github.com/Go-SQL-Driver/MySQL`
 
 * `cd src`
 * `git clone git@bitbucket.org:vayan/goirc.git`
