@@ -7,4 +7,6 @@ const (
 	DB_SERV   = "69.85.88.161"
 	root_web  = "templates/"
 	port_http = "1112"
+	ANON      = 5
+	REGIST    = 4
 )

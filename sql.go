@@ -30,10 +30,24 @@ func connect_sql() {
 	HandleErrorSql(err)
 }
 
+func valid_user(mail string, pass string) bool {
+	row := db.QueryRow("SELECT pseudo FROM users WHERE mail = ? AND password = ? ", mail, EncryptPass(pass))
+	var pseudo string
+	err := row.Scan(&pseudo)
+	if err != nil {
+		log.Println(err)
+	}
+	if len(pseudo) > 0 {
+		return true
+	}
+	return false
+}
+
 func insert_new_user(user RegisteringUser) int {
 	//TODO : verif pseudo / mail pas deja existant
+
 	if (strings.Contains(user.InputMail, "@")) && (user.InputPass == user.InputPassVerif) && (len(user.InputPseudo) <= Pref.max_lenght_pseudo) {
-		_, err := db.Query("INSERT INTO users (pseudo, mail, password) VALUES ('" + user.InputPseudo + "', '" + user.InputMail + "',  '" + EncryptPass(user.InputPass) + "')")
+		_, err := db.Exec("INSERT INTO users (pseudo, mail, password) VALUES (?, ?, ?)", user.InputPseudo, user.InputMail, EncryptPass(user.InputPass))
 		HandleErrorSql(err)
 	}
 	return -1
