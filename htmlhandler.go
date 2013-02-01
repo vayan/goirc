@@ -15,8 +15,7 @@ func need_perm(need_defcon int, r *http.Request) bool {
 	// defcon 1 = admin
 	defcon := ANON
 
-	session, _ := store.Get(r, "usersession")
-	log.Print("il est ", session.Values["login"])
+	session, _ := store.Get(r, COOKIE_SESSION)
 	if session.Values["login"] == true {
 		defcon = REGIST
 	}
@@ -38,7 +37,7 @@ func RenderHtml(w http.ResponseWriter, tmpl string, p *Page) {
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "usersession")
+	session, _ := store.Get(r, COOKIE_SESSION)
 
 	p := &Page{
 		Title: "IRC in your browser",
@@ -79,7 +78,7 @@ func IrcHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActionLogOut(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "usersession")
+	session, _ := store.Get(r, COOKIE_SESSION)
 
 	session.Values["login"] = false
 	session.Save(r, w)
@@ -91,7 +90,7 @@ func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
 	mail := r.FormValue("InputMail")
 	pass := r.FormValue("InputPass")
 
-	session, _ := store.Get(r, "usersession")
+	session, _ := store.Get(r, COOKIE_SESSION)
 	session.Values["login"] = valid_user(mail, pass)
 	session.Save(r, w)
 	http.Redirect(w, r, "/", http.StatusFound)
@@ -106,14 +105,19 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "usersession")
+	session, _ := store.Get(r, COOKIE_SESSION)
 	if session.Values[42] == 43 {
 		log.Print("user login")
 	}
 
 	p := &Page{
 		Title: "IRC in your browser",
-		Data:  map[string]string{"name": Pref.name, "descr": Pref.descr, "short_descr": Pref.short_descr, "long_descr": Pref.long_descr, "base_url": Pref.base_url}}
+		Data: map[string]string{
+			"name":        Pref.name,
+			"descr":       Pref.descr,
+			"short_descr": Pref.short_descr,
+			"long_descr":  Pref.long_descr,
+			"base_url":    Pref.base_url}}
 	RenderHtml(w, "ajx/home", p)
 }
 
