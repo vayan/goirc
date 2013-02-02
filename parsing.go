@@ -20,6 +20,7 @@ func parsemsg(id_user int, msg string) {
 				all_users[pl].ws = user.ws
 				delete(all_users, id_user)
 				log.Print("user find link etablish")
+				all_users[pl].send_all_buffer()
 				//TODO : generate new uid
 				return
 			}

@@ -7,7 +7,9 @@ import (
 )
 
 func ws_send(buf string, ws *websocket.Conn) {
-	// TODO : check si socket alive
+	if ws == nil {
+		return
+	}
 	if err := websocket.Message.Send(ws, buf); err != nil {
 		log.Println(err)
 	}

@@ -19,12 +19,8 @@ function get_timestamp_now() {
 function parse_irc(msg) {
     var buff = msg.split(']');
     switch(buff[0]) {
-    case "successserv":
-        console.log("Connect to server " + buff[1]);
-        add_new_buffer(buff);
-        break;
-    case "successchan":
-        console.log("Connect to channel " + buff[1]);
+    case "buffer":
+        console.log("new buffer " + buff[1]);
         add_new_buffer(buff);
         break;
     default:
@@ -32,19 +28,6 @@ function parse_irc(msg) {
         break;
     }
 }
-
-$(document).ready(function() {
-    $("tr:even").css("background-color", "#f7f7f9");
-    $("tr:odd").css("background-color", "#fff");
-    $(".bufferchan").scrollbars();
-});
-
-$(".formirc input").keyup(function(event) {
-    if(event.keyCode == 13) {
-        $(".formirc button").click();
-    }
-});
-
 
 $(".formirc button").click(function() {
     if($(".formirc input").val() != '') {

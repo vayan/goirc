@@ -70,9 +70,15 @@ func (user *User) add_all_callback(id_buffer int) {
 	user.on_message(id_buffer)
 }
 
+func (user *User) send_all_buffer() {
+	for _, buff := range user.Buffers {
+		ws_send("buffer]"+strconv.Itoa(buff.id)+"]"+buff.name, user.ws)
+	}
+}
+
 func (user *User) on_connect(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("001", func(e *irc.Event) {
-		ws_send("successserv]"+strconv.Itoa(id_buffer)+"]"+user.Buffers[id_buffer].name, user.ws)
+		ws_send("buffer]"+strconv.Itoa(id_buffer)+"]"+user.Buffers[id_buffer].name, user.ws)
 		user.ircObj[id_buffer].Nick = user.Nick
 	})
 }
@@ -89,6 +95,6 @@ func (user *User) on_join(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("366", func(e *irc.Event) {
 		id_buffer_chan := user.get_new_id_buffer()
 		user.add_buffer(e.Arguments[1], user.Buffers[id_buffer].addr+e.Arguments[1], id_buffer_chan, id_buffer)
-		ws_send("successchan]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1], user.ws)
+		ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1], user.ws)
 	})
 }

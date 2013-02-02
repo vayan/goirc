@@ -9,6 +9,8 @@ import (
 	"net/http"
 )
 
+// FIXME : random deco..
+
 func need_perm(need_defcon int, r *http.Request) bool {
 	// defcon 5 = anon
 	// defcon 4 = register
@@ -112,7 +114,7 @@ func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
 	session.Values["mail"] = email
 	if len(uid) < 1 {
 		log.Print("UID never generate, generate new uid")
-		uid = generate_unique_uid()
+		uid = generate_unique_uid(pseudo)
 		set_uid(id, uid)
 	}
 	session.Values["uid"] = uid

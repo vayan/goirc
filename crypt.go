@@ -7,9 +7,9 @@ import (
 	"math/rand"
 )
 
-func generate_unique_uid() string {
+func generate_unique_uid(nick string) string {
 	//TODO : more random uid with nick
-	unique := string(rand.Int63())
+	unique := string(rand.Int63()) + nick
 	h := sha512.New()
 	io.WriteString(h, unique)
 	return fmt.Sprintf("%x", h.Sum(nil))

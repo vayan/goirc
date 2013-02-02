@@ -21,27 +21,60 @@
 
     <div class="sidebar">
       <ul class="nav nav-list bs-docs-sidenav">
-          <li><a href="#home">Home <i class="icon-chevron-right"></i> </a></li>
-          {{if .Data.login}} 
-            <li><a href="logout">Logout<i class="icon-chevron-right"></i> </a></li> 
-          {{else}} 
-            <li><a href="#register">Register<i class="icon-chevron-right"></i> </a></li>
-          {{end}}
-          {{if .Data.login}}  {{else}} <li><a href="#login">Login<i class="icon-chevron-right"></i> </a></li>  {{end}}
-          
-          <li><a href="#irc">Irc <i class="icon-chevron-right"></i> </a></li>
-          <li><a href="#foo">Setting <i class="icon-chevron-right"></i> </a></li>
-          <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
-          <li><a href="#foo">Foo <i class="icon-chevron-right"></i> </a></li>
-          <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
-        </ul>
+        <li><a href="#home">Home <i class="icon-chevron-right"></i> </a></li>
+        {{if .Data.login}} 
+        <li><a href="logout">Logout<i class="icon-chevron-right"></i> </a></li> 
+        {{else}} 
+        <li><a href="#register">Register<i class="icon-chevron-right"></i> </a></li>
+        {{end}}
+        {{if .Data.login}}  {{else}} <li><a href="#login">Login<i class="icon-chevron-right"></i> </a></li>  {{end}}
+
+        <li><a href="#irc">Irc <i class="icon-chevron-right"></i> </a></li>
+        <li><a href="#foo">Setting <i class="icon-chevron-right"></i> </a></li>
+        <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
+        <li><a href="#foo">Foo <i class="icon-chevron-right"></i> </a></li>
+        <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
+      </ul>
     </div>
 
     <div class="content">
+
     </div>
+    {{if .Data.login}} 
+      <span class="hidden" id="clientirc">
+      <h2 class="pagetitle"> Client IRC </h2>
+      <div class="main-irc">
+        <input type="hidden" name="activeserver" value="" />
+        <input type="hidden" name="activechannel" value="" />
+        <div class="tabbable tabs-right">
+          <ul class="list nav nav-tabs listbuffer">
+            <li class="active"><a href="#log" data-toggle="tab">log</a></li>
+          </ul>
+          <div class="tab-content contentbuffer">
+            <div class="bufferchan tab-pane active" id="log">
+              <table class="table table-striped allmsg">
+                <tr class="msg">
+                  <td class="pseudo">test</td>
+                  <td class="message">msg test</td>
+                  <td class="time">13h30</td>
+                </tr>
+              </table>
+            </div>  
+          </div>
+          <div class="input-append send-message formirc">
+            <input class="span2" id="appendedInputButton" type="text">
+            <button class="btn" type="button">Send!</button>
+          </div>
+
+        </div>
+      </div>
+    </span>
+    {{else}} 
+    {{end}}
     <input type="hidden" value="{{.Data.uid}}" id="yuid" name="yuid" />
   </div>
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+  <script src="static/js/irc.js"></script>
   <script src="static/js/import/bootstrap.min.js"></script>
   <script src="static/js/websocket.js"></script>
   <script src="static/js/sidebar.js"></script>
