@@ -39,9 +39,23 @@ func RenderHtml(w http.ResponseWriter, tmpl string, p *Page) {
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, COOKIE_SESSION)
 
+	if session.Values["login"] == nil {
+		session.Values["login"] = false
+	}
+
+	session.Values["uid"] = ""
+	if session.Values["login"].(bool) {
+		log.Print("User connected get UID from bdd")
+		session.Values["uid"] = get_uid(session.Values["id"].(int))
+	}
+	session.Save(r, w)
+	uid := session.Values["uid"]
+
 	p := &Page{
 		Title: "IRC in your browser",
-		Data:  map[string]string{"one": "one"}}
+		Data: map[string]string{
+			"one": "one",
+			"uid": uid.(string)}}
 
 	if session.Values["login"] == true {
 		p.Data["login"] = "login"
@@ -91,7 +105,17 @@ func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
 	pass := r.FormValue("InputPass")
 
 	session, _ := store.Get(r, COOKIE_SESSION)
-	session.Values["login"] = valid_user(mail, pass)
+	valid, id, pseudo, email, uid := get_user(mail, pass)
+	session.Values["login"] = valid
+	session.Values["id"] = id
+	session.Values["pseudo"] = pseudo
+	session.Values["mail"] = email
+	if len(uid) < 1 {
+		log.Print("UID never generate, generate new uid")
+		uid = generate_unique_uid()
+		set_uid(id, uid)
+	}
+	session.Values["uid"] = uid
 	session.Save(r, w)
 	http.Redirect(w, r, "/", http.StatusFound)
 }
@@ -105,10 +129,7 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, COOKIE_SESSION)
-	if session.Values[42] == 43 {
-		log.Print("user login")
-	}
+	//session, _ := store.Get(r, COOKIE_SESSION)
 
 	p := &Page{
 		Title: "IRC in your browser",

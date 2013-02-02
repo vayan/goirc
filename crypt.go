@@ -4,7 +4,16 @@ import (
 	"crypto/sha512"
 	"fmt"
 	"io"
+	"math/rand"
 )
+
+func generate_unique_uid() string {
+	//TODO : more random uid with nick
+	unique := string(rand.Int63())
+	h := sha512.New()
+	io.WriteString(h, unique)
+	return fmt.Sprintf("%x", h.Sum(nil))
+}
 
 func ComparePassHash(pass string, hash string) bool {
 	if EncryptPass(pass) == hash {

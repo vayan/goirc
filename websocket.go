@@ -7,6 +7,7 @@ import (
 )
 
 func ws_send(buf string, ws *websocket.Conn) {
+	// TODO : check si socket alive
 	if err := websocket.Message.Send(ws, buf); err != nil {
 		log.Println(err)
 	}
@@ -32,13 +33,16 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 }
 
 func WsHandle(ws *websocket.Conn) {
+	// TODO : rattacher le ws a une connexion si existe
 	log.Printf("Nouveau client %s\n", ws.Request().RemoteAddr)
-	us := &User{"goricvayan", make(map[int]*IrcConnec), make(map[int]*Buffer), ws}
-	all_users[1] = us
+	newid := get_new_id_user()
+	//us := &User{"Anon", make(map[int]*IrcConnec), make(map[int]*Buffer), ws}
+	us := &User{"nil", 0, "Anon3123123123", nil, nil, ws}
+	all_users[newid] = us
 	for {
 
 		if buff, err := ws_recv(ws); err != 1 {
-			go parsemsg(1, buff)
+			go parsemsg(get_user_ws(ws), buff)
 		} else {
 			return
 		}

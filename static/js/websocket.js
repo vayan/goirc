@@ -11,7 +11,9 @@ ws = new WebSocket("ws://" + host + ":1112/ws");
 
 ws.onopen = function() {
   console.log("open ws");
-
+  if ($("#yuid").val() != "") {
+    ws.send("co]"+$("#yuid").val());
+  }
 };
 
 ws.onmessage = function(e) {

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"strconv"
 	"strings"
 )
@@ -12,23 +13,43 @@ func parsemsg(id_user int, msg string) {
 	user := all_users[id_user]
 	data := strings.Split(msg, "]")
 
-	buffer_id, _ := strconv.Atoi(data[0])
-	buff_msg := data[1]
+	if data[0] == "co" {
+		log.Print("User WS want to co")
+		for pl, _ := range all_users {
+			if all_users[pl].uid == data[1] {
+				all_users[pl].ws = user.ws
+				delete(all_users, id_user)
+				log.Print("user find link etablish")
+				//TODO : generate new uid
+				return
+			}
+		}
+		log.Print("user not find create new instance")
+		//TODO : check if uid exist in bdd
+		//TODO : fin way to guess nick
+		user.uid = data[1]
+		user.ircObj = make(map[int]*IrcConnec)
+		user.Buffers = make(map[int]*Buffer)
+	} else {
 
-	buff := strings.Split(buff_msg, " ")
+		buffer_id, _ := strconv.Atoi(data[0])
+		buff_msg := data[1]
 
-	switch buff[0] {
-	case "/connect":
-		go connect_server(buff[1], id_user)
-		return
-	case "/join":
-		go join_channel(id_user, user.find_server_by_channel(buffer_id), buff[1])
-		return
-	case "/msg":
-		go send_msg(id_user, buffer_id, buff[1])
-		return
-	default:
-		go send_msg(id_user, buffer_id, buff_msg)
-		return
+		buff := strings.Split(buff_msg, " ")
+
+		switch buff[0] {
+		case "/connect":
+			go connect_server(buff[1], id_user)
+			return
+		case "/join":
+			go join_channel(id_user, user.find_server_by_channel(buffer_id), buff[1])
+			return
+		case "/msg":
+			go send_msg(id_user, buffer_id, buff[1])
+			return
+		default:
+			go send_msg(id_user, buffer_id, buff_msg)
+			return
+		}
 	}
 }

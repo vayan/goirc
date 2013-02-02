@@ -11,6 +11,8 @@ int of ircObj is the id of the buffer
 */
 
 type User struct {
+	uid     string
+	id      int
 	Nick    string
 	ircObj  map[int]*IrcConnec
 	Buffers map[int]*Buffer

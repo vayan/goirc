@@ -23,6 +23,22 @@ func HandleErrorSql(er error) bool {
 	return false
 }
 
+func get_uid(id int) string {
+	var uid string
+
+	row := db.QueryRow("SELECT uid FROM users WHERE id = ?", id)
+	err := row.Scan(&uid)
+	if err != nil {
+		log.Println(err)
+	}
+	return uid
+}
+
+func set_uid(id int, uid string) {
+	_, err := db.Exec("UPDATE users SET uid = ? WHERE id = ?", uid, id)
+	HandleErrorSql(err)
+}
+
 func connect_sql() {
 	log.Println("========Start Connexion DB========")
 	var err error
@@ -30,17 +46,21 @@ func connect_sql() {
 	HandleErrorSql(err)
 }
 
-func valid_user(mail string, pass string) bool {
-	row := db.QueryRow("SELECT pseudo FROM users WHERE mail = ? AND password = ? ", mail, EncryptPass(pass))
-	var pseudo string
-	err := row.Scan(&pseudo)
+func get_user(email string, pass string) (bool, int, string, string, string) {
+	var pseudo, mail, uid string
+	var id int
+
+	valid := false
+	row := db.QueryRow("SELECT id, pseudo, mail, uid FROM users WHERE mail = ? AND password = ? ", email, EncryptPass(pass))
+
+	err := row.Scan(&id, &pseudo, &mail, &uid)
+	if len(pseudo) > 0 {
+		valid = true
+	}
 	if err != nil {
 		log.Println(err)
 	}
-	if len(pseudo) > 0 {
-		return true
-	}
-	return false
+	return valid, id, pseudo, mail, uid
 }
 
 func insert_new_user(user RegisteringUser) int {
