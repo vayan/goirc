@@ -46,6 +46,23 @@ func connect_sql() {
 	HandleErrorSql(err)
 }
 
+func get_user_by_uid(uid string) (bool, int, string, string) {
+	var pseudo, mail string
+	var id int
+
+	valid := false
+	row := db.QueryRow("SELECT id, pseudo, mail FROM users WHERE uid = ? ", uid)
+
+	err := row.Scan(&id, &pseudo, &mail)
+	if len(pseudo) > 0 {
+		valid = true
+	}
+	if err != nil {
+		log.Println(err)
+	}
+	return valid, id, pseudo, mail
+}
+
 func get_user(email string, pass string) (bool, int, string, string, string) {
 	var pseudo, mail, uid string
 	var id int
@@ -71,6 +88,11 @@ func insert_new_user(user RegisteringUser) int {
 		HandleErrorSql(err)
 	}
 	return -1
+}
+
+func insert_new_message(id_user int, id_buffer int, nick string, message string) {
+	_, err := db.Exec("INSERT INTO logirc (id_user, id_buffer, nick, message, time) VALUES (?, ?, ?, ?, NOW())", id_user, id_buffer, nick, message)
+	HandleErrorSql(err)
 }
 
 func get_preference() {

@@ -8,6 +8,7 @@ function add_new_buffer(buffer) {
 function new_message(id_buffer, nick, msg) {
     if(msg.charAt(0) == '/') return;
     $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td class="pseudo">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
+    $('#' + id_buffer).scrollTop($('#' + id_buffer)[0].scrollHeight);
 }
 
 function get_timestamp_now() {
@@ -17,6 +18,7 @@ function get_timestamp_now() {
 }
 
 function parse_irc(msg) {
+    // TODO : check le ] dans le message pour eviter split useless
     var buff = msg.split(']');
     switch(buff[0]) {
     case "buffer":

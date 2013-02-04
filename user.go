@@ -27,6 +27,13 @@ func get_user_ws(ws *websocket.Conn) int {
 	return -1
 }
 
+func (user *User) update_data_user() {
+	_, id, pseudo, _ := get_user_by_uid(user.uid)
+
+	user.id = id
+	user.Nick = pseudo
+}
+
 // Retourne un ID pas utiliser pour buffer
 func (user *User) get_new_id_buffer() int {
 	if len(user.Buffers) == 0 {
@@ -87,6 +94,7 @@ func (user *User) on_message(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("PRIVMSG", func(e *irc.Event) {
 		id_buffer_chan := user.find_id_buffer(e.Arguments[0], id_buffer)
 		log.Print(e.Arguments)
+		go insert_new_message(user.id, id_buffer, e.Nick, e.Message)
 		go ws_send(strconv.Itoa(id_buffer_chan)+"]"+e.Nick+"]"+e.Message, user.ws)
 	})
 }

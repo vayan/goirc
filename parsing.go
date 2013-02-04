@@ -27,8 +27,8 @@ func parsemsg(id_user int, msg string) {
 		}
 		log.Print("user not find create new instance")
 		//TODO : check if uid exist in bdd
-		//TODO : fin way to guess nick
 		user.uid = data[1]
+		user.update_data_user()
 		user.ircObj = make(map[int]*IrcConnec)
 		user.Buffers = make(map[int]*Buffer)
 	} else {
