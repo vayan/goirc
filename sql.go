@@ -63,6 +63,21 @@ func get_user_by_uid(uid string) (bool, int, string, string) {
 	return valid, id, pseudo, mail
 }
 
+func get_backlog(id_user int, buffer string) []*BackLog {
+	rows, err := db.Query("SELECT nick, message, time FROM logirc WHERE id_user = ? AND buffer = ? ORDER BY time ASC", id_user, buffer)
+	HandleErrorSql(err)
+	backlog := make([]*BackLog, 0, 10)
+	var nick, message, time string
+	for rows.Next() {
+		err = rows.Scan(&nick, &message, &time)
+		if err != nil {
+			// TODO : Handle error
+		}
+		backlog = append(backlog, &BackLog{nick, message, time})
+	}
+	return backlog
+}
+
 func get_user(email string, pass string) (bool, int, string, string, string) {
 	var pseudo, mail, uid string
 	var id int
@@ -90,8 +105,8 @@ func insert_new_user(user RegisteringUser) int {
 	return -1
 }
 
-func insert_new_message(id_user int, id_buffer int, nick string, message string) {
-	_, err := db.Exec("INSERT INTO logirc (id_user, id_buffer, nick, message, time) VALUES (?, ?, ?, ?, NOW())", id_user, id_buffer, nick, message)
+func insert_new_message(id_user int, buffer string, nick string, message string) {
+	_, err := db.Exec("INSERT INTO logirc (id_user, buffer, nick, message, time) VALUES (?, ?, ?, ?, NOW())", id_user, buffer, nick, message)
 	HandleErrorSql(err)
 }
 

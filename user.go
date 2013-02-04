@@ -16,8 +16,18 @@ func get_new_id_user() int {
 	return len(all_users) + 1
 }
 
-// get id client by ws 
+//get client by id 
 
+func get_user_id(id int) *User {
+	for _, us := range all_users {
+		if us.id == id {
+			return us
+		}
+	}
+	return nil
+}
+
+// get id client by ws 
 func get_user_ws(ws *websocket.Conn) int {
 	for pl, _ := range all_users {
 		if all_users[pl].ws == ws {
@@ -94,7 +104,7 @@ func (user *User) on_message(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("PRIVMSG", func(e *irc.Event) {
 		id_buffer_chan := user.find_id_buffer(e.Arguments[0], id_buffer)
 		log.Print(e.Arguments)
-		go insert_new_message(user.id, id_buffer, e.Nick, e.Message)
+		go insert_new_message(user.id, user.Buffers[id_buffer].addr+e.Arguments[0], e.Nick, e.Message)
 		go ws_send(strconv.Itoa(id_buffer_chan)+"]"+e.Nick+"]"+e.Message, user.ws)
 	})
 }

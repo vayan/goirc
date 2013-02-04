@@ -24,6 +24,12 @@ type IrcConnec struct {
 	Nick string
 }
 
+type BackLog struct {
+	nick    string
+	message string
+	time    string
+}
+
 type Buffer struct {
 	name    string
 	addr    string

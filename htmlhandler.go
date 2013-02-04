@@ -2,6 +2,7 @@ package main
 
 import (
 	"code.google.com/p/go.net/websocket"
+	"fmt"
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/gorilla/mux"
 	"html/template"
@@ -122,6 +123,26 @@ func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
+func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
+	idbuffer := Atoi(r.FormValue("idbuffer"))
+	session, _ := store.Get(r, COOKIE_SESSION)
+
+	if need_perm(REGIST, r) {
+		user := get_user_id(session.Values["id"].(int))
+		buffers := user.Buffers
+		for _, buff := range buffers {
+			if buff.id == idbuffer {
+				backlog := get_backlog(user.id, user.Buffers[idbuffer].addr)
+				for _, log := range backlog {
+					fmt.Fprint(w, "<tr class=\"msg\"><td class=\"pseudo\">"+log.nick+"</td><td class=\"message\">"+log.message+"</td><td class=\"time\">"+log.time+"</td></tr>")
+				}
+				return
+			}
+		}
+
+	}
+}
+
 func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	use := new(RegisteringUser)
@@ -150,6 +171,7 @@ func start_http_server() {
 	r.HandleFunc("/", IndexHandler)
 
 	//ajx html
+	r.HandleFunc("/ajx/backlog", ActionBacklogHandler)
 	r.HandleFunc("/ajx/home", HomeHandler)
 	r.HandleFunc("/ajx/register", RegisterHandler)
 	r.HandleFunc("/ajx/login", LoginHandler)

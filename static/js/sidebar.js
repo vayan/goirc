@@ -11,8 +11,8 @@ $(".sidebar li").click(function() {
     $(".sidebar li").removeClass("active");
     if(name == "irc") {
         $('.content').html(irc);
-        $("tr:even").css("background-color", "#f7f7f9");
-        $("tr:odd").css("background-color", "#fff");
+        // $("tr:even").css("background-color", "#f7f7f9");
+        // $("tr:odd").css("background-color", "#fff");
         //$(".bufferchan").scrollbars();
         $(".formirc input").keyup(function(event) {
             if(event.keyCode == 13) {
