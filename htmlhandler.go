@@ -13,9 +13,6 @@ import (
 // FIXME : random deco..
 
 func need_perm(need_defcon int, r *http.Request) bool {
-	// defcon 5 = anon
-	// defcon 4 = register
-	// defcon 1 = admin
 	defcon := ANON
 
 	session, _ := store.Get(r, COOKIE_SESSION)
@@ -67,60 +64,8 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	RenderHtml(w, "index", p)
 }
 
-func RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	p := loadPage()
-	if need_perm(ANON, r) {
-		RenderHtml(w, "ajx/register", p)
-		return
-	}
-	HomeHandler(w, r)
-}
-
-func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	p := loadPage()
-	if need_perm(ANON, r) {
-		RenderHtml(w, "ajx/login", p)
-		return
-	}
-	HomeHandler(w, r)
-}
-
 func IrcHandler(w http.ResponseWriter, r *http.Request) {
-	p := loadPage()
-	if need_perm(REGIST, r) {
-		RenderHtml(w, "ajx/irc", p)
-		return
-	}
 	HomeHandler(w, r)
-}
-
-func ActionLogOut(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, COOKIE_SESSION)
-
-	session.Values["login"] = false
-	session.Save(r, w)
-	http.Redirect(w, r, "/", http.StatusFound)
-}
-
-func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
-
-	mail := r.FormValue("InputMail")
-	pass := r.FormValue("InputPass")
-
-	session, _ := store.Get(r, COOKIE_SESSION)
-	valid, id, pseudo, email, uid := get_user(mail, pass)
-	session.Values["login"] = valid
-	session.Values["id"] = id
-	session.Values["pseudo"] = pseudo
-	session.Values["mail"] = email
-	if len(uid) < 1 {
-		log.Print("UID never generate, generate new uid")
-		uid = generate_unique_uid(pseudo)
-		set_uid(id, uid)
-	}
-	session.Values["uid"] = uid
-	session.Save(r, w)
-	http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
@@ -152,8 +97,6 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
-	//session, _ := store.Get(r, COOKIE_SESSION)
-
 	p := &Page{
 		Title: "IRC in your browser",
 		Data: map[string]string{
@@ -166,7 +109,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func start_http_server() {
-	log.Println("========Starting goric web server========")
+	log.Print("=== Starting goric web server ===")
 	r := mux.NewRouter()
 	r.HandleFunc("/", IndexHandler)
 
@@ -188,7 +131,7 @@ func start_http_server() {
 	//all js/img/stuff
 	r.PathPrefix("/static/").Handler(http.FileServer(http.Dir(".")))
 
-	log.Println("========Listening on " + port_http + "========")
+	log.Print("=== Listening on " + port_http + " ===")
 	log.Fatal(http.ListenAndServe(":"+port_http, r))
 
 }

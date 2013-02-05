@@ -3,10 +3,11 @@ function add_new_buffer(buffer) {
 
     $('.listbuffer').append('<li><a href="#' + id + '" data-toggle="tab">' + buffer[2] + '</a></li>');
     $('.contentbuffer').append('<div class="tab-pane bufferchan" id="' + id + '"><table class="table table-striped allmsg"></table></div>');
-    $.post("/ajx/backlog", { idbuffer: id })
-        .done (function(data) {
-            $('.contentbuffer #' + id + ' .allmsg').append(data);
-        });
+    $.post("/ajx/backlog", {
+        idbuffer: id
+    }).done(function(data) {
+        $('.contentbuffer #' + id + ' .allmsg').append(data);
+    });
 }
 
 function new_message(id_buffer, nick, msg) {

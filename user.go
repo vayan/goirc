@@ -1,41 +1,12 @@
 package main
 
 import (
-	"code.google.com/p/go.net/websocket"
 	"github.com/thoj/go-ircevent"
 	"log"
 	"strconv"
 )
 
-// Retourne un ID pas utiliser pour la list d'usr 
 
-func get_new_id_user() int {
-	if len(all_users) == 0 {
-		return 0
-	}
-	return len(all_users) + 1
-}
-
-//get client by id 
-
-func get_user_id(id int) *User {
-	for _, us := range all_users {
-		if us.id == id {
-			return us
-		}
-	}
-	return nil
-}
-
-// get id client by ws 
-func get_user_ws(ws *websocket.Conn) int {
-	for pl, _ := range all_users {
-		if all_users[pl].ws == ws {
-			return pl
-		}
-	}
-	return -1
-}
 
 func (user *User) update_data_user() {
 	_, id, pseudo, _ := get_user_by_uid(user.uid)
@@ -73,7 +44,7 @@ func (user *User) add_buffer(name string, addr string, id int, id_serv int) {
 }
 
 func (user *User) add_connexion(nick string, whois string, id_buffer int) {
-	con := irc.IRC(user.Nick, "arheu")
+	con := irc.IRC(user.Nick, "go#irc")
 	user.ircObj[id_buffer] = &IrcConnec{con, ""}
 }
 

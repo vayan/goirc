@@ -27,6 +27,7 @@ body {
 	color: white;
 }
 
+
 .hidden {
 	display: none;
 }
@@ -183,6 +184,22 @@ LOGIN
 /**
 MAIN IRC
 **/
+
+.menu-irc {
+	position: absolute;
+	right: 0;
+	top: 5px;
+	color: white;
+}
+
+.item-menu-irc {
+	cursor: pointer;
+	text-align: center;
+	border-left: 1px solid rgb(65, 60, 60);
+	border-right: 1px solid rgb(65, 60, 60);
+	padding: 33px;
+	background-color: rgb(44, 41, 41);
+}
 
 .main-irc {
 	margin-right: 203px; 

@@ -7,13 +7,13 @@ import (
 )
 
 func ws_send(buf string, ws *websocket.Conn) {
-	if ws == nil {
+	if ws == nil || len(buf) == 0 {
 		return
 	}
 	if err := websocket.Message.Send(ws, buf); err != nil {
 		log.Println(err)
 	}
-	log.Printf("send:%s\n", buf)
+	log.Printf("send : '%s'", buf)
 }
 
 func ws_recv(ws *websocket.Conn) (string, int) {
@@ -30,15 +30,13 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 		}
 		fmt.Println(err)
 	}
-	log.Printf("recv :%s\n", buf)
+	log.Printf("recv : '%s'", buf)
 	return buf, erri
 }
 
 func WsHandle(ws *websocket.Conn) {
-	// TODO : rattacher le ws a une connexion si existe
-	log.Printf("Nouveau client %s\n", ws.Request().RemoteAddr)
+	log.Printf("Nouveau client %s", ws.Request().RemoteAddr)
 	newid := get_new_id_user()
-	//us := &User{"Anon", make(map[int]*IrcConnec), make(map[int]*Buffer), ws}
 	us := &User{"nil", 0, "Anon3123123123", nil, nil, ws}
 	all_users[newid] = us
 	for {

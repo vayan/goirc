@@ -5,6 +5,8 @@ import (
 	"time"
 )
 
+//TODO : gerer reconnexion server / channel si crash
+
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	connect_sql()

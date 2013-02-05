@@ -4,17 +4,8 @@ import (
 	"database/sql"
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"log"
-	"strconv"
 	"strings"
 )
-
-func Atoi(str string) int {
-	val, err := strconv.Atoi(str)
-	if err != nil {
-		log.Println(err)
-	}
-	return val
-}
 
 func HandleErrorSql(er error) bool {
 	if er != nil {
@@ -40,7 +31,7 @@ func set_uid(id int, uid string) {
 }
 
 func connect_sql() {
-	log.Println("========Start Connexion DB========")
+	log.Println("=== Start Connexion DB ===")
 	var err error
 	db, err = sql.Open("mysql", DB_USER+":"+DB_PASS+"@("+DB_SERV+":3306)/"+DB_NAME+"?charset=utf8")
 	HandleErrorSql(err)
