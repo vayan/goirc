@@ -30,6 +30,9 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 		}
 		fmt.Println(err)
 	}
+	if len(buf) < 1 {
+		return buf, 1
+	}
 	log.Printf("recv : '%s'", buf)
 	return buf, erri
 }

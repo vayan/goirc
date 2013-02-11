@@ -192,6 +192,15 @@ MAIN IRC
 	color: white;
 }
 
+.menu-settings {
+	left: 0;
+	padding: 5px;
+	display: none;
+	color: white;
+	background-color: #0088cc;
+	height: 60px;
+}
+
 .item-menu-irc {
 	cursor: pointer;
 	text-align: center;

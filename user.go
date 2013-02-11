@@ -6,8 +6,6 @@ import (
 	"strconv"
 )
 
-
-
 func (user *User) update_data_user() {
 	_, id, pseudo, _ := get_user_by_uid(user.uid)
 
