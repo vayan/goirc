@@ -68,6 +68,22 @@ func IrcHandler(w http.ResponseWriter, r *http.Request) {
 	HomeHandler(w, r)
 }
 
+func SetServHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO : ne pas faire avec un form envoye un ws cote cl
+	if need_perm(REGIST, r) {
+		servaddr := r.FormValue("adressserv")
+		servport := r.FormValue("portserv")
+
+		if len(servaddr) < 1 {
+			p := loadPage()
+			RenderHtml(w, "ajx/set-servers", p)
+		} else {
+			log.Print("UI want to connect to serv", servaddr, "port ", servport)
+		}
+
+	}
+}
+
 func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 	idbuffer := Atoi(r.FormValue("idbuffer"))
 	session, _ := store.Get(r, COOKIE_SESSION)
@@ -119,6 +135,9 @@ func start_http_server() {
 	r.HandleFunc("/ajx/register", RegisterHandler)
 	r.HandleFunc("/ajx/login", LoginHandler)
 	r.HandleFunc("/ajx/irc", IrcHandler)
+
+	//ajx html settings
+	r.HandleFunc("/ajx/set-servers", SetServHandler)
 
 	//action form
 	r.HandleFunc("/register", ActionRegisterHandler)

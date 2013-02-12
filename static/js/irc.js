@@ -35,17 +35,3 @@ function parse_irc(msg) {
         break;
     }
 }
-
-$(".formirc button").click(function() {
-    if($(".formirc input").val() != '') {
-        //console.log($(".active a").html());
-        var buffer_id = $(".main-irc .active a").attr('href').substring(1);
-        var txt = $(".formirc input").val();
-        var msg = buffer_id + "]" + txt;
-
-        console.log(msg);
-        ws.send(msg);
-        new_message(buffer_id, "me", txt);
-    }
-    $(".formirc input").val("").focus();
-});

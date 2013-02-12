@@ -1,6 +1,9 @@
 /***********************
 Default style by yann
 v 0.2
+
+TODO : fix scrolling sidebar no scrollbar
+
 ***********************/
 
 /**
@@ -11,14 +14,16 @@ body {
 	font-family: 'Mako', sans-serif;
 }
 
+.fourdigit {
+	max-width: 35px;
+}
+
 .wrap {
 	margin: 0 auto 0 50px;
 }
 
 .content {
-	padding-top: 2px;
-	margin-left: 225px; 
-
+	margin-left: 221px; 
 }
 
 .pagetitle {
@@ -26,6 +31,7 @@ body {
 	top: 5px;
 	color: white;
 }
+
 
 
 .hidden {
@@ -99,6 +105,7 @@ HOME
 **/
 
 .pres {
+	margin-left: 3px;
 	width: 100%;
 	text-align: center;
 }
@@ -193,22 +200,34 @@ MAIN IRC
 }
 
 .menu-settings {
-	left: 0;
+	border-bottom: 2px solid black;
 	padding: 5px;
 	display: none;
-	color: white;
-	background-color: #0088cc;
+	color: black;
+	background-color: rgb(206, 226, 236);
 	height: 60px;
 }
 
-.item-menu-irc {
-	cursor: pointer;
-	text-align: center;
+.menu-irc  .selected { 
 	border-left: 1px solid rgb(65, 60, 60);
 	border-right: 1px solid rgb(65, 60, 60);
-	padding: 33px;
-	background-color: rgb(44, 41, 41);
+	background-color: #111111;
 }
+
+.item-menu-irc {
+	font-size: 2em;
+	line-height: 33px;
+	cursor: pointer;
+	text-align: center;
+	padding: 16px;
+}
+
+.sepport {
+	font-size: 2em;
+	line-height: 33px;
+}
+
+
 
 .main-irc {
 	margin-right: 203px; 
