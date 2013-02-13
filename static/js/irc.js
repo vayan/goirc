@@ -1,3 +1,53 @@
+function load_irc() {
+    var irc = $("#clientirc").html();
+
+    $('.content').html(irc);
+        $(".formirc input").keyup(function(event) {
+            if(event.keyCode == 13) {
+                send_message();
+            }
+        });
+
+        $(".item-menu-irc").click(function() {
+            console.log($(this).html());
+            $(".item-menu-irc").removeClass("selected");
+            if ($(".menu-settings").css("display") == "block") {
+                $(".list").css("top", "60px");
+                $(".bufferchan").css("top", "60px");
+                $(".menu-settings").hide();
+            } else {
+                $(".list").css("top", "130px");
+                $(".bufferchan").css("top", "130px");
+                $('.menu-settings').load('ajx/set-' + $(this).html().toLowerCase());
+                $(".menu-settings").show();
+                $(this).addClass("selected");
+            }   
+        }); 
+}
+
+function send_new_co_serv() {
+    var msg = "log]/connect " + $("#adressserv").val() + ":" + $("#portserv").val();
+    ws.send(msg);
+}
+
+function send_new_join_chan() {
+    //TODO : join chan ui
+}
+
+function send_message() {
+    if($(".formirc input").val() != '') {
+                //console.log($(".active a").html());
+                var buffer_id = $(".main-irc .active a").attr('href').substring(1);
+                var txt = $(".formirc input").val();
+                var msg = buffer_id + "]" + txt;
+
+                console.log(msg);
+                ws.send(msg);
+                new_message(buffer_id, "me", txt);
+    }
+    $(".formirc input").val("").focus();    
+}
+
 function add_new_buffer(buffer) {
     var id = buffer[1];
 

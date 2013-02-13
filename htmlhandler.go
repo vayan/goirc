@@ -53,7 +53,7 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 
 	p := &Page{
 		Title: "IRC in your browser",
-		Data: map[string]string{
+		Data: map[string]interface{}{
 			"one": "one",
 			"uid": uid.(string)}}
 
@@ -69,18 +69,29 @@ func IrcHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetServHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO : ne pas faire avec un form envoye un ws cote cl
 	if need_perm(REGIST, r) {
-		servaddr := r.FormValue("adressserv")
-		servport := r.FormValue("portserv")
+		p := loadPage()
+		RenderHtml(w, "ajx/set-servers", p)
+	}
+}
 
-		if len(servaddr) < 1 {
-			p := loadPage()
-			RenderHtml(w, "ajx/set-servers", p)
-		} else {
-			log.Print("UI want to connect to serv", servaddr, "port ", servport)
+func SetChanHandler(w http.ResponseWriter, r *http.Request) {
+	if need_perm(REGIST, r) {
+		//TODO : test si ws active
+
+		var allserv string
+		session, _ := store.Get(r, COOKIE_SESSION)
+		us := get_user_id(session.Values["id"].(int))
+
+		for _, irco := range us.Buffers {
+			if irco.name[0] != '#' {
+				allserv += "<option>" + irco.name + "</option>"
+			}
 		}
-
+		p := &Page{
+			Title: "IRC in your browser",
+			Data:  map[string]interface{}{"servers": template.HTML(allserv)}}
+		RenderHtml(w, "ajx/set-channels", p)
 	}
 }
 
@@ -115,7 +126,7 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	p := &Page{
 		Title: "IRC in your browser",
-		Data: map[string]string{
+		Data: map[string]interface{}{
 			"name":        Pref.name,
 			"descr":       Pref.descr,
 			"short_descr": Pref.short_descr,
@@ -138,6 +149,7 @@ func start_http_server() {
 
 	//ajx html settings
 	r.HandleFunc("/ajx/set-servers", SetServHandler)
+	r.HandleFunc("/ajx/set-channels", SetChanHandler)
 
 	//action form
 	r.HandleFunc("/register", ActionRegisterHandler)

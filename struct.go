@@ -48,7 +48,7 @@ type Preference struct {
 
 type Page struct {
 	Title string
-	Data  map[string]string
+	Data  map[string]interface{}
 }
 
 type RegisteringUser struct {

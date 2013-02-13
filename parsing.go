@@ -9,7 +9,7 @@ import (
 //parse les message client pour commande
 func parsemsg(id_user int, msg string) {
 	// TODO : check if user is login 
-	// TODO : Secure
+	// TODO : Secure SECURE
 	user := all_users[id_user]
 	data := strings.Split(msg, "]")
 
