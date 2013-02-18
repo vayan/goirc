@@ -42,8 +42,13 @@ func (user *User) add_buffer(name string, addr string, id int, id_serv int) {
 }
 
 func (user *User) add_connexion(nick string, whois string, id_buffer int) {
-	con := irc.IRC(user.Nick, "go#irc")
+	con := irc.IRC(user.Nick, "goirc")
+	con.VerboseCallbackHandler = false //true for debug
 	user.ircObj[id_buffer] = &IrcConnec{con, ""}
+}
+
+func (user *User) add_con_loop(id_buffer int) {
+	user.ircObj[id_buffer].irc.Loop()
 }
 
 func (user *User) start_connexion(id_buffer int, url string) {

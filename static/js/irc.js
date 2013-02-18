@@ -9,7 +9,7 @@ function load_irc() {
         });
 
         $(".item-menu-irc").click(function() {
-            console.log($(this).html());
+            //console.log($(this).html());
             $(".item-menu-irc").removeClass("selected");
             if ($(".menu-settings").css("display") == "block") {
                 $(".list").css("top", "60px");
@@ -31,7 +31,8 @@ function send_new_co_serv() {
 }
 
 function send_new_join_chan() {
-    //TODO : join chan ui
+    var msg = $("#idnetwork").val()+"]/join "+$("#adresschan").val();
+    ws.send(msg);
 }
 
 function send_message() {

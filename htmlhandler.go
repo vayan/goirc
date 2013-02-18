@@ -8,6 +8,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // FIXME : random deco..
@@ -85,7 +86,7 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 
 		for _, irco := range us.Buffers {
 			if irco.name[0] != '#' {
-				allserv += "<option>" + irco.name + "</option>"
+				allserv += "<option value='" + strconv.Itoa(irco.id) + "'>" + irco.name + "</option>"
 			}
 		}
 		p := &Page{
