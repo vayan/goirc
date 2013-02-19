@@ -34,7 +34,7 @@ type Buffer struct {
 	name    string
 	addr    string
 	id      int
-	id_serv int
+	id_serv int //id du buffer network
 }
 
 type Preference struct {
