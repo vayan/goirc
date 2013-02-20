@@ -2,6 +2,7 @@ package main
 
 import (
 	"code.google.com/p/go.net/websocket"
+	"container/list"
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/thoj/go-ircevent"
 )
@@ -31,6 +32,7 @@ type BackLog struct {
 }
 
 type Buffer struct {
+	users   *list.List
 	name    string
 	addr    string
 	id      int

@@ -87,6 +87,10 @@ SIDEBAR
 	bottom: 0;
 }
 
+.switch-userlist {
+	display: none;
+}
+
 .sidebar li a {
  padding: 8px 14px;
 }
@@ -197,6 +201,15 @@ MAIN IRC
 	right: 0;
 	top: 5px;
 	color: white;
+}
+
+.userslist {
+	padding: 5px;
+	width: 210px;
+	overflow: auto;
+	position: absolute;
+	top: 115px;
+	bottom: 0;
 }
 
 .menu-settings {

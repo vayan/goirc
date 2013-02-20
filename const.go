@@ -10,4 +10,5 @@ const (
 	ANON           = 5
 	REGIST         = 4
 	COOKIE_SESSION = "ZebraLion"
+	HOSTNAME_IRC   = "GOIRC"
 )

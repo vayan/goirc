@@ -124,6 +124,20 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusFound)
 }
 
+func UsersListHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO : check connected
+
+	//double server -> not working
+	//server + chan not working
+
+	id := Atoi(r.FormValue("channel"))
+	session, _ := store.Get(r, COOKIE_SESSION)
+	us := get_user_id(session.Values["id"].(int))
+	for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
+		fmt.Fprint(w, e.Value.(string)+"<br />")
+	}
+}
+
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	p := &Page{
 		Title: "IRC in your browser",
@@ -147,6 +161,7 @@ func start_http_server() {
 	r.HandleFunc("/ajx/register", RegisterHandler)
 	r.HandleFunc("/ajx/login", LoginHandler)
 	r.HandleFunc("/ajx/irc", IrcHandler)
+	r.HandleFunc("/ajx/userslist", UsersListHandler)
 
 	//ajx html settings
 	r.HandleFunc("/ajx/set-servers", SetServHandler)

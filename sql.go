@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+//TODO : Check loose connexion
+
 func HandleErrorSql(er error) bool {
 	if er != nil {
 		log.Println(er)

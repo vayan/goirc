@@ -2,13 +2,13 @@ function load_irc() {
     var irc = $("#clientirc").html();
 
     $('.content').html(irc);
-        $(".formirc input").keyup(function(event) {
-            if(event.keyCode == 13) {
-                send_message();
-            }
-        });
+    $(".formirc input").keyup(function(event) {
+        if(event.keyCode == 13) {
+            send_message();
+        }
+    });
 
-        $(".item-menu-irc").click(function() {
+    $(".item-menu-irc").click(function() {
             //console.log($(this).html());
             $(".item-menu-irc").removeClass("selected");
             if ($(".menu-settings").css("display") == "block") {
@@ -23,6 +23,17 @@ function load_irc() {
                 $(this).addClass("selected");
             }   
         }); 
+    $('.switch-userlist').show();
+    $('#userlisttab').click ();
+}
+
+//TODO : Optimize this call less
+function aff_user_list(id) {
+    $.post("/ajx/userslist", {
+        channel: id
+    }).done(function(data) {
+        $('#userlist').html(data);
+    });
 }
 
 function send_new_co_serv() {
@@ -45,14 +56,14 @@ function send_message() {
                 console.log(msg);
                 ws.send(msg);
                 new_message(buffer_id, "me", txt);
-    }
-    $(".formirc input").val("").focus();    
+            }
+            $(".formirc input").val("").focus();    
 }
 
 function add_new_buffer(buffer) {
     var id = buffer[1];
 
-    $('.listbuffer').append('<li><a href="#' + id + '" data-toggle="tab">' + buffer[2] + '</a></li>');
+    $('.listbuffer').append('<li onclick="aff_user_list('+id+')"><a href="#' + id + '" data-toggle="tab">' + buffer[2] + '</a></li>');
     $('.contentbuffer').append('<div class="tab-pane bufferchan" id="' + id + '"><table class="table table-striped allmsg"></table></div>');
     $.post("/ajx/backlog", {
         idbuffer: id
@@ -74,15 +85,15 @@ function get_timestamp_now() {
 }
 
 function parse_irc(msg) {
-    // TODO : check le ] dans le message pour eviter split useless
-    var buff = msg.split(']');
-    switch(buff[0]) {
-    case "buffer":
-        console.log("new buffer " + buff[1]);
-        add_new_buffer(buff);
-        break;
-    default:
-        new_message(buff[0], buff[1], buff[2]);
-        break;
-    }
+// TODO : check le ] dans le message pour eviter split useless
+var buff = msg.split(']');
+switch(buff[0]) {
+case "buffer":
+console.log("new buffer " + buff[1]);
+add_new_buffer(buff);
+break;
+default:
+new_message(buff[0], buff[1], buff[2]);
+break;
+}
 }

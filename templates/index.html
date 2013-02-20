@@ -20,28 +20,40 @@
     </div>
 
     <div class="sidebar">
-      <ul class="nav nav-list bs-docs-sidenav">
-        <li><a href="#home">Home <i class="icon-chevron-right"></i> </a></li>
-        {{if .Data.login}} 
-        <li><a href="logout">Logout<i class="icon-chevron-right"></i> </a></li> 
-        {{else}} 
-        <li><a href="#register">Register<i class="icon-chevron-right"></i> </a></li>
-        {{end}}
-        {{if .Data.login}}  {{else}} <li><a href="#login">Login<i class="icon-chevron-right"></i> </a></li>  {{end}}
 
-        <li><a href="#irc">Irc <i class="icon-chevron-right"></i> </a></li>
-        <li><a href="#foo">Setting <i class="icon-chevron-right"></i> </a></li>
-        <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
-        <li><a href="#foo">Foo <i class="icon-chevron-right"></i> </a></li>
-        <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
-      </ul>
+        <ul class="nav nav-tabs switch-userlist">
+          <li class="active"><a href="#menu" data-toggle="tab">Menu</a></li>
+          <li><a id="userlisttab" href="#userlist" data-toggle="tab">User List</a></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane active" id="menu">
+            <ul class="nav nav-list bs-docs-sidenav">
+              <li id="home"><a href="#home">Home <i class="icon-chevron-right"></i> </a></li>
+              {{if .Data.login}} 
+              <li><a href="logout">Logout<i class="icon-chevron-right"></i> </a></li> 
+              {{else}} 
+              <li id="register"><a href="#register">Register<i class="icon-chevron-right"></i> </a></li>
+              {{end}}
+              {{if .Data.login}}  {{else}} <li id="login"><a href="#login">Login<i class="icon-chevron-right"></i> </a></li>  {{end}}
+
+              <li id="irc"><a href="#irc">Irc <i class="icon-chevron-right"></i> </a></li>
+              <li><a href="#foo">Setting <i class="icon-chevron-right"></i> </a></li>
+              <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
+              <li><a href="#foo">Foo <i class="icon-chevron-right"></i> </a></li>
+              <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
+            </ul> 
+          </div>
+          <div class="tab-pane userslist" id="userlist">None</div>
+        </div>
+      
+      
     </div>
 
     <div class="content">
 
     </div>
     {{if .Data.login}} 
-      <span class="hidden" id="clientirc">
+    <span class="hidden" id="clientirc">
       <h2 class="pagetitle"> Settings : </h2>
       <div class="menu-irc"> <span class="item-menu-irc">Servers</span>  <span class="item-menu-irc">Channels</span> </div>
       <div class="menu-settings">blabla </div>
