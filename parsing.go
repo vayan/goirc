@@ -6,6 +6,8 @@ import (
 	"strings"
 )
 
+//TODO : epur str on all incoming message
+
 func check_buffer_exist(id_buffer int, id_user int) bool {
 	for id, _ := range all_users[id_user].Buffers {
 		if id == id_buffer {

@@ -90,6 +90,7 @@ func get_user(email string, pass string) (bool, int, string, string, string) {
 
 func insert_new_user(user RegisteringUser) int {
 	//TODO : verif pseudo / mail pas deja existant
+	// TODO : welcom mail to send
 
 	if (strings.Contains(user.InputMail, "@")) && (user.InputPass == user.InputPassVerif) && (len(user.InputPseudo) <= Pref.max_lenght_pseudo) {
 		_, err := db.Exec("INSERT INTO users (pseudo, mail, password) VALUES (?, ?, ?)", user.InputPseudo, user.InputMail, EncryptPass(user.InputPass))

@@ -42,6 +42,8 @@ func (user *User) find_server_by_channel(channel int) int {
 
 //TODO : verif duplicate buffer
 func (user *User) add_buffer(name string, addr string, id int, id_serv int) {
+	name = strings.ToLower(name)
+	addr = strings.ToLower(addr)
 	new_buffer := Buffer{list.New(), name, addr, id, id_serv}
 	user.Buffers[id] = &new_buffer
 }
