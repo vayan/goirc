@@ -9,20 +9,21 @@ function load_irc() {
     });
 
     $(".item-menu-irc").click(function() {
-            //console.log($(this).html());
             $(".item-menu-irc").removeClass("selected");
             if ($(".menu-settings").css("display") == "block") {
+                console.log("hide");
                 $(".list").css("top", "60px");
                 $(".bufferchan").css("top", "60px");
                 $(".menu-settings").hide();
             } else {
+                console.log("show");
                 $(".list").css("top", "130px");
                 $(".bufferchan").css("top", "130px");
                 $('.menu-settings').load('ajx/set-' + $(this).html().toLowerCase());
                 $(".menu-settings").show();
                 $(this).addClass("selected");
-            }   
-        }); 
+            }
+        });
     $('.switch-userlist').show();
     $('#userlisttab').click ();
 }
@@ -39,11 +40,15 @@ function aff_user_list(id) {
 function send_new_co_serv() {
     var msg = "log]/connect " + $("#adressserv").val() + ":" + $("#portserv").val();
     ws.send(msg);
+    new_message("log", "log", "Connecting to "+$("#adressserv").val()+"...");
+    $(".menu-irc > .selected").click();
 }
 
 function send_new_join_chan() {
     var msg = $("#idnetwork").val()+"]/join "+$("#adresschan").val();
     ws.send(msg);
+    new_message("log", "log", "Joining "+$("#adresschan").val()+"...");
+    $(".menu-irc > .selected").click();
 }
 
 function send_message() {
@@ -62,6 +67,12 @@ function send_message() {
 
 function add_new_buffer(buffer) {
     var id = buffer[1];
+
+    if (buffer[2][0] != '#') {
+        new_message("log", "log", "Connected to "+buffer[2]+"!");
+    } else {
+        new_message("log", "log", "Joined "+buffer[2]+"!");
+    }
 
     $('.listbuffer').append('<li onclick="aff_user_list('+id+')"><a href="#' + id + '" data-toggle="tab">' + buffer[2] + '</a></li>');
     $('.contentbuffer').append('<div class="tab-pane bufferchan" id="' + id + '"><table class="table table-striped allmsg"></table></div>');

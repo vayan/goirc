@@ -6,6 +6,15 @@ import (
 	"strings"
 )
 
+func check_buffer_exist(id_buffer int, id_user int) bool {
+	for id, _ := range all_users[id_user].Buffers {
+		if id == id_buffer {
+			return true
+		}
+	}
+	return false
+}
+
 //parse les message client pour commande
 func parsemsg(id_user int, msg string) {
 	// TODO : check if user is login 
@@ -18,6 +27,7 @@ func parsemsg(id_user int, msg string) {
 		for pl, _ := range all_users {
 			if all_users[pl].uid == data[1] {
 				all_users[pl].ws = user.ws
+				all_users[pl].online = true
 				delete(all_users, id_user)
 				log.Print("user find link etablish")
 				all_users[pl].send_all_buffer()
@@ -27,13 +37,17 @@ func parsemsg(id_user int, msg string) {
 		}
 		log.Print("user not find create new instance")
 		//TODO : check if uid exist in bdd
+		user.online = true
 		user.uid = data[1]
 		user.update_data_user()
 		user.ircObj = make(map[int]*IrcConnec)
 		user.Buffers = make(map[int]*Buffer)
-	} else {
+	} else if all_users[id_user].online == true {
 
 		buffer_id, _ := strconv.Atoi(data[0])
+		if len(data) <= 1 {
+			return
+		}
 		buff_msg := data[1]
 
 		buff := strings.Split(buff_msg, " ")
@@ -46,10 +60,14 @@ func parsemsg(id_user int, msg string) {
 			go join_channel(id_user, user.find_server_by_channel(buffer_id), buff[1])
 			return
 		case "/msg":
-			go send_msg(id_user, buffer_id, buff[1])
+			if check_buffer_exist(buffer_id, id_user) {
+				go send_msg(id_user, buffer_id, buff[1])
+			}
 			return
 		default:
-			go send_msg(id_user, buffer_id, buff_msg)
+			if check_buffer_exist(buffer_id, id_user) {
+				go send_msg(id_user, buffer_id, buff_msg)
+			}
 			return
 		}
 	}

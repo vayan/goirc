@@ -15,6 +15,7 @@ type User struct {
 	uid     string
 	id      int
 	Nick    string
+	online  bool
 	ircObj  map[int]*IrcConnec
 	Buffers map[int]*Buffer
 	ws      *websocket.Conn
