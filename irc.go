@@ -1,6 +1,7 @@
 package main
 
 import (
+	"html/template"
 	"strings"
 )
 
@@ -8,9 +9,10 @@ import (
 
 func send_msg(id_user int, server int, message string) {
 	user := all_users[id_user]
+	msg := template.HTMLEscapeString(message)
 
-	user.ircObj[all_users[id_user].Buffers[server].id_serv].irc.Privmsg(all_users[id_user].Buffers[server].name, message)
-	go insert_new_message(user.id, user.Buffers[server].addr, user.ircObj[user.Buffers[server].id_serv].irc.GetNick(), message)
+	user.ircObj[all_users[id_user].Buffers[server].id_serv].irc.Privmsg(all_users[id_user].Buffers[server].name, msg)
+	go insert_new_message(user.id, user.Buffers[server].addr, user.ircObj[user.Buffers[server].id_serv].irc.GetNick(), msg)
 }
 
 func join_channel(id_user int, server int, channel string) {

@@ -3,6 +3,7 @@ package main
 import (
 	"container/list"
 	"github.com/thoj/go-ircevent"
+	"html/template"
 	"log"
 	"strconv"
 	"strings"
@@ -100,8 +101,9 @@ func (user *User) on_message(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("PRIVMSG", func(e *irc.Event) {
 		id_buffer_chan := user.find_id_buffer(e.Arguments[0], id_buffer)
 		log.Print(e.Arguments)
-		go insert_new_message(user.id, user.Buffers[id_buffer].addr+e.Arguments[0], e.Nick, e.Message)
-		go ws_send(strconv.Itoa(id_buffer_chan)+"]"+e.Nick+"]"+e.Message, user.ws)
+		msg := template.HTMLEscapeString(e.Message)
+		go insert_new_message(user.id, user.Buffers[id_buffer].addr+e.Arguments[0], e.Nick, msg)
+		go ws_send(strconv.Itoa(id_buffer_chan)+"]"+e.Nick+"]"+msg, user.ws)
 	})
 }
 
