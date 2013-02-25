@@ -107,7 +107,7 @@ func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 			if buff.id == idbuffer {
 				backlog := get_backlog(user.id, user.Buffers[idbuffer].addr)
 				for _, log := range backlog {
-					fmt.Fprint(w, "<tr class=\"msg\"><td class=\"pseudo\">"+log.nick+"</td><td class=\"message\">"+log.message+"</td><td class=\"time\">"+log.time+"</td></tr>")
+					fmt.Fprint(w, "<tr class=\"msg\"><td class=\"pseudo\">"+log.nick+"</td><td class=\"message\"><div class='messagediv'>"+log.message+"</div></td><td class=\"time\">"+log.time+"</td></tr>")
 				}
 				return
 			}

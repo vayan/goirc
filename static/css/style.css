@@ -288,9 +288,12 @@ MAIN IRC
 	
 }
 
-
 .bufferchan .message {
-	
+	word-break: break-all;
+}
+
+.bufferchan .messagediv {
+	word-break: break-all;
 }
 
 .bufferchan .time {
