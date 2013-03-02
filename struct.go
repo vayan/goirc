@@ -33,11 +33,12 @@ type BackLog struct {
 }
 
 type Buffer struct {
-	users   *list.List
-	name    string
-	addr    string
-	id      int
-	id_serv int //id du buffer network
+	users      *list.List
+	name       string
+	front_name string
+	addr       string
+	id         int
+	id_serv    int //id du buffer network
 }
 
 type Preference struct {

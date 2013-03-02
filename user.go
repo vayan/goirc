@@ -42,16 +42,17 @@ func (user *User) find_server_by_channel(channel int) int {
 }
 
 //TODO : verif duplicate buffer
-func (user *User) add_buffer(name string, addr string, id int, id_serv int) {
+func (user *User) add_buffer(name string, front_name string, addr string, id int, id_serv int) {
+	// TODO : send new buffer to cl here, delete all other
 	name = strings.ToLower(name)
 	addr = strings.ToLower(addr)
-	new_buffer := Buffer{list.New(), name, addr, id, id_serv}
+	new_buffer := Buffer{list.New(), name, front_name, addr, id, id_serv}
 	user.Buffers[id] = &new_buffer
 }
 
 func (user *User) add_connexion(nick string, whois string, id_buffer int) {
 	con := irc.IRC(user.Nick, HOSTNAME_IRC)
-	con.VerboseCallbackHandler = false //true for debug
+	con.VerboseCallbackHandler = true //true for debug
 	user.ircObj[id_buffer] = &IrcConnec{con, ""}
 }
 
@@ -75,7 +76,7 @@ func (user *User) on_user_list(id_buffer int) {
 		id_buffer_chan := user.find_id_buffer(e.Arguments[2], id_buffer)
 		if id_buffer_chan == -1 {
 			id_buffer_chan = user.get_new_id_buffer()
-			user.add_buffer(e.Arguments[2], user.Buffers[id_buffer].addr+e.Arguments[2], id_buffer_chan, id_buffer)
+			user.add_buffer(e.Arguments[2], e.Arguments[2], user.Buffers[id_buffer].addr+e.Arguments[2], id_buffer_chan, id_buffer)
 		}
 		arr := strings.Split(e.Message, " ")
 		for _, val := range arr {
@@ -86,7 +87,7 @@ func (user *User) on_user_list(id_buffer int) {
 
 func (user *User) send_all_buffer() {
 	for _, buff := range user.Buffers {
-		ws_send("buffer]"+strconv.Itoa(buff.id)+"]"+buff.name, user.ws)
+		ws_send("buffer]"+strconv.Itoa(buff.id)+"]"+buff.front_name, user.ws)
 	}
 }
 
@@ -99,7 +100,16 @@ func (user *User) on_connect(id_buffer int) {
 
 func (user *User) on_message(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("PRIVMSG", func(e *irc.Event) {
-		id_buffer_chan := user.find_id_buffer(e.Arguments[0], id_buffer)
+		buffer_name := e.Arguments[0]
+		if buffer_name[0] != '#' {
+			buffer_name = e.Nick
+		}
+		id_buffer_chan := user.find_id_buffer(buffer_name, id_buffer)
+		if id_buffer_chan == -1 {
+			id_buffer_chan = user.get_new_id_buffer()
+			user.add_buffer(buffer_name, e.Nick, user.Buffers[id_buffer].addr, id_buffer_chan, id_buffer)
+			ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
+		}
 		log.Print(e.Arguments)
 		msg := template.HTMLEscapeString(e.Message)
 		go insert_new_message(user.id, user.Buffers[id_buffer].addr+e.Arguments[0], e.Nick, msg)
@@ -112,7 +122,7 @@ func (user *User) on_join(id_buffer int) {
 		id_buffer_chan := user.find_id_buffer(e.Arguments[1], id_buffer)
 		if id_buffer_chan == -1 {
 			id_buffer_chan := user.get_new_id_buffer()
-			user.add_buffer(e.Arguments[1], user.Buffers[id_buffer].addr+e.Arguments[1], id_buffer_chan, id_buffer)
+			user.add_buffer(e.Arguments[1], e.Arguments[1], user.Buffers[id_buffer].addr+e.Arguments[1], id_buffer_chan, id_buffer)
 		}
 		ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1], user.ws)
 	})
