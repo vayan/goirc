@@ -196,6 +196,10 @@ LOGIN
 MAIN IRC
 **/
 
+.allmsg {
+	font-size: 12px;
+}
+
 .menu-irc {
 	position: absolute;
 	right: 0;

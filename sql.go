@@ -5,6 +5,7 @@ import (
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"log"
 	"strings"
+	"time"
 )
 
 //TODO : Check loose connexion
@@ -60,13 +61,15 @@ func get_backlog(id_user int, buffer string) []*BackLog {
 	rows, err := db.Query("SELECT nick, message, time FROM logirc WHERE id_user = ? AND buffer = ? ORDER BY time ASC", id_user, buffer)
 	HandleErrorSql(err)
 	backlog := make([]*BackLog, 0, 10)
-	var nick, message, time string
+	var nick, message, timesql string
 	for rows.Next() {
-		err = rows.Scan(&nick, &message, &time)
+		err = rows.Scan(&nick, &message, &timesql)
 		if err != nil {
 			// TODO : Handle error
 		}
-		backlog = append(backlog, &BackLog{nick, message, time})
+		date, _ := time.Parse("2006-01-02 15:04:05", timesql)
+		dateaff := date.Format("15:04")
+		backlog = append(backlog, &BackLog{nick, message, dateaff})
 	}
 	return backlog
 }
