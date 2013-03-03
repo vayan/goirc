@@ -1,4 +1,4 @@
-function load_irc() {
+var load_irc = function () {
     var irc = $("#clientirc").html();
 
     $('.content').html(irc);
@@ -26,32 +26,32 @@ function load_irc() {
         });
     $('.switch-userlist').show();
     $('#userlisttab').click ();
-}
+};
 
 //TODO : Optimize this call less
-function aff_user_list(id) {
+var aff_user_list = function (id) {
     $.post("/ajx/userslist", {
         channel: id
     }).done(function(data) {
         $('#userlist').html(data);
     });
-}
+};
 
-function send_new_co_serv() {
+var send_new_co_serv = function () {
     var msg = "log]/connect " + $("#adressserv").val() + ":" + $("#portserv").val();
     ws.send(msg);
     new_message("log", "log", "Connecting to "+$("#adressserv").val()+"...");
     $(".menu-irc > .selected").click();
-}
+};
 
-function send_new_join_chan() {
+var send_new_join_chan = function () {
     var msg = $("#idnetwork").val()+"]/join "+$("#adresschan").val();
     ws.send(msg);
     new_message("log", "log", "Joining "+$("#adresschan").val()+"...");
     $(".menu-irc > .selected").click();
-}
+};
 
-function send_message() {
+var send_message = function () {
     if($(".formirc input").val() != '') {
                 //console.log($(".active a").html());
                 var buffer_id = $(".main-irc .active a").attr('href').substring(1);
@@ -63,9 +63,9 @@ function send_message() {
                 new_message(buffer_id, "me", txt);
             }
             $(".formirc input").val("").focus();    
-}
+};
 
-function add_new_buffer(buffer) {
+var add_new_buffer = function (buffer) {
     var id = buffer[1];
 
     if (buffer[2][0] != '#') {
@@ -81,21 +81,21 @@ function add_new_buffer(buffer) {
     }).done(function(data) {
         $('.contentbuffer #' + id + ' .allmsg').append(data);
     });
-}
+};
 
-function new_message(id_buffer, nick, msg) {
+var new_message = function (id_buffer, nick, msg) {
     if(msg.charAt(0) == '/') return;
     $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td class="pseudo">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
     $('#' + id_buffer).scrollTop($('#' + id_buffer)[0].scrollHeight);
-}
+};
 
-function get_timestamp_now() {
+var get_timestamp_now = function () {
     var d = new Date();
     var timestamp = d.getHours() + ":" + d.getMinutes();
     return timestamp;
-}
+};
 
-function parse_irc(msg) {
+var parse_irc = function (msg) {
 // TODO : check le ] dans le message pour eviter split useless
 var buff = msg.split(']');
 switch(buff[0]) {
@@ -107,4 +107,4 @@ default:
 new_message(buff[0], buff[1], buff[2]);
 break;
 }
-}
+};

@@ -1,12 +1,12 @@
 //piou piou
 
-function update_active_sidebar(page) {
+var update_active_sidebar = function (page) {
     $('.switch-userlist').hide();
     $(".sidebar #menu  li").removeClass("active");
     $(".sidebar #menu #"+page).addClass("active");
-}
+};
 
-function ChangePage(page) {
+var ChangePage = function (page) {
     switch(page) {
         case "irc":
             update_active_sidebar(page);
@@ -27,7 +27,7 @@ function ChangePage(page) {
         default:
         break;
     }
-}
+};
 
 $(".sidebar #menu li").click(function() {
     var name = $(this).find("a").attr("href").substring(1);
