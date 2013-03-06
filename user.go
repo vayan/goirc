@@ -80,7 +80,8 @@ func (user *User) on_user_list(id_buffer int) {
 		}
 		arr := strings.Split(e.Message, " ")
 		for _, val := range arr {
-			user.Buffers[id_buffer_chan].users.PushBack(val)
+			chanuser := ChannelUser{val, GenerateColor()}
+			user.Buffers[id_buffer_chan].users.PushBack(chanuser)
 		}
 	})
 }

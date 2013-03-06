@@ -21,6 +21,11 @@ type User struct {
 	ws      *websocket.Conn
 }
 
+type ChannelUser struct {
+	nick  string
+	color string
+}
+
 type IrcConnec struct {
 	irc  *irc.Connection
 	Nick string

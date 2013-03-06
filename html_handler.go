@@ -134,7 +134,8 @@ func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, COOKIE_SESSION)
 	us := get_user_id(session.Values["id"].(int))
 	for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
-		fmt.Fprint(w, e.Value.(string)+"<br />")
+		chanus := e.Value.(ChannelUser)
+		fmt.Fprint(w, "<span style='color : "+chanus.color+";'>"+chanus.nick+" </span><br />")
 	}
 }
 
