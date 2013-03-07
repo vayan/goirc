@@ -133,10 +133,16 @@ func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 	id := Atoi(r.FormValue("channel"))
 	session, _ := store.Get(r, COOKIE_SESSION)
 	us := get_user_id(session.Values["id"].(int))
+	fmt.Fprint(w, "<ul class='nav nav-list'>")
+	fmt.Fprint(w, "<li class='nav-header'>Chatting</li>")
+
+	fmt.Fprint(w, "<li class='divider'></li>")
+	fmt.Fprint(w, "<li class='nav-header'>User List</li>")
 	for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
 		chanus := e.Value.(ChannelUser)
-		fmt.Fprint(w, "<span style='color : "+chanus.color+";'>"+chanus.nick+" </span><br />")
+		fmt.Fprint(w, " <li><a href='#' style='color : "+chanus.color+";'>"+chanus.nick+" </a></li>")
 	}
+	fmt.Fprint(w, "</ul>")
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {

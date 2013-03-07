@@ -85,13 +85,15 @@ var add_new_buffer = function (buffer) {
 
 var new_message = function (id_buffer, nick, msg) {
     if(msg.charAt(0) == '/') return;
-    $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td class="pseudo">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
+    $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
     $('#' + id_buffer).scrollTop($('#' + id_buffer)[0].scrollHeight);
 };
 
 var get_timestamp_now = function () {
     var d = new Date();
-    var timestamp = d.getHours() + ":" + d.getMinutes();
+    var hour = '0' + d.getHours();
+    var min = '0' + d.getMinutes();
+    var timestamp = hour.slice(-2) +  ":" + min.slice(-2) ;
     return timestamp;
 };
 

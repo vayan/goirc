@@ -289,7 +289,8 @@ MAIN IRC
 }
 
 .bufferchan .pseudo {
-	
+	width: 10%;
+	border-right: 1px solid #dddddd;
 }
 
 .bufferchan .message {
@@ -301,7 +302,8 @@ MAIN IRC
 }
 
 .bufferchan .time {
-	text-align: center;
+	color : #dddddd;
+	text-align: right;
 	
 }
 
