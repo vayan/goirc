@@ -2,6 +2,7 @@ package main
 
 import (
 	"code.google.com/p/go.net/websocket"
+	"encoding/json"
 	"fmt"
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/gorilla/mux"
@@ -97,6 +98,7 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO : JSON all that
 	idbuffer := Atoi(r.FormValue("idbuffer"))
 	session, _ := store.Get(r, COOKIE_SESSION)
 
@@ -107,7 +109,7 @@ func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 			if buff.id == idbuffer {
 				backlog := get_backlog(user.id, user.Buffers[idbuffer].addr)
 				for _, log := range backlog {
-					fmt.Fprint(w, "<tr class=\"msg\"><td class=\"pseudo\">"+log.nick+"</td><td class=\"message\"><div class='messagediv'>"+log.message+"</div></td><td class=\"time\">"+log.time+"</td></tr>")
+					fmt.Fprint(w, "<tr class=\"msg\"><td class=\"pseudo "+log.nick+"\">"+log.nick+"</td><td class=\"message\"><div class='messagediv'>"+log.message+"</div></td><td class=\"time\">"+log.time+"</td></tr>")
 				}
 				return
 			}
@@ -127,22 +129,18 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO : check connected
 
-	//double server -> not working
-	//server + chan not working
-
+	jsonres := "{ \"UserList\":["
 	id := Atoi(r.FormValue("channel"))
 	session, _ := store.Get(r, COOKIE_SESSION)
 	us := get_user_id(session.Values["id"].(int))
-	fmt.Fprint(w, "<ul class='nav nav-list'>")
-	fmt.Fprint(w, "<li class='nav-header'>Chatting</li>")
 
-	fmt.Fprint(w, "<li class='divider'></li>")
-	fmt.Fprint(w, "<li class='nav-header'>User List</li>")
 	for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
-		chanus := e.Value.(ChannelUser)
-		fmt.Fprint(w, " <li><a href='#' style='color : "+chanus.color+";'>"+chanus.nick+" </a></li>")
+		b, _ := json.Marshal(e.Value.(ChannelUser))
+		jsonres += string(b) + ","
 	}
-	fmt.Fprint(w, "</ul>")
+	jsonres = jsonres[:len(jsonres)-1]
+	jsonres += "]}"
+	fmt.Fprint(w, jsonres)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {

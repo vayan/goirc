@@ -6,6 +6,7 @@ import (
 	"strconv"
 )
 
+//TODO : more flashy color
 func GenerateColor() string {
 	var r, g, b int
 

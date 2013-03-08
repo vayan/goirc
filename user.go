@@ -80,7 +80,8 @@ func (user *User) on_user_list(id_buffer int) {
 		}
 		arr := strings.Split(e.Message, " ")
 		for _, val := range arr {
-			chanuser := ChannelUser{val, GenerateColor()}
+			//TODO : check other chara than @
+			chanuser := ChannelUser{val, strings.Replace(val, "@", "", 1), GenerateColor()}
 			user.Buffers[id_buffer_chan].users.PushBack(chanuser)
 		}
 	})

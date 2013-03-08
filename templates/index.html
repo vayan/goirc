@@ -43,7 +43,19 @@
               <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
             </ul> 
           </div>
-          <div class="tab-pane userslist" id="userlist">None</div>
+          <div class="tab-pane userslist" id="userlist">
+            <span id="userlist-style">
+
+            </span>
+            <ul class='nav nav-list'>
+              <li class='nav-header'>Chatting</li>
+              <li class='divider'></li>
+              <li class='nav-header'>User List</li>
+              <span id="userlist-current">
+
+              </span>
+            </ul>
+          </div>
         </div>
       
       
@@ -56,7 +68,7 @@
     <span class="hidden" id="clientirc">
       <h2 class="pagetitle"> Settings : </h2>
       <div class="menu-irc"> <span class="item-menu-irc">Servers</span>  <span class="item-menu-irc">Channels</span> </div>
-      <div class="menu-settings">blabla </div>
+      <div class="menu-settings"></div>
       <div class="main-irc">
         <input type="hidden" name="activeserver" value="" />
         <input type="hidden" name="activechannel" value="" />
@@ -90,10 +102,5 @@
   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
   <script src="static/js/irc.js"></script>
   <script src="static/js/import/bootstrap.min.js"></script>
-  <script src="static/js/websocket.js"></script>
-  <script src="static/js/sidebar.js"></script>
-  <script src="static/js/main.js"></script>
-  <script src="static/js/import/jquery.mousewheel.js"></script>
-  <script src="static/js/import/jquery.scrollbars.js"></script>
 </body>
 </html>

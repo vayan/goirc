@@ -22,8 +22,9 @@ type User struct {
 }
 
 type ChannelUser struct {
-	nick  string
-	color string
+	Nick      string
+	NickClean string
+	Color     string
 }
 
 type IrcConnec struct {
