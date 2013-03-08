@@ -11,5 +11,6 @@ func main() {
 	rand.Seed(time.Now().UnixNano())
 	connect_sql()
 	get_preference()
+	go restore_lost_server()
 	start_http_server()
 }

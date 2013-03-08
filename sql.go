@@ -57,6 +57,22 @@ func get_user_by_uid(uid string) (bool, int, string, string) {
 	return valid, id, pseudo, mail
 }
 
+func get_user_by_id(id int) (bool, string, string, string) {
+	var pseudo, mail, uid string
+
+	valid := false
+	row := db.QueryRow("SELECT uid, pseudo, mail FROM users WHERE id = ? ", id)
+
+	err := row.Scan(&uid, &pseudo, &mail)
+	if len(pseudo) > 0 {
+		valid = true
+	}
+	if err != nil {
+		log.Println(err)
+	}
+	return valid, uid, pseudo, mail
+}
+
 func get_backlog(id_user int, buffer string) []*BackLog {
 	rows, err := db.Query("SELECT nick, message, time FROM logirc WHERE id_user = ? AND buffer = ? ORDER BY time ASC", id_user, buffer)
 	HandleErrorSql(err)
@@ -89,6 +105,35 @@ func get_user(email string, pass string) (bool, int, string, string, string) {
 		log.Println(err)
 	}
 	return valid, id, pseudo, mail, uid
+}
+
+func get_restore_sessions() []*RestoreSession {
+	rows, err := db.Query("SELECT id_user, server, channel FROM session_save")
+	HandleErrorSql(err)
+	restoresessions := make([]*RestoreSession, 0, 10)
+	var server, channel string
+	var id_user int
+	for rows.Next() {
+		err = rows.Scan(&id_user, &server, &channel)
+		if err != nil {
+			// TODO : Handle error
+		}
+		restoresessions = append(restoresessions, &RestoreSession{id_user, server, channel})
+	}
+	return restoresessions
+}
+
+func insert_new_server_session(id_user int, server string) {
+	//TODO : check doublon
+	_, err := db.Exec("INSERT INTO session_save (id_user, server, channel) VALUES (?, ?, ?)", id_user, server, "")
+	HandleErrorSql(err)
+}
+
+func insert_new_channel_session(id_user int, server string, channel string) {
+	//TODO : check doublon
+	channel = "," + channel
+	_, err := db.Exec("UPDATE session_save SET channel = CONCAT(channel, ?) WHERE id_user = ? AND server = ?", channel, id_user, server)
+	HandleErrorSql(err)
 }
 
 func insert_new_user(user RegisteringUser) int {

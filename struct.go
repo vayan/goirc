@@ -67,3 +67,9 @@ type RegisteringUser struct {
 	InputPass      string
 	InputPassVerif string
 }
+
+type RestoreSession struct {
+	id_user int
+	server  string
+	channel string
+}

@@ -185,5 +185,4 @@ func start_http_server() {
 
 	log.Print("=== Listening on " + port_http + " ===")
 	log.Fatal(http.ListenAndServe(":"+port_http, r))
-
 }

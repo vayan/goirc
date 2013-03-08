@@ -22,7 +22,17 @@ func get_user_id(id int) *User {
 	return nil
 }
 
-// get id client by ws 
+//recuperer la key de la map duser
+func get_key_allusers_by_id(id int) int {
+	for key, us := range all_users {
+		if us.id == id {
+			return key
+		}
+	}
+	return -1
+}
+
+// get id/key client by ws 
 func get_user_ws(ws *websocket.Conn) int {
 	for pl, _ := range all_users {
 		if all_users[pl].ws == ws {

@@ -52,7 +52,7 @@ func (user *User) add_buffer(name string, front_name string, addr string, id int
 
 func (user *User) add_connexion(nick string, whois string, id_buffer int) {
 	con := irc.IRC(user.Nick, HOSTNAME_IRC)
-	con.VerboseCallbackHandler = true //true for debug
+	con.VerboseCallbackHandler = false //true for debug
 	user.ircObj[id_buffer] = &IrcConnec{con, ""}
 }
 
@@ -96,6 +96,7 @@ func (user *User) send_all_buffer() {
 func (user *User) on_connect(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("001", func(e *irc.Event) {
 		ws_send("buffer]"+strconv.Itoa(id_buffer)+"]"+user.Buffers[id_buffer].name, user.ws)
+		go insert_new_server_session(user.id, user.Buffers[id_buffer].name)
 		user.ircObj[id_buffer].Nick = user.Nick
 	})
 }
@@ -113,9 +114,8 @@ func (user *User) on_message(id_buffer int) {
 			ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
 		}
 		log.Print(e.Arguments)
-		msg := template.HTMLEscapeString(e.Message)
-		go insert_new_message(user.id, user.Buffers[id_buffer].addr+e.Arguments[0], e.Nick, msg)
-		go ws_send(strconv.Itoa(id_buffer_chan)+"]"+e.Nick+"]"+msg, user.ws)
+		go insert_new_message(user.id, user.Buffers[id_buffer].addr+e.Arguments[0], e.Nick, e.Message)
+		go ws_send(strconv.Itoa(id_buffer_chan)+"]"+e.Nick+"]"+template.HTMLEscapeString(e.Message), user.ws)
 	})
 }
 
@@ -127,5 +127,6 @@ func (user *User) on_join(id_buffer int) {
 			user.add_buffer(e.Arguments[1], e.Arguments[1], user.Buffers[id_buffer].addr+e.Arguments[1], id_buffer_chan, id_buffer)
 		}
 		ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1], user.ws)
+		insert_new_channel_session(user.id, user.Buffers[id_buffer].name, e.Arguments[1])
 	})
 }
