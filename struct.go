@@ -14,6 +14,7 @@ int of ircObj is the id of the buffer
 type User struct {
 	uid     string
 	id      int
+	key     int
 	Nick    string
 	online  bool
 	ircObj  map[int]*IrcConnec
@@ -45,6 +46,7 @@ type Buffer struct {
 	addr       string
 	id         int
 	id_serv    int //id du buffer network
+	connected  bool
 }
 
 type Preference struct {

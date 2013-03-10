@@ -71,6 +71,7 @@ func IrcHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetServHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO : check connected
 	if need_perm(REGIST, r) {
 		p := loadPage()
 		RenderHtml(w, "ajx/set-servers", p)

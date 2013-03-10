@@ -46,7 +46,7 @@ func (user *User) add_buffer(name string, front_name string, addr string, id int
 	// TODO : send new buffer to cl here, delete all other
 	name = strings.ToLower(name)
 	addr = strings.ToLower(addr)
-	new_buffer := Buffer{list.New(), name, front_name, addr, id, id_serv}
+	new_buffer := Buffer{list.New(), name, front_name, addr, id, id_serv, false}
 	user.Buffers[id] = &new_buffer
 }
 
@@ -89,15 +89,19 @@ func (user *User) on_user_list(id_buffer int) {
 
 func (user *User) send_all_buffer() {
 	for _, buff := range user.Buffers {
-		ws_send("buffer]"+strconv.Itoa(buff.id)+"]"+buff.front_name, user.ws)
+		if buff.connected == true {
+			ws_send("buffer]"+strconv.Itoa(buff.id)+"]"+buff.front_name, user.ws)
+		}
 	}
 }
 
 func (user *User) on_connect(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("001", func(e *irc.Event) {
+		user.Buffers[id_buffer].connected = true
 		ws_send("buffer]"+strconv.Itoa(id_buffer)+"]"+user.Buffers[id_buffer].name, user.ws)
 		go insert_new_server_session(user.id, user.Buffers[id_buffer].name)
 		user.ircObj[id_buffer].Nick = user.Nick
+		go restore_lost_channels(user.Buffers[id_buffer].name, user.Buffers[id_buffer].id_serv, user.key)
 	})
 }
 
@@ -126,6 +130,7 @@ func (user *User) on_join(id_buffer int) {
 			id_buffer_chan := user.get_new_id_buffer()
 			user.add_buffer(e.Arguments[1], e.Arguments[1], user.Buffers[id_buffer].addr+e.Arguments[1], id_buffer_chan, id_buffer)
 		}
+		user.Buffers[id_buffer].connected = true
 		ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1], user.ws)
 		insert_new_channel_session(user.id, user.Buffers[id_buffer].name, e.Arguments[1])
 	})
