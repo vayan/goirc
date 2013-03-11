@@ -21,7 +21,7 @@ func check_buffer_exist(id_buffer int, id_user int) bool {
 func parsemsg(id_user int, msg string) {
 	// TODO : check if user is login 
 	// TODO : Secure SECURE
-	//TODO : TEST SECURE FFS
+	// TODO : TEST SECURE FFS
 	user := all_users[id_user]
 	data := strings.SplitN(msg, "]", 2)
 

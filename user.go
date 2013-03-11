@@ -70,6 +70,7 @@ func (user *User) add_all_callback(id_buffer int) {
 	user.on_message(id_buffer)
 	user.on_user_list(id_buffer)
 	user.on_nick_used(id_buffer)
+	user.on_nick_change(id_buffer)
 }
 
 func (user *User) on_user_list(id_buffer int) {
@@ -100,9 +101,8 @@ func (user *User) on_connect(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("001", func(e *irc.Event) {
 		user.Buffers[id_buffer].connected = true
 		ws_send("buffer]"+strconv.Itoa(id_buffer)+"]"+user.Buffers[id_buffer].name, user.ws)
-		log.Print("change nick")
-		user.change_nick(id_buffer, user.Nick)
-		log.Print("change nicked")
+		//user.change_nick(id_buffer, user.Nick)
+		user.ircObj[id_buffer].Nick = user.ircObj[id_buffer].irc.GetNick()
 		ws_send("nick]"+strconv.Itoa(id_buffer)+"]"+user.ircObj[id_buffer].irc.GetNick(), user.ws)
 		go insert_new_server_session(user.id, user.Buffers[id_buffer].name)
 		user.ircObj[id_buffer].Nick = user.Nick
@@ -142,6 +142,15 @@ func (user *User) on_join(id_buffer int) {
 		user.Buffers[id_buffer_chan].connected = true
 		ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1], user.ws)
 		insert_new_channel_session(user.id, user.Buffers[id_buffer].name, e.Arguments[1])
+	})
+}
+
+func (user *User) on_nick_change(id_buffer int) {
+	user.ircObj[id_buffer].irc.AddCallback("NICK", func(e *irc.Event) {
+		if user.ircObj[id_buffer].Nick == e.Nick { //si c'est moi qui change
+			user.ircObj[id_buffer].Nick = e.Message
+			ws_send("nick]"+strconv.Itoa(id_buffer)+"]"+e.Message, user.ws)
+		}
 	})
 }
 
