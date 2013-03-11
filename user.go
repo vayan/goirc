@@ -130,8 +130,36 @@ func (user *User) on_join(id_buffer int) {
 			id_buffer_chan := user.get_new_id_buffer()
 			user.add_buffer(e.Arguments[1], e.Arguments[1], user.Buffers[id_buffer].addr+e.Arguments[1], id_buffer_chan, id_buffer)
 		}
-		user.Buffers[id_buffer].connected = true
+		user.Buffers[id_buffer_chan].connected = true
 		ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1], user.ws)
 		insert_new_channel_session(user.id, user.Buffers[id_buffer].name, e.Arguments[1])
 	})
+}
+
+func (user *User) close_buffer(id_buffer int) {
+	if user.Buffers[id_buffer].id_serv == id_buffer {
+		user.leave_network(id_buffer)
+	} else {
+		user.leave_channel(id_buffer)
+	}
+}
+
+func (user *User) leave_channel(id_buffer_chan int) {
+	id_ircobj := user.Buffers[id_buffer_chan].id_serv
+	user.ircObj[id_ircobj].irc.Part(user.Buffers[id_buffer_chan].name)
+	delete(user.Buffers, id_buffer_chan)
+	//TODO : remove in DB
+}
+
+func (user *User) leave_network(id_buffer_chan int) {
+	id_ircobj := user.Buffers[id_buffer_chan].id_serv
+	user.ircObj[id_ircobj].irc.Quit()
+
+	for key, buff := range user.Buffers {
+		if buff.id_serv == id_ircobj {
+			delete(user.Buffers, key)
+		}
+	}
+	delete(user.ircObj, id_ircobj)
+	//TODO : Remove in db
 }

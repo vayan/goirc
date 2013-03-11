@@ -135,13 +135,15 @@ func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, COOKIE_SESSION)
 	us := get_user_id(session.Values["id"].(int))
 
-	for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
-		b, _ := json.Marshal(e.Value.(ChannelUser))
-		jsonres += string(b) + ","
+	if _, ok := us.Buffers[id]; ok {
+		for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
+			b, _ := json.Marshal(e.Value.(ChannelUser))
+			jsonres += string(b) + ","
+		}
+		jsonres = jsonres[:len(jsonres)-1]
+		jsonres += "]}"
+		fmt.Fprint(w, jsonres)
 	}
-	jsonres = jsonres[:len(jsonres)-1]
-	jsonres += "]}"
-	fmt.Fprint(w, jsonres)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {

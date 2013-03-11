@@ -45,7 +45,7 @@ type Buffer struct {
 	front_name string
 	addr       string
 	id         int
-	id_serv    int //id du buffer network
+	id_serv    int //id du buffer network or ircobj
 	connected  bool
 }
 

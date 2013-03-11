@@ -272,6 +272,10 @@ MAIN IRC
 	
 }
 
+.remove-buffer {
+	float: right;
+}
+
 .bufferchan {
 	position: absolute;
 	left: 273px;

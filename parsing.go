@@ -66,6 +66,11 @@ func parsemsg(id_user int, msg string) {
 				go send_msg(id_user, buffer_id, buff[1])
 			}
 			return
+		case "/close":
+			if check_buffer_exist(buffer_id, id_user) {
+				go all_users[id_user].close_buffer(buffer_id)
+			}
+			return
 		default:
 			if check_buffer_exist(buffer_id, id_user) {
 				go send_msg(id_user, buffer_id, buff_msg)

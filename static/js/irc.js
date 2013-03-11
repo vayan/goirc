@@ -139,6 +139,15 @@ var send_message = function() {
         $(".formirc input").val("").focus();
     };
 
+var remove_buffer = function(bufferid) {
+    //TODO : alert to confirm
+    console.log("rm buffer");
+    $("#bufferid"+bufferid).hide();
+    $("#"+bufferid).hide();
+    ws.send(bufferid+"]/close");
+};
+
+
 var add_new_buffer = function(buffer) {
         var id = buffer[1];
 
@@ -147,7 +156,7 @@ var add_new_buffer = function(buffer) {
         } else {
             new_message("log", "log", "Joined " + buffer[2] + "!");
         }
-        $('.listbuffer').append('<li onclick="aff_user_list(' + id + ')"><a href="#' + id + '" data-toggle="tab">' + buffer[2] + '</a></li>');
+        $('.listbuffer').append('<li id="bufferid'+id+'" onclick="aff_user_list(' + id + ')" ><a href="#' + id + '" data-toggle="tab">' + buffer[2] + '<span class="remove-buffer" onclick="remove_buffer('+id+')">X</span></a></li>');
         $('.contentbuffer').append('<div class="tab-pane bufferchan" id="' + id + '"><table class="table table-striped allmsg"></table></div>');
         $.post("/ajx/backlog", {
             idbuffer: id

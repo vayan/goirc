@@ -124,7 +124,6 @@ func get_restore_sessions() []*RestoreSession {
 }
 
 func insert_new_server_session(id_user int, server string) {
-	//TODO : check doublon
 	var sserver string
 
 	row := db.QueryRow("SELECT server FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
@@ -136,9 +135,17 @@ func insert_new_server_session(id_user int, server string) {
 }
 
 func insert_new_channel_session(id_user int, server string, channel string) {
-	//TODO : check doublon
+	var cchanel string
+
+	row := db.QueryRow("SELECT channel FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
+	err := row.Scan(&cchanel)
+	for _, val := range strings.Split(cchanel, ",") {
+		if val == channel {
+			return
+		}
+	}
 	channel = "," + channel
-	_, err := db.Exec("UPDATE session_save SET channel = CONCAT(channel, ?) WHERE id_user = ? AND server = ?", channel, id_user, server)
+	_, err = db.Exec("UPDATE session_save SET channel = CONCAT(channel, ?) WHERE id_user = ? AND server = ?", channel, id_user, server)
 	HandleErrorSql(err)
 }
 
