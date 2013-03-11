@@ -134,7 +134,7 @@ var send_message = function() {
 
             console.log(msg);
             ws.send(msg);
-            new_message(buffer_id, "me", txt);
+            new_message(buffer_id, $(".inputpseudo").html(), txt);
         }
         $(".formirc input").val("").focus();
     };

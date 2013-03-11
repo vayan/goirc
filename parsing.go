@@ -21,8 +21,9 @@ func check_buffer_exist(id_buffer int, id_user int) bool {
 func parsemsg(id_user int, msg string) {
 	// TODO : check if user is login 
 	// TODO : Secure SECURE
+	//TODO : TEST SECURE FFS
 	user := all_users[id_user]
-	data := strings.Split(msg, "]")
+	data := strings.SplitN(msg, "]", 2)
 
 	if data[0] == "co" {
 		log.Print("User WS want to co")
@@ -51,7 +52,6 @@ func parsemsg(id_user int, msg string) {
 			return
 		}
 		buff_msg := data[1]
-
 		buff := strings.Split(buff_msg, " ")
 
 		switch buff[0] {
@@ -69,6 +69,11 @@ func parsemsg(id_user int, msg string) {
 		case "/close":
 			if check_buffer_exist(buffer_id, id_user) {
 				go all_users[id_user].close_buffer(buffer_id)
+			}
+			return
+		case "/nick":
+			if check_buffer_exist(buffer_id, id_user) {
+				go all_users[id_user].change_nick(buffer_id, buff[1])
 			}
 			return
 		default:

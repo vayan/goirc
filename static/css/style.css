@@ -318,7 +318,16 @@ MAIN IRC
 	right: 200px;
 }
 
-.send-message input {
-	width: 92%;
+.send-message .inputpseudo {
+	width: 10%;
+}
+
+.send-message .inputpseudo .icon-edit {
+	margin-top: 3px;
+	float: left;
+}
+
+.send-message .inputtextirc {
+	width: 82%;
 }
 
