@@ -188,6 +188,9 @@ var parse_irc = function(msg) {
             console.log("new buffer " + buff[1]);
             add_new_buffer(buff);
             break;
+        case "nick" :
+            $(".inputpseudo").html(buff[1]);
+        break;
         default:
             new_message(buff[0], buff[1], buff[2]);
             break;

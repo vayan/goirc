@@ -72,6 +72,7 @@ func parsemsg(id_user int, msg string) {
 			}
 			return
 		case "/nick":
+			//TODOSADOASDOASDOS
 			if check_buffer_exist(buffer_id, id_user) {
 				go all_users[id_user].change_nick(buffer_id, buff[1])
 			}
