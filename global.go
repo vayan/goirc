@@ -12,3 +12,4 @@ var db *sql.DB
 var Pref Preference
 var decoder = schema.NewDecoder()
 var store = sessions.NewCookieStore([]byte("supersecretkeydelamortquitue"))
+var set Settings

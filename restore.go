@@ -10,6 +10,9 @@ import (
 // TODO : restore channel
 
 func restore_lost_server() {
+	if set.Restore_session == false {
+		return
+	}
 	sessions := get_restore_sessions()
 	log.Print("=== Crash ? Restoring session....")
 	//restore server
@@ -31,6 +34,9 @@ func restore_lost_server() {
 }
 
 func restore_lost_channels(server string, server_id int, user_key int) {
+	if set.Restore_session == false {
+		return
+	}
 	sessions := get_restore_sessions()
 	log.Print("=== Crash ? Restoring channels....")
 

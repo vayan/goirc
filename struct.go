@@ -49,6 +49,13 @@ type Buffer struct {
 	connected  bool
 }
 
+type Settings struct {
+	Root_web        string
+	Port_http       string
+	Database        []interface{}
+	Restore_session bool
+}
+
 type Preference struct {
 	name              string
 	descr             string

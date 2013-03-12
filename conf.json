@@ -1,0 +1,10 @@
+{
+    "root_web": "goirc",
+    "port_http": "goirc",
+    "database": [{
+        "name": "meu",
+        "user": "miaou",
+        "pass": "chou"
+    }],
+    "restore_session" : false
+}
