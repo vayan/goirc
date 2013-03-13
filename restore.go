@@ -10,7 +10,7 @@ import (
 // TODO : restore channel
 
 func restore_lost_server() {
-	if set.Restore_session == false {
+	if serv_set.Restore_session == false {
 		return
 	}
 	sessions := get_restore_sessions()
@@ -27,14 +27,14 @@ func restore_lost_server() {
 		} else {
 			keyuser = get_key_allusers_by_id(session.id_user)
 		}
-		go connect_server(session.server, keyuser)
+		go all_users[keyuser].connect_server(session.server)
 		log.Print("RESTORING : ", pseudo, " reconnecting on ", session.server)
 	}
 
 }
 
 func restore_lost_channels(server string, server_id int, user_key int) {
-	if set.Restore_session == false {
+	if serv_set.Restore_session == false {
 		return
 	}
 	sessions := get_restore_sessions()
@@ -45,7 +45,7 @@ func restore_lost_channels(server string, server_id int, user_key int) {
 			channels := strings.Split(session.channel, ",")
 			for _, channel := range channels {
 				if len(channel) > 1 {
-					join_channel(user_key, server_id, channel)
+					all_users[user_key].join_channel(server_id, channel)
 				}
 			}
 			return

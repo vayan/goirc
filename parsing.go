@@ -56,14 +56,14 @@ func parsemsg(id_user int, msg string) {
 
 		switch buff[0] {
 		case "/connect":
-			go connect_server(buff[1], id_user)
+			go all_users[id_user].connect_server(buff[1])
 			return
 		case "/join":
-			go join_channel(id_user, user.find_server_by_channel(buffer_id), buff[1])
+			go all_users[id_user].join_channel(user.find_server_by_channel(buffer_id), buff[1])
 			return
 		case "/msg":
 			if check_buffer_exist(buffer_id, id_user) {
-				go send_msg(id_user, buffer_id, buff[1])
+				go all_users[id_user].send_msg(buffer_id, buff[1])
 			}
 			return
 		case "/close":
@@ -79,7 +79,7 @@ func parsemsg(id_user int, msg string) {
 			return
 		default:
 			if check_buffer_exist(buffer_id, id_user) {
-				go send_msg(id_user, buffer_id, buff_msg)
+				go all_users[id_user].send_msg(buffer_id, buff_msg)
 			}
 			return
 		}

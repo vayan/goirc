@@ -5,24 +5,24 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"os"
 	"time"
 )
-
-//TODO : gerer reconnexion server/channel si crash
 
 func get_config_file() {
 	log.Print("=== Get config from conf.json")
 	content, err := ioutil.ReadFile("conf.json")
 	if err != nil {
-		//TODO : error
+		log.Panicln("conf.json errror : ", err)
 	}
-	err = json.Unmarshal(content, &set)
+	err = json.Unmarshal(content, &serv_set)
 	if err != nil {
-		log.Print("Error in conf.json : ", err)
+		log.Panicln("Error in conf.json : ", err)
 	}
 }
 
 func main() {
+	os.Chdir(os.Getenv("GOPATH") + "/src/goirc")
 	rand.Seed(time.Now().UnixNano())
 	get_config_file()
 	connect_sql()

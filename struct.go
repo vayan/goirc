@@ -49,11 +49,16 @@ type Buffer struct {
 	connected  bool
 }
 
-type Settings struct {
+type Server_Settings struct {
 	Root_web        string
 	Port_http       string
-	Database        []interface{}
+	Cookie_session  string
+	DB_server       string
+	DB_name         string
+	DB_user         string
+	DB_pass         string
 	Restore_session bool
+	Hostname_irc    string
 }
 
 type Preference struct {

@@ -12,12 +12,10 @@ import (
 	"strconv"
 )
 
-// FIXME : random deco..
-
 func need_perm(need_defcon int, r *http.Request) bool {
 	defcon := ANON
 
-	session, _ := store.Get(r, COOKIE_SESSION)
+	session, _ := store.Get(r, serv_set.Cookie_session)
 	if session.Values["login"] == true {
 		defcon = REGIST
 	}
@@ -34,12 +32,12 @@ func loadPage() *Page {
 }
 
 func RenderHtml(w http.ResponseWriter, tmpl string, p *Page) {
-	t, _ := template.ParseFiles(root_web + tmpl + ".html")
+	t, _ := template.ParseFiles(serv_set.Root_web + tmpl + ".html")
 	t.Execute(w, p)
 }
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, COOKIE_SESSION)
+	session, _ := store.Get(r, serv_set.Cookie_session)
 
 	if session.Values["login"] == nil {
 		session.Values["login"] = false
@@ -83,7 +81,7 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 		//TODO : test si ws active
 
 		var allserv string
-		session, _ := store.Get(r, COOKIE_SESSION)
+		session, _ := store.Get(r, serv_set.Cookie_session)
 		us := get_user_id(session.Values["id"].(int))
 
 		for _, irco := range us.Buffers {
@@ -101,7 +99,7 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO : JSON all that
 	idbuffer := Atoi(r.FormValue("idbuffer"))
-	session, _ := store.Get(r, COOKIE_SESSION)
+	session, _ := store.Get(r, serv_set.Cookie_session)
 
 	if need_perm(REGIST, r) {
 		user := get_user_id(session.Values["id"].(int))
@@ -132,7 +130,7 @@ func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 
 	jsonres := "{ \"UserList\":["
 	id := Atoi(r.FormValue("channel"))
-	session, _ := store.Get(r, COOKIE_SESSION)
+	session, _ := store.Get(r, serv_set.Cookie_session)
 	us := get_user_id(session.Values["id"].(int))
 
 	if _, ok := us.Buffers[id]; ok {
@@ -186,6 +184,6 @@ func start_http_server() {
 	//all js/img/stuff
 	r.PathPrefix("/static/").Handler(http.FileServer(http.Dir(".")))
 
-	log.Print("=== Listening on " + port_http + " ===")
-	log.Fatal(http.ListenAndServe(":"+port_http, r))
+	log.Print("=== Listening on " + serv_set.Port_http + " ===")
+	log.Fatal(http.ListenAndServe(":"+serv_set.Port_http, r))
 }

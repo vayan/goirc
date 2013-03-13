@@ -36,7 +36,7 @@ func set_uid(id int, uid string) {
 func connect_sql() {
 	log.Println("=== Start Connexion DB ===")
 	var err error
-	db, err = sql.Open("mysql", DB_USER+":"+DB_PASS+"@("+DB_SERV+":3306)/"+DB_NAME+"?charset=utf8")
+	db, err = sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
 	HandleErrorSql(err)
 }
 

@@ -22,6 +22,9 @@
 * `git clone git@bitbucket.org:vayan/goirc.git`
 
 * `cd goirc`
+
+* Creer le fichier de config `conf.json` (exemple dans `conf.json.exemple`)
+
 * `go install goirc`
 * `goirc`
 * et localhost:port dans votre navigateur

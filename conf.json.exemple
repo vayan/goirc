@@ -1,0 +1,11 @@
+{
+    "root_web": "templates/",
+    "port_http": "1112",
+    "cookie_session" : "ZebraLion",
+    "db_server" : "69.85.88.161",
+    "db_name": "goirc",
+    "db_user": "goirc",
+    "db_pass": "rRfCKB6eMnDXNVZw",
+    "restore_session" : true,
+    "hostname_irc" : "GOIRC"
+}
