@@ -2,7 +2,7 @@ package main
 
 import (
 	"container/list"
-	"github.com/vayan/go-ircevent"
+	"github.com/thoj/go-ircevent"
 	"html/template"
 	"log"
 	"strconv"
@@ -111,7 +111,8 @@ func (user *User) on_connect(id_buffer int) {
 }
 
 func (user *User) change_nick(id_buffer int, newnick string) {
-	user.ircObj[user.Buffers[id_buffer].id_serv].irc.SendRawf("NICK %s", newnick)
+	//user.ircObj[user.Buffers[id_buffer].id_serv].irc.SendRawf("NICK %s", newnick)
+	user.ircObj[user.Buffers[id_buffer].id_serv].irc.Nick(newnick)
 }
 
 func (user *User) on_message(id_buffer int) {
