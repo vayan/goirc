@@ -2,7 +2,7 @@ package main
 
 import (
 	"container/list"
-	"github.com/thoj/go-ircevent"
+	"github.com/vayan/go-ircevent"
 	"html/template"
 	"log"
 	"strconv"
@@ -111,7 +111,7 @@ func (user *User) on_connect(id_buffer int) {
 }
 
 func (user *User) change_nick(id_buffer int, newnick string) {
-	user.ircObj[user.Buffers[id_buffer].id_serv].irc.SendRaw("NICK " + newnick)
+	user.ircObj[user.Buffers[id_buffer].id_serv].irc.SendRawf("NICK %s", newnick)
 }
 
 func (user *User) on_message(id_buffer int) {
@@ -145,12 +145,27 @@ func (user *User) on_join(id_buffer int) {
 	})
 }
 
+func (user *User) send_change_nick(id_buffer int, old_nick string, new_nick string) {
+	for _, buff := range user.Buffers {
+		if buff.id_serv == user.Buffers[id_buffer].id_serv && buff.id != user.Buffers[id_buffer].id_serv {
+			for e := user.Buffers[buff.id].users.Front(); e != nil; e = e.Next() {
+				if e.Value.(ChannelUser).Nick == old_nick {
+					val := user.Buffers[buff.id].users.Remove(e)
+					chanuser := ChannelUser{new_nick, strings.Replace(new_nick, "@", "", 1), val.(ChannelUser).Color}
+					user.Buffers[buff.id].users.PushBack(chanuser)
+				}
+			}
+			ws_send("nick]"+strconv.Itoa(buff.id)+"]"+old_nick+" "+new_nick, user.ws)
+		}
+	}
+}
+
 func (user *User) on_nick_change(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("NICK", func(e *irc.Event) {
-		if user.ircObj[id_buffer].Nick == e.Nick { //si c'est moi qui change
-			user.ircObj[id_buffer].Nick = e.Message
-			ws_send("nick]"+strconv.Itoa(id_buffer)+"]"+e.Message, user.ws)
+		if user.ircObj[user.Buffers[id_buffer].id_serv].Nick == e.Nick { //si c'est moi qui change
+			user.ircObj[user.Buffers[id_buffer].id_serv].Nick = e.Message
 		}
+		go user.send_change_nick(id_buffer, e.Nick, e.Message)
 	})
 }
 

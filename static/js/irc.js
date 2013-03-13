@@ -28,6 +28,14 @@ ws.onclose = function(e) {
 };
 
 
+var SplitN = function(s, sep, n) {
+    arr = s.split(sep),
+    result = arr.splice(0,n);
+    result.push(arr.join(sep));
+    return result;
+};
+
+
 var update_active_sidebar = function(page) {
         $('.switch-userlist').hide();
         $(".sidebar #menu  li").removeClass("active");
@@ -166,6 +174,11 @@ var add_new_buffer = function(buffer) {
         });
     };
 
+var nick_changed = function(oldnick, newnick, buffer) {
+    new_message(buffer, "----", oldnick + " is now known as " + newnick);
+    //$(".inputpseudo").html(buff[2])
+};
+
 var new_message = function(id_buffer, nick, msg) {
         if (msg.charAt(0) == '/') return;
         $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo ' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
@@ -182,14 +195,18 @@ var get_timestamp_now = function() {
 
 var parse_irc = function(msg) {
         // TODO : check le ] dans le message pour eviter split useless
-        var buff = msg.split(']');
+        var buff = SplitN(msg, ']', 2);
         switch (buff[0]) {
         case "buffer":
             console.log("new buffer " + buff[1]);
             add_new_buffer(buff);
             break;
         case "nick" :
-            $(".inputpseudo").html(buff[1]);
+        var nicks = buff[2].split(' ');
+        nick_changed(nicks[0], nicks[1], buff[1]);
+        break;
+        case "upul" :
+            aff_user_list(buff[1]);
         break;
         default:
             new_message(buff[0], buff[1], buff[2]);

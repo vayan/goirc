@@ -6,5 +6,5 @@
         "user": "miaou",
         "pass": "chou"
     }],
-    "restore_session" : false
+    "restore_session" : true
 }

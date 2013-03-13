@@ -4,7 +4,7 @@ import (
 	"code.google.com/p/go.net/websocket"
 	"container/list"
 	_ "github.com/Go-SQL-Driver/MySQL"
-	"github.com/thoj/go-ircevent"
+	"github.com/vayan/go-ircevent"
 )
 
 /*
