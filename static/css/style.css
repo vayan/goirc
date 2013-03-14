@@ -216,6 +216,14 @@ MAIN IRC
 	bottom: 0;
 }
 
+.userlist-buffer {
+	display: none;
+}
+
+.active-list {
+	display: block;
+}
+
 .menu-settings {
 	border-bottom: 2px solid black;
 	padding: 5px;

@@ -10,7 +10,7 @@ import (
 // id_buffer (the key of the map) of the server buffer is the same as the ircObj key/id
 //
 //
-//
+// TODO : function send new buffer , for wraping all the ws_send
 //
 
 func (user *User) update_data_user() {
@@ -65,7 +65,7 @@ func (user *User) start_connexion(id_buffer int, url string) {
 func (user *User) send_all_buffer() {
 	for _, buff := range user.Buffers {
 		if buff.connected == true {
-			ws_send("buffer]"+strconv.Itoa(buff.id)+"]"+buff.front_name, user.ws)
+			ws_send("buffer]"+strconv.Itoa(buff.id)+"]"+buff.front_name+" "+user.ircObj[buff.id_serv].Nick, user.ws)
 		}
 	}
 }

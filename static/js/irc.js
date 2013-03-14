@@ -96,28 +96,42 @@ var load_irc = function() {
         $('#userlisttab').click();
     };
 
-var add_user_list = function(name, color, id) {
-        var newrulecss = "."+id+" {  color : "+color+" ; } ";
-        $('#userlist-current').append("<li class='"+id+"'>" + name + "</li>");
+var switch_buffer = function(id) {
+    aff_user_list(id);
+
+    $(".inputpseudo").html($("#"+id+" .current-nick").val());
+};
+
+var add_user_list = function(name, color, id, buffer) {
+        var newrulecss = ".nick-"+id+" {  color : "+color+" ; } ";
+        $("#userlist-buffer"+buffer+' .userlist-user').append("<li class='nick-"+id+"'>" + name + "</li>");
         return newrulecss;
 };
 
 //TODO : Optimize this call less
 var aff_user_list = function(id) {
+
+    if ($("#userlist-buffer"+id).length <= 0) {
     var newcss;
         $.post("/ajx/userslist", {
             channel: id
         }).done(function(data) {
+            $("#userlist").append("<span id='userlist-buffer"+id+"' class='userlist-buffer' >"+$("#userlist-buffer0").html()+"</span>");
             jsonres = JSON.parse(data).UserList;
-            $('#userlist-current').html("");
-            $("#userlist-style").html("<style></style>");
+            // $('#userlist-user').html("");
+            $("#userlist-buffer"+id+" .userlist-style").html("<style></style>");
             for (var i = 0; i < jsonres.length; i++) {
-                newcss += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean);
+                newcss += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
             }
-            //TODO : Optimize maybe ?
-            $("#userlist-style style").html(newcss);
+            $("#userlist-buffer"+id+" .userlist-style style").html(newcss);
+            $(".userlist-buffer").hide();
+            $("#userlist-buffer"+id).show();
         });
-    };
+    } else {
+        $(".userlist-buffer").hide();
+        $("#userlist-buffer"+id).show();
+    }
+};
 
 var send_new_co_serv = function() {
         var msg = "log]/connect " + $("#adressserv").val() + ":" + $("#portserv").val();
@@ -135,7 +149,6 @@ var send_new_join_chan = function() {
 
 var send_message = function() {
         if ($(".formirc input").val() != '') {
-            //console.log($(".active a").html());
             var buffer_id = $(".main-irc .active a").attr('href').substring(1);
             var txt = $(".formirc input").val();
             var msg = buffer_id + "]" + txt;
@@ -156,16 +169,15 @@ var remove_buffer = function(bufferid) {
 };
 
 
-var add_new_buffer = function(buffer) {
-        var id = buffer[1];
-
-        if (buffer[2][0] != '#') {
-            new_message("log", "log", "Connected to " + buffer[2] + "!");
+var add_new_buffer = function(id, name, nick) {
+        if (name[0] != '#') {
+            new_message("log", "log", "Connected to " + name + "!");
         } else {
-            new_message("log", "log", "Joined " + buffer[2] + "!");
+            new_message("log", "log", "Joined " + name + "!");
         }
-        $('.listbuffer').append('<li id="bufferid'+id+'" onclick="aff_user_list(' + id + ')" ><a href="#' + id + '" data-toggle="tab">' + buffer[2] + '<span class="remove-buffer" onclick="remove_buffer('+id+')">X</span></a></li>');
-        $('.contentbuffer').append('<div class="tab-pane bufferchan" id="' + id + '"><table class="table table-striped allmsg"></table></div>');
+        $('.listbuffer').append('<li id="bufferid'+id+'" onclick="switch_buffer(' + id + ')" ><a href="#' + id + '" data-toggle="tab">' + name + '<span class="remove-buffer" onclick="remove_buffer('+id+')">X</span></a></li>');
+        $('.contentbuffer').append('<div class="tab-pane bufferchan" id="' + id + '"><table class="table table-striped allmsg"></table> <input type="hidden" class="current-nick" value="log" /></div>');
+        $("#"+id+" .current-nick").val(nick);
         $.post("/ajx/backlog", {
             idbuffer: id
         }).done(function(data) {
@@ -176,12 +188,15 @@ var add_new_buffer = function(buffer) {
 
 var nick_changed = function(oldnick, newnick, buffer) {
     new_message(buffer, "----", oldnick + " is now known as " + newnick);
-    //$(".inputpseudo").html(buff[2])
+
+    if ($("#"+buffer+" .current-nick").val() == oldnick) {
+        $("#"+buffer+" .current-nick").val(newnick);
+    }
 };
 
 var new_message = function(id_buffer, nick, msg) {
         if (msg.charAt(0) == '/') return;
-        $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo ' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
+        $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo nick-'+ nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
         $('#' + id_buffer).scrollTop($('#' + id_buffer)[0].scrollHeight);
     };
 
@@ -194,12 +209,12 @@ var get_timestamp_now = function() {
     };
 
 var parse_irc = function(msg) {
-        // TODO : check le ] dans le message pour eviter split useless
         var buff = SplitN(msg, ']', 2);
         switch (buff[0]) {
         case "buffer":
+            var buff_nick = buff[2].split(' ');
             console.log("new buffer " + buff[1]);
-            add_new_buffer(buff);
+            add_new_buffer(buff[1], buff_nick[0], buff_nick[1]);
             break;
         case "nick" :
         var nicks = buff[2].split(' ');
