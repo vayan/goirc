@@ -102,13 +102,30 @@ var switch_buffer = function(id) {
     $(".inputpseudo").val($("#"+id+" .current-nick").val());
 };
 
+var update_user_list = function (id) {
+    var newcss;
+        $.post("/ajx/userslist", {
+            channel: id
+        }).done(function(data) {
+            $("#userlist-buffer"+id).html($("#userlist-buffer0").html());
+            jsonres = JSON.parse(data).UserList;
+            // $('#userlist-user').html("");
+            $("#userlist-buffer"+id+" .userlist-style").html("<style></style>");
+            for (var i = 0; i < jsonres.length; i++) {
+                newcss += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
+            }
+            $("#userlist-buffer"+id+" .userlist-style style").html(newcss);
+            $(".userlist-buffer").hide();
+            $("#userlist-buffer"+id).show();
+        });
+};
+
 var add_user_list = function(name, color, id, buffer) {
         var newrulecss = ".nick-"+id+" {  color : "+color+" ; } ";
         $("#userlist-buffer"+buffer+' .userlist-user').append("<li class='nick-"+id+"'>" + name + "</li>");
         return newrulecss;
 };
 
-//TODO : Optimize this call less
 var aff_user_list = function(id) {
 
     if ($("#userlist-buffer"+id).length <= 0) {
@@ -222,6 +239,14 @@ var parse_irc = function(msg) {
         break;
         case "upul" :
             aff_user_list(buff[1]);
+        break;
+        case "join" :
+            new_message(buff[1], "<----",  buff[2]+ " has joined");
+            update_user_list(buff[1]);
+        break;
+        case "part" :
+            new_message(buff[1], "---->",  buff[2] + " has left");
+            update_user_list(buff[1]);
         break;
         default:
             new_message(buff[0], buff[1], buff[2]);

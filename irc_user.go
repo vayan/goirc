@@ -28,7 +28,7 @@ func (user *User) get_new_id_buffer() int {
 	return len(user.Buffers) + 1
 }
 
-// Retourne ID buffer base sur son nom + server
+// Retourne ID buffer base sur son nom + id server
 func (user *User) find_id_buffer(channel string, server int) int {
 	channel = strings.ToLower(channel)
 	for _, buff := range user.Buffers {
@@ -72,7 +72,7 @@ func (user *User) send_all_buffer() {
 
 func (user *User) send_change_nick(id_buffer int, old_nick string, new_nick string) {
 	for _, buff := range user.Buffers {
-		if buff.id_serv == user.Buffers[id_buffer].id_serv && buff.id != user.Buffers[id_buffer].id_serv {
+		if buff.id_serv == user.Buffers[id_buffer].id_serv {
 			for e := user.Buffers[buff.id].users.Front(); e != nil; e = e.Next() {
 				if e.Value.(ChannelUser).Nick == old_nick {
 					val := user.Buffers[buff.id].users.Remove(e)

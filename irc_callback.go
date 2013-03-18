@@ -10,11 +10,13 @@ import (
 
 func (user *User) add_all_callback(id_buffer int) {
 	user.on_connect(id_buffer)
-	user.on_join(id_buffer)
+	user.on_me_join(id_buffer)
 	user.on_message(id_buffer)
 	user.on_user_list(id_buffer)
 	user.on_nick_used(id_buffer)
 	user.on_nick_change(id_buffer)
+	user.on_part(id_buffer)
+	user.on_join(id_buffer)
 }
 
 func (user *User) on_user_list(id_buffer int) {
@@ -64,7 +66,7 @@ func (user *User) on_message(id_buffer int) {
 	})
 }
 
-func (user *User) on_join(id_buffer int) {
+func (user *User) on_me_join(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("366", func(e *irc.Event) {
 		id_buffer_chan := user.find_id_buffer(e.Arguments[1], id_buffer)
 		if id_buffer_chan == -1 {
@@ -74,6 +76,33 @@ func (user *User) on_join(id_buffer int) {
 		user.Buffers[id_buffer_chan].connected = true
 		ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1]+" "+user.ircObj[id_buffer].Nick, user.ws)
 		insert_new_channel_session(user.id, user.Buffers[id_buffer].name, e.Arguments[1])
+	})
+}
+
+func (user *User) on_part(id_buffer int) {
+	user.ircObj[id_buffer].irc.AddCallback("PART", func(e *irc.Event) {
+		id_buffer_chan := user.find_id_buffer(e.Arguments[0], id_buffer)
+		ws_send("part]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
+		for j := user.Buffers[id_buffer_chan].users.Front(); j != nil; j = j.Next() {
+			if j.Value.(ChannelUser).Nick == e.Nick {
+				user.Buffers[id_buffer_chan].users.Remove(j)
+				return
+			}
+		}
+
+	})
+}
+
+func (user *User) on_join(id_buffer int) {
+	user.ircObj[id_buffer].irc.AddCallback("JOIN", func(e *irc.Event) {
+		var id_buffer_chan int
+		if id_buffer_chan = user.find_id_buffer(e.Message, id_buffer); id_buffer_chan == -1 {
+			return
+		}
+		log.Print("join user add to list")
+		chanuser := ChannelUser{e.Nick, strings.Replace(e.Nick, "@", "", 1), GenerateColor()}
+		user.Buffers[id_buffer_chan].users.PushBack(chanuser)
+		ws_send("join]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
 	})
 }
 
