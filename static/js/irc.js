@@ -99,7 +99,7 @@ var load_irc = function() {
 var switch_buffer = function(id) {
     aff_user_list(id);
 
-    $(".inputpseudo").html($("#"+id+" .current-nick").val());
+    $(".inputpseudo").val($("#"+id+" .current-nick").val());
 };
 
 var add_user_list = function(name, color, id, buffer) {
@@ -233,6 +233,31 @@ $(document).ready(function() {
     var hash = window.location.hash.substring(1);
     ChangePage(hash);
 });
+
+var resetnick = function(nick) {
+    $(".formirc .add-on").html("<i onclick='changenick()' class='icon-edit'></i><input type='text' disabled='disabled' value='"+nick+"' class='inputpseudo'>")
+};
+
+var send_change_nick = function() {
+    var nick = $(".inputpseudo").val();
+    var buffer_id = $(".main-irc .active a").attr('href').substring(1);
+    var msg = buffer_id + "]/nick " + nick;
+    ws.send(msg);
+    resetnick(nick)
+};
+
+var changenick = function() {
+    console.log("bou");
+    var pseudo = $(".inputpseudo").val();
+    $(".inputpseudo").removeAttr("disabled");
+    $(".inputpseudo").addClass("activate");
+    $(".add-on i").removeClass("icon-edit");
+    $(".add-on i").addClass("icon-remove");
+    $(".add-on .icon-remove").attr("onclick", "resetnick(\""+pseudo+"\")")
+    $(".add-on").append("<i onclick='send_change_nick()' class='icon-ok'></i>");
+
+    $(".inputpseudo").focus();
+};
 
 $(".sidebar #menu li").click(function() {
     var name = $(this).find("a").attr("href").substring(1);

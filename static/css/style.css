@@ -316,7 +316,6 @@ MAIN IRC
 .bufferchan .time {
 	color : #dddddd;
 	text-align: right;
-	
 }
 
 .send-message {
@@ -326,16 +325,24 @@ MAIN IRC
 	right: 200px;
 }
 
-.send-message .inputpseudo {
-	width: 10%;
-}
-
-.send-message .inputpseudo .icon-edit {
-	margin-top: 3px;
-	float: left;
-}
-
 .send-message .inputtextirc {
 	width: 82%;
+}
+
+.formirc .add-on i {
+	margin-top: 3px;
+	padding: 2px;
+}
+
+.inputpseudo {
+	border: none !important;
+	height: 15px !important;
+	width:  100px !important;
+	font-size: 0.9em !important;
+}
+
+.activate {
+	height: 11px !important;
+	border: 1px solid gray !important;
 }
 
