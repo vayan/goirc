@@ -9,6 +9,7 @@ import (
 )
 
 //TODO : Check loose connexion
+// TODO : timeout sql deco
 
 func HandleErrorSql(er error) bool {
 	if er != nil {
