@@ -3,12 +3,13 @@ package main
 import (
 	"github.com/thoj/go-ircevent"
 	"html/template"
+	"log"
 	"strings"
 )
 
 func (user *User) add_connexion(nick string, whois string, id_buffer int) {
 	con := irc.IRC(nick, serv_set.Hostname_irc)
-	con.VerboseCallbackHandler = false //true for debug
+	con.VerboseCallbackHandler = true //true for debug
 	user.ircObj[id_buffer] = &IrcConnec{con, ""}
 }
 
@@ -54,6 +55,11 @@ func (user *User) leave_network(id_buffer_chan int) {
 	}
 	delete(user.ircObj, id_ircobj)
 	//TODO : Remove in db
+}
+
+func (user *User) send_me(id_buffer int, msg string) {
+	log.Print("send /me !!!!!!!!!!!!!!!!!!!")
+	user.ircObj[user.Buffers[id_buffer].id_serv].irc.SendRawf("PRIVMSG %s :\x01ACTION %s\x01", user.Buffers[id_buffer].name, msg)
 }
 
 func (user *User) change_nick(id_buffer int, newnick string) {

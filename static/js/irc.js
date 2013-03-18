@@ -70,7 +70,7 @@ var load_irc = function() {
         var irc = $("#clientirc").html();
 
         $('.content').html(irc);
-        $(".formirc input").keyup(function(event) {
+        $(".inputtextirc").keyup(function(event) {
             if (event.keyCode == 13) {
                 send_message();
             }
@@ -165,16 +165,16 @@ var send_new_join_chan = function() {
     };
 
 var send_message = function() {
-        if ($(".formirc input").val() != '') {
+        if ($(".inputtextirc").val() != '') {
             var buffer_id = $(".main-irc .active a").attr('href').substring(1);
-            var txt = $(".formirc input").val();
+            var txt = $(".inputtextirc").val();
             var msg = buffer_id + "]" + txt;
 
             console.log(msg);
             ws.send(msg);
-            new_message(buffer_id, $(".inputpseudo").html(), txt);
+            new_message(buffer_id, $(".inputpseudo").val(), txt);
         }
-        $(".formirc input").val("").focus();
+        $(".inputtextirc").val("").focus();
     };
 
 var remove_buffer = function(bufferid) {

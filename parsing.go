@@ -78,7 +78,8 @@ func parsemsg(id_user int, msg string) {
 			return
 		case "/me":
 			if check_buffer_exist(buffer_id, id_user) {
-				//
+				//TODO : fix send
+				go all_users[id_user].send_me(buffer_id, buff[1])
 			}
 			return
 		default:
