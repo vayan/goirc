@@ -33,7 +33,6 @@ func ActionLogOut(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
-
 	mail := r.FormValue("InputMail")
 	pass := r.FormValue("InputPass")
 

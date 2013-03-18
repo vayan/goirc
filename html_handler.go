@@ -79,6 +79,7 @@ func SetServHandler(w http.ResponseWriter, r *http.Request) {
 func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
 		//TODO : test si ws active
+		//TODO : Json
 
 		var allserv string
 		session, _ := store.Get(r, serv_set.Cookie_session)

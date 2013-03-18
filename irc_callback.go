@@ -39,11 +39,10 @@ func (user *User) on_connect(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("001", func(e *irc.Event) {
 		user.Buffers[id_buffer].connected = true
 		ws_send("buffer]"+strconv.Itoa(id_buffer)+"]"+user.Buffers[id_buffer].name+" "+user.ircObj[id_buffer].Nick, user.ws)
-		//user.change_nick(id_buffer, user.Nick)
 		user.ircObj[id_buffer].Nick = user.ircObj[id_buffer].irc.GetNick()
 		ws_send("nick]"+strconv.Itoa(id_buffer)+"]"+user.ircObj[id_buffer].irc.GetNick(), user.ws)
-		go insert_new_server_session(user.id, user.Buffers[id_buffer].name)
 		user.ircObj[id_buffer].Nick = user.Nick
+		go insert_new_server_session(user.id, user.Buffers[id_buffer].name)
 		go restore_lost_channels(user.Buffers[id_buffer].name, user.Buffers[id_buffer].id_serv, user.key)
 	})
 }
@@ -58,7 +57,7 @@ func (user *User) on_message(id_buffer int) {
 		if id_buffer_chan == -1 {
 			id_buffer_chan = user.get_new_id_buffer()
 			user.add_buffer(buffer_name, e.Nick, user.Buffers[id_buffer].addr, id_buffer_chan, id_buffer)
-			ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick+" "+user.ircObj[id_buffer].Nick, user.ws)
+			go ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick+" "+user.ircObj[id_buffer].Nick, user.ws)
 		}
 		log.Print(e.Arguments)
 		go insert_new_message(user.id, user.Buffers[id_buffer].addr+e.Arguments[0], e.Nick, e.Message)
@@ -74,15 +73,15 @@ func (user *User) on_me_join(id_buffer int) {
 			user.add_buffer(e.Arguments[1], e.Arguments[1], user.Buffers[id_buffer].addr+e.Arguments[1], id_buffer_chan, id_buffer)
 		}
 		user.Buffers[id_buffer_chan].connected = true
-		ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1]+" "+user.ircObj[id_buffer].Nick, user.ws)
-		insert_new_channel_session(user.id, user.Buffers[id_buffer].name, e.Arguments[1])
+		go ws_send("buffer]"+strconv.Itoa(id_buffer_chan)+"]"+e.Arguments[1]+" "+user.ircObj[id_buffer].Nick, user.ws)
+		go insert_new_channel_session(user.id, user.Buffers[id_buffer].name, e.Arguments[1])
 	})
 }
 
 func (user *User) on_part(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("PART", func(e *irc.Event) {
 		id_buffer_chan := user.find_id_buffer(e.Arguments[0], id_buffer)
-		ws_send("part]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
+		go ws_send("part]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
 		for j := user.Buffers[id_buffer_chan].users.Front(); j != nil; j = j.Next() {
 			if j.Value.(ChannelUser).Nick == e.Nick {
 				user.Buffers[id_buffer_chan].users.Remove(j)
@@ -102,7 +101,7 @@ func (user *User) on_join(id_buffer int) {
 		log.Print("join user add to list")
 		chanuser := ChannelUser{e.Nick, strings.Replace(e.Nick, "@", "", 1), GenerateColor()}
 		user.Buffers[id_buffer_chan].users.PushBack(chanuser)
-		ws_send("join]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
+		go ws_send("join]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
 	})
 }
 

@@ -7,5 +7,7 @@
     "db_user": "goirc",
     "db_pass": "rRfCKB6eMnDXNVZw",
     "restore_session" : true,
+    "show_log" : true,
+    "log_in_file" : false,
     "hostname_irc" : "GOIRC"
 }

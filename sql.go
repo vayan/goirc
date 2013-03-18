@@ -18,6 +18,7 @@ func HandleErrorSql(er error) bool {
 	return false
 }
 
+// Get user UID by id
 func get_uid(id int) string {
 	var uid string
 
@@ -29,6 +30,7 @@ func get_uid(id int) string {
 	return uid
 }
 
+//Set UID user
 func set_uid(id int, uid string) {
 	_, err := db.Exec("UPDATE users SET uid = ? WHERE id = ?", uid, id)
 	HandleErrorSql(err)
@@ -41,6 +43,8 @@ func connect_sql() {
 	HandleErrorSql(err)
 }
 
+//return user by uid
+// TODO : return struct user
 func get_user_by_uid(uid string) (bool, int, string, string) {
 	var pseudo, mail string
 	var id int
@@ -58,6 +62,7 @@ func get_user_by_uid(uid string) (bool, int, string, string) {
 	return valid, id, pseudo, mail
 }
 
+//TODO : return struct
 func get_user_by_id(id int) (bool, string, string, string) {
 	var pseudo, mail, uid string
 
@@ -74,6 +79,7 @@ func get_user_by_id(id int) (bool, string, string, string) {
 	return valid, uid, pseudo, mail
 }
 
+// Get backlog from channel
 func get_backlog(id_user int, buffer string) []*BackLog {
 	rows, err := db.Query("SELECT nick, message, time FROM logirc WHERE id_user = ? AND buffer = ? ORDER BY time ASC", id_user, buffer)
 	HandleErrorSql(err)
@@ -91,6 +97,7 @@ func get_backlog(id_user int, buffer string) []*BackLog {
 	return backlog
 }
 
+//get user from mail / pass
 func get_user(email string, pass string) (bool, int, string, string, string) {
 	var pseudo, mail, uid string
 	var id int
@@ -108,6 +115,7 @@ func get_user(email string, pass string) (bool, int, string, string, string) {
 	return valid, id, pseudo, mail, uid
 }
 
+//get session to restore (session with channel)
 func get_restore_sessions() []*RestoreSession {
 	rows, err := db.Query("SELECT id_user, server, channel FROM session_save")
 	HandleErrorSql(err)
@@ -166,6 +174,7 @@ func insert_new_message(id_user int, buffer string, nick string, message string)
 	HandleErrorSql(err)
 }
 
+//get preference for ui
 func get_preference() {
 	var name string
 	var descr string
