@@ -104,6 +104,7 @@ var switch_buffer = function(id) {
 
 var update_user_list = function (id) {
     var newcss;
+
         $.post("/ajx/userslist", {
             channel: id
         }).done(function(data) {
@@ -116,6 +117,7 @@ var update_user_list = function (id) {
             }
             $("#userlist-buffer"+id+" .userlist-style style").html(newcss);
             $(".userlist-buffer").hide();
+            //TODO : rendre visible uniquement la list active
             $("#userlist-buffer"+id).show();
         });
 };
@@ -200,6 +202,8 @@ var add_new_buffer = function(id, name, nick) {
         }).done(function(data) {
             $('.contentbuffer #' + id + ' .allmsg').append(data);
             // TODO : JSON this stuff
+            // TODO : inline
+            check_all_inline_element();
         });
     };
 
@@ -209,9 +213,11 @@ var nick_changed = function(oldnick, newnick, buffer) {
     if ($("#"+buffer+" .current-nick").val() == oldnick) {
         $("#"+buffer+" .current-nick").val(newnick);
     }
+    update_user_list(buffer);
 };
 
 var new_message = function(id_buffer, nick, msg) {
+        msg = check_inline_element(msg);
         if (msg.charAt(0) == '/') return;
         $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo nick-'+ nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
         $('#' + id_buffer).scrollTop($('#' + id_buffer)[0].scrollHeight);
@@ -260,7 +266,7 @@ $(document).ready(function() {
 });
 
 var resetnick = function(nick) {
-    $(".formirc .add-on").html("<i onclick='changenick()' class='icon-edit'></i><input type='text' disabled='disabled' value='"+nick+"' class='inputpseudo'>")
+    $(".formirc .add-on").html("<i onclick='changenick()' class='icon-edit'></i><input type='text' disabled='disabled' value='"+nick+"' class='inputpseudo'>");
 };
 
 var send_change_nick = function() {
@@ -268,20 +274,59 @@ var send_change_nick = function() {
     var buffer_id = $(".main-irc .active a").attr('href').substring(1);
     var msg = buffer_id + "]/nick " + nick;
     ws.send(msg);
-    resetnick(nick)
+    resetnick(nick);
 };
 
 var changenick = function() {
-    console.log("bou");
     var pseudo = $(".inputpseudo").val();
     $(".inputpseudo").removeAttr("disabled");
     $(".inputpseudo").addClass("activate");
     $(".add-on i").removeClass("icon-edit");
     $(".add-on i").addClass("icon-remove");
-    $(".add-on .icon-remove").attr("onclick", "resetnick(\""+pseudo+"\")")
+    $(".add-on .icon-remove").attr("onclick", "resetnick(\""+pseudo+"\")");
     $(".add-on").append("<i onclick='send_change_nick()' class='icon-ok'></i>");
 
     $(".inputpseudo").focus();
+};
+
+var check_all_inline_element = function() {
+    $('.messagediv').each(function() {
+        $(this).html(check_inline_element($(this).html()));
+    });
+};
+
+var check_inline_element = function (string) {
+    // TODO: embeded youtube
+    // TODO : bug multiple replace
+    var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    return string.replace(exp,
+        function(url) {
+                var clean_url = url.split("?")[0];
+                if (clean_url.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
+                    return '<a target="_blank" href="' + clean_url + '#"><img src="'+clean_url+'?" width="150" height="150" alt="bou" /></a>';
+                }
+                return '<a target="_blank" href="' + url + '?">' + url + '</a>';
+            }
+
+        );
+
+
+    // var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
+    // var url_url= string.match(urlRegex);
+    // if (url_url === null) {
+    //     return string;
+    // }
+
+    // $.each(url_url, function(i,value) {
+    // console.log(value);
+    // var convert_url='<a target="_blank" href="'+url_url[i]+'">'+url_url[i]+'</a>';
+    // if (value.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
+    //     convert_url= '<a target="_blank" href="'+url_url[i]+'">'+ '<img src="'+url_url[i]+'" width="150" height="150" alt="bou" />'+'</a>';
+    // }
+    // var newtxt = string.replace(value, convert_url);
+    // string = newtxt;
+    // });
+    // return string;
 };
 
 $(".sidebar #menu li").click(function() {
