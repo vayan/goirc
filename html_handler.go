@@ -157,6 +157,15 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	RenderHtml(w, "ajx/home", p)
 }
 
+func SettingsHandler(w http.ResponseWriter, r *http.Request) {
+	p := loadPage()
+	if need_perm(REGIST, r) {
+		RenderHtml(w, "ajx/settings", p)
+		return
+	}
+	HomeHandler(w, r)
+}
+
 func start_http_server() {
 	log.Print("=== Starting goric web server ===")
 	r := mux.NewRouter()
@@ -169,6 +178,7 @@ func start_http_server() {
 	r.HandleFunc("/ajx/login", LoginHandler)
 	r.HandleFunc("/ajx/irc", IrcHandler)
 	r.HandleFunc("/ajx/userslist", UsersListHandler)
+	r.HandleFunc("/ajx/settings", SettingsHandler)
 
 	//ajx html settings
 	r.HandleFunc("/ajx/set-servers", SetServHandler)

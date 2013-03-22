@@ -60,6 +60,10 @@ var ChangePage = function(page) {
             update_active_sidebar(page);
             $('.content').load('ajx/login');
             break;
+        case "settings" :
+        update_active_sidebar(page);
+        $('.content').load('ajx/settings');
+        break;
         default:
             break;
         }
@@ -256,6 +260,7 @@ var parse_irc = function(msg) {
         break;
         default:
             new_message(buff[0], buff[1], buff[2]);
+            check_mention(buff[0], buff[2]);
             break;
         }
     };
@@ -297,36 +302,45 @@ var check_all_inline_element = function() {
 
 var check_inline_element = function (string) {
     // TODO: embeded youtube
-    // TODO : bug multiple replace
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     return string.replace(exp,
         function(url) {
+            if (string[string.indexOf(url) - 2] != "=") {
                 var clean_url = url.split("?")[0];
                 if (clean_url.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
-                    return '<a target="_blank" href="' + clean_url + '#"><img src="'+clean_url+'?" width="150" height="150" alt="bou" /></a>';
+                    return '<a target="_blank" href="' + url + '"><img src="'+url+'" width="150" height="150" alt="bou" /></a>';
                 }
-                return '<a target="_blank" href="' + url + '?">' + url + '</a>';
+                return '<a target="_blank" href="' + url + '">' + url + '</a>';
+            } else {
+                return url;
             }
-
+        }
         );
+};
 
+var check_mention = function(id, string) {
+    var mynick = $("#"+id+" .current-nick").val();
+ if (string.indexOf(mynick) != -1) {
+    console.log("mention!");
+    notify("test", "hey !");
+ }
+};
 
-    // var urlRegex = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-    // var url_url= string.match(urlRegex);
-    // if (url_url === null) {
-    //     return string;
-    // }
-
-    // $.each(url_url, function(i,value) {
-    // console.log(value);
-    // var convert_url='<a target="_blank" href="'+url_url[i]+'">'+url_url[i]+'</a>';
-    // if (value.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
-    //     convert_url= '<a target="_blank" href="'+url_url[i]+'">'+ '<img src="'+url_url[i]+'" width="150" height="150" alt="bou" />'+'</a>';
-    // }
-    // var newtxt = string.replace(value, convert_url);
-    // string = newtxt;
-    // });
-    // return string;
+var notify = function(title, body) {
+    var icon = "../img/icon_notif.jpg";
+  var perm = window.webkitNotifications.checkPermission();
+  if (perm == 0) { //si perm
+    console.log("can notify");
+    var notification = window.webkitNotifications.createNotification(
+      icon,
+      title,
+      body
+    );
+    notification.show();
+  } else { //sinn request perm
+    console.log("cant notify...requesting");
+      window.webkitNotifications.requestPermission();
+  }
 };
 
 $(".sidebar #menu li").click(function() {
