@@ -192,6 +192,25 @@ LOGIN
 	margin-left: 100px;
 }
 
+
+/**
+REGISER
+**/
+
+.settings {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.settings .control-label {
+	float: left;
+	width: 100px;
+}
+
+.settings .controls {
+	margin-left: 100px;
+}
+
 /**
 MAIN IRC
 **/

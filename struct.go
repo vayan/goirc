@@ -12,14 +12,20 @@ int of ircObj is the id of the buffer
 */
 
 type User struct {
-	uid     string
-	id      int
-	key     int
-	Nick    string
-	online  bool
-	ircObj  map[int]*IrcConnec
-	Buffers map[int]*Buffer
-	ws      *websocket.Conn
+	uid      string
+	id       int
+	key      int
+	Nick     string
+	online   bool
+	Settings UserSettings
+	ircObj   map[int]*IrcConnec
+	Buffers  map[int]*Buffer
+	ws       *websocket.Conn
+}
+
+type UserSettings struct {
+	Notify       bool
+	Save_session bool
 }
 
 type ChannelUser struct {

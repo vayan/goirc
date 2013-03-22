@@ -189,3 +189,31 @@ func get_preference() {
 	err = ar.Scan(&name, &descr, &short_descr, &long_descr, &base_url, &max_lenght_pseudo)
 	Pref = Preference{name: name, descr: descr, short_descr: short_descr, long_descr: long_descr, base_url: base_url, max_lenght_pseudo: Atoi(max_lenght_pseudo)}
 }
+
+//update user setting
+
+func create_settings(user User) {
+	_, err := db.Exec(
+		"INSERT INTO users_settings (id_user, notify, save_session) VALUES (?, ?, ?)",
+		user.id,
+		user.Settings.Notify,
+		user.Settings.Save_session)
+	HandleErrorSql(err)
+}
+
+func update_settings(user User) {
+	var id int
+
+	row := db.QueryRow("SELECT id FROM users_settings WHERE id_user = ? ", user.id)
+	err := row.Scan(&id)
+	if err == sql.ErrNoRows {
+		create_settings(user)
+	} else {
+		_, err = db.Exec(
+			"UPDATE users_settings SET notify = ?, save_session = ? WHERE id_user = ?",
+			user.Settings.Notify,
+			user.Settings.Save_session,
+			user.id)
+		HandleErrorSql(err)
+	}
+}

@@ -1,3 +1,26 @@
 <h2 class="pagetitle"> {{.Title}} </h2>
 
+<form class="settings" method="POST" action="">
+    <div class="control-group">
+        <label class="control-label" for="Notify">Notify </label>
+        <div class="controls">
+            <div class="switch switch-small">
+             <input type="checkbox" name="Notify">
+            </div>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label" for="Save_Session">Save Session</label>
+        <div class="controls">
+            <div class="switch switch-small">
+             <input type="checkbox" name="Save_Session">
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn">Submit</button>
+</form>
+
+<link href="static/css/bootstrapSwitch.css" rel="stylesheet">
+<script src="static/js/import/bootstrapSwitch.js"></script>
+
 <a href="#" onclick="notify('GO#IRC', 'notify activate')">Enable notification</a>
