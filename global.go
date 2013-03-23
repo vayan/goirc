@@ -7,9 +7,16 @@ import (
 	"github.com/gorilla/sessions"
 )
 
-var all_users = make(map[int]*User)
-var db *sql.DB
-var Pref Preference
-var decoder = schema.NewDecoder()
-var store = sessions.NewCookieStore([]byte("supersecretkeydelamortquitue"))
-var serv_set Server_Settings
+const (
+	ANON   = 5
+	REGIST = 4
+)
+
+var (
+	all_users = make(map[int]*User)
+	db        *sql.DB
+	Pref      Preference
+	decoder   = schema.NewDecoder()
+	store     = sessions.NewCookieStore([]byte("supersecretkeydelamortquitue"))
+	serv_set  Server_Settings
+)

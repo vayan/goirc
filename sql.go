@@ -190,8 +190,10 @@ func get_preference() {
 	Pref = Preference{name: name, descr: descr, short_descr: short_descr, long_descr: long_descr, base_url: base_url, max_lenght_pseudo: Atoi(max_lenght_pseudo)}
 }
 
-//update user setting
+//get user settings 
+//TODO : get settings in sql and update user
 
+//create user setting
 func create_settings(user User) {
 	_, err := db.Exec(
 		"INSERT INTO users_settings (id_user, notify, save_session) VALUES (?, ?, ?)",
@@ -201,11 +203,13 @@ func create_settings(user User) {
 	HandleErrorSql(err)
 }
 
+//update user setting
 func update_settings(user User) {
 	var id int
 
 	row := db.QueryRow("SELECT id FROM users_settings WHERE id_user = ? ", user.id)
 	err := row.Scan(&id)
+	HandleErrorSql(err)
 	if err == sql.ErrNoRows {
 		create_settings(user)
 	} else {

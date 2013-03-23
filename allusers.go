@@ -4,6 +4,8 @@ import (
 	"code.google.com/p/go.net/websocket"
 )
 
+//TODO : function create user
+
 // Retourne un ID pas utiliser pour la list d'usr 
 func get_new_id_user() int {
 	if len(all_users) == 0 {

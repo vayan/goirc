@@ -158,14 +158,15 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 
 func SettingsHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
-		notify, err := strconv.ParseBool(r.FormValue("Notify"))
-		save_session, err1 := strconv.ParseBool(r.FormValue("save_session"))
-
-		if (err == nil) && (err1 == nil) {
+		if r.Method == "POST" {
 			session, _ := store.Get(r, serv_set.Cookie_session)
 			user := get_user_id(session.Values["id"].(int))
-			user.Settings.Notify = notify
-			user.Settings.Save_session = save_session
+			if notify, err := strconv.ParseBool(r.FormValue("Notify")); err == nil {
+				user.Settings.Notify = notify
+			}
+			if save_session, err := strconv.ParseBool(r.FormValue("Save_Session")); err == nil {
+				user.Settings.Save_session = save_session
+			}
 			update_settings(*user)
 		}
 		p := loadPage()
@@ -175,12 +176,12 @@ func SettingsHandler(w http.ResponseWriter, r *http.Request) {
 	HomeHandler(w, r)
 }
 
-func GetSettingsHandlet(w http.ResponseWriter, r *http.Request) {
+func GetSettingsHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, serv_set.Cookie_session)
 	if need_perm(REGIST, r) {
 		user := get_user_id(session.Values["id"].(int))
 		jsonres, _ := json.Marshal(user.Settings)
-		fmt.Fprint(w, jsonres)
+		fmt.Fprint(w, string(jsonres))
 	}
 }
 
@@ -197,6 +198,7 @@ func start_http_server() {
 	r.HandleFunc("/ajx/irc", IrcHandler)
 	r.HandleFunc("/ajx/userslist", UsersListHandler)
 	r.HandleFunc("/ajx/settings", SettingsHandler)
+	r.HandleFunc("/ajx/getsettings", GetSettingsHandler)
 
 	//ajx html settings
 	r.HandleFunc("/ajx/set-servers", SetServHandler)
