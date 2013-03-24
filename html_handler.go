@@ -69,7 +69,6 @@ func IrcHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func SetServHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO : check connected
 	if need_perm(REGIST, r) {
 		p := loadPage()
 		RenderHtml(w, "ajx/set-servers", p)
@@ -127,20 +126,21 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func UsersListHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO : check connected
-	jsonres := "{ \"UserList\":["
-	id := Atoi(r.FormValue("channel"))
-	session, _ := store.Get(r, serv_set.Cookie_session)
-	us := get_user_id(session.Values["id"].(int))
+	if need_perm(REGIST, r) {
+		jsonres := "{ \"UserList\":["
+		id := Atoi(r.FormValue("channel"))
+		session, _ := store.Get(r, serv_set.Cookie_session)
+		us := get_user_id(session.Values["id"].(int))
 
-	if _, ok := us.Buffers[id]; ok {
-		for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
-			b, _ := json.Marshal(e.Value.(ChannelUser))
-			jsonres += string(b) + ","
+		if _, ok := us.Buffers[id]; ok {
+			for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
+				b, _ := json.Marshal(e.Value.(ChannelUser))
+				jsonres += string(b) + ","
+			}
+			jsonres = jsonres[:len(jsonres)-1]
+			jsonres += "]}"
+			fmt.Fprint(w, jsonres)
 		}
-		jsonres = jsonres[:len(jsonres)-1]
-		jsonres += "]}"
-		fmt.Fprint(w, jsonres)
 	}
 }
 

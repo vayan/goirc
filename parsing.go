@@ -19,7 +19,6 @@ func check_buffer_exist(id_buffer int, id_user int) bool {
 
 //parse les message client pour commande
 func parsemsg(id_user int, msg string) {
-	// TODO : check if user is login 
 	// TODO : Secure SECURE
 	// TODO : TEST SECURE FFS
 	user := all_users[id_user]
@@ -78,7 +77,6 @@ func parsemsg(id_user int, msg string) {
 			return
 		case "/me":
 			if check_buffer_exist(buffer_id, id_user) {
-				//TODO : fix send
 				go all_users[id_user].send_me(buffer_id, buff[1])
 			}
 			return

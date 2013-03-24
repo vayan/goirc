@@ -107,7 +107,7 @@ func (user *User) on_join(id_buffer int) {
 
 func (user *User) on_nick_change(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("NICK", func(e *irc.Event) {
-		if user.ircObj[user.Buffers[id_buffer].id_serv].Nick == e.Nick { //si c'est moi qui change
+		if user.ircObj[user.Buffers[id_buffer].id_serv].Nick == e.Nick {
 			user.ircObj[user.Buffers[id_buffer].id_serv].Nick = e.Message
 		}
 		go user.send_change_nick(id_buffer, e.Nick, e.Message)

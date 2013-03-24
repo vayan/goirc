@@ -6,8 +6,6 @@ import (
 )
 
 //TODO : warning uid change 
-//
-// TODO : restore channel
 
 func restore_lost_server() {
 	if serv_set.Restore_session == false {
@@ -15,7 +13,6 @@ func restore_lost_server() {
 	}
 	sessions := get_restore_sessions()
 	log.Print("=== Crash ? Restoring session....")
-	//restore server
 	for _, session := range sessions {
 		_, uid, pseudo, _ := get_user_by_id(session.id_user)
 		var keyuser = -1

@@ -58,7 +58,6 @@ func (user *User) leave_network(id_buffer_chan int) {
 }
 
 func (user *User) send_me(id_buffer int, msg string) {
-	log.Print("send /me !!!!!!!!!!!!!!!!!!!")
 	user.ircObj[user.Buffers[id_buffer].id_serv].irc.SendRawf("PRIVMSG %s :\x01ACTION %s\x01", user.Buffers[id_buffer].name, msg)
 }
 
