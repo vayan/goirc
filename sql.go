@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	_ "github.com/Go-SQL-Driver/MySQL"
+	"html/template"
 	"log"
 	"strings"
 	"time"
@@ -170,6 +171,7 @@ func insert_new_user(user RegisteringUser) int {
 }
 
 func insert_new_message(id_user int, buffer string, nick string, message string) {
+	message = template.HTMLEscapeString(message)
 	_, err := db.Exec("INSERT INTO logirc (id_user, buffer, nick, message, time) VALUES (?, ?, ?, ?, NOW())", id_user, buffer, nick, message)
 	HandleErrorSql(err)
 }

@@ -2,8 +2,6 @@ package main
 
 import (
 	"github.com/thoj/go-ircevent"
-	"html/template"
-	"log"
 	"strings"
 )
 
@@ -14,10 +12,8 @@ func (user *User) add_connexion(nick string, whois string, id_buffer int) {
 }
 
 func (user *User) send_msg(server int, message string) {
-	msg := template.HTMLEscapeString(message)
-
-	user.ircObj[user.Buffers[server].id_serv].irc.Privmsg(user.Buffers[server].name, msg)
-	go insert_new_message(user.id, user.Buffers[server].addr, user.ircObj[user.Buffers[server].id_serv].irc.GetNick(), msg)
+	user.ircObj[user.Buffers[server].id_serv].irc.Privmsg(user.Buffers[server].name, message)
+	go insert_new_message(user.id, user.Buffers[server].addr, user.ircObj[user.Buffers[server].id_serv].irc.GetNick(), message)
 }
 
 func (user *User) join_channel(server int, channel string) {

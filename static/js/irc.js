@@ -258,6 +258,8 @@ var nick_changed = function(oldnick, newnick, buffer) {
 };
 
 var new_message = function(id_buffer, nick, msg) {
+    msg = escape_html(msg);
+    console.log(msg);
     msg = check_inline_element(msg);
     if (msg.charAt(0) == '/') return;
     $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo nick-' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
@@ -375,6 +377,19 @@ var notify = function(title, body) {
     } else { //sinn request perm
         window.webkitNotifications.requestPermission();
     }
+};
+
+var escape_html = function(str) {
+    var tagsToReplace = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+    };
+
+    function replaceTag(tag) {
+        return tagsToReplace[tag] || tag;
+    }
+    return str.replace(/[&<>]/g, replaceTag);
 };
 
 
