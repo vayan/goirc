@@ -343,14 +343,22 @@ var check_all_inline_element = function() {
     });
 };
 
+var youtube_valid = function(url) {
+  var p = /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+  return (url.match(p)) ? RegExp.$1 : false;
+};
+
 var check_inline_element = function(string) {
-    // TODO: embeded youtube
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     return string.replace(exp,
 
     function(url) {
         if (string[string.indexOf(url) - 2] != "=") {
             var clean_url = url.split("?")[0];
+            var yt = youtube_valid(url);
+            if (yt !== false) {
+                return '<iframe width="90%" height="280%" src="http://www.youtube.com/embed/'+yt+'" frameborder="0" allowfullscreen></iframe>';
+            }
             if (clean_url.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
                 var img = new Image();
                 img.src = url;
