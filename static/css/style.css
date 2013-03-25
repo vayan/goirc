@@ -308,6 +308,14 @@ MAIN IRC
 	padding-left: 75px;
 }
 
+.listbuffer li {
+	font-size: 0.8em;
+}
+
+.listbuffer li a {
+	padding: 0 0 0 5px;
+}
+
 .tab-content .active {
 	
 }
@@ -339,6 +347,11 @@ MAIN IRC
 
 .bufferchan .message {
 	word-break: break-all;
+}
+
+.bufferchan .message img {
+	max-width: 300px;
+	max-height: 300px;
 }
 
 .bufferchan .messagediv {

@@ -352,7 +352,11 @@ var check_inline_element = function(string) {
         if (string[string.indexOf(url) - 2] != "=") {
             var clean_url = url.split("?")[0];
             if (clean_url.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
-                return '<a target="_blank" href="' + url + '"><img src="' + url + '" width="150" height="150" alt="bou" /></a>';
+                var img = new Image();
+                img.src = url;
+                if ( (typeof img.width === 'number') && (typeof img.height === 'number') && img.width <= 1500 && img.height <= 1500) {
+                    return '<a rel="lightbox" target="_blank" href="' + url + '"><img src="' + url + '" alt="bou" /></a>';
+                }
             }
             return '<a target="_blank" href="' + url + '">' + url + '</a>';
         } else {
@@ -395,12 +399,6 @@ var escape_html = function(str) {
     }
     return str.replace(/[&<>]/g, replaceTag);
 };
-
-var loadGravatar = function(data) {
-    //console.log("bou");
-    //$("#gravatar").html("<img src="+data+" />");
-};
-
 
 $(".sidebar #menu li").click(function() {
     var name = $(this).find("a").attr("href").substring(1);
