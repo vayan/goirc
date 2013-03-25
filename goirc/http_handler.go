@@ -110,3 +110,18 @@ func SettingsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	HomeHandler(w, r)
 }
+
+func ProfileHandler(w http.ResponseWriter, r *http.Request) {
+	if need_perm(REGIST, r) {
+		session, _ := store.Get(r, serv_set.Cookie_session)
+		//user := get_user_id(session.Values["id"].(int))
+		p := &Page{
+			Title: "Profile",
+			Data: map[string]interface{}{
+				"hashmail": get_mail_hash(session.Values["mail"].(string)),
+				"pseudo":   session.Values["pseudo"].(string)}}
+		RenderHtml(w, "ajx/profile", p)
+		return
+	}
+	HomeHandler(w, r)
+}

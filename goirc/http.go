@@ -22,6 +22,7 @@ func start_http_server() {
 	r.HandleFunc("/ajx/userslist", UsersListHandler)
 	r.HandleFunc("/ajx/settings", SettingsHandler)
 	r.HandleFunc("/ajx/getsettings", GetSettingsHandler)
+	r.HandleFunc("/ajx/profile", ProfileHandler)
 
 	//ajx html settings
 	r.HandleFunc("/ajx/set-servers", SetServHandler)

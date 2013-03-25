@@ -212,6 +212,19 @@ REGISER
 }
 
 /**
+PROFILE
+**/
+
+.profile-avatar {
+	float: left;
+}
+
+.profile-pseudo {
+	font-size: 3em;
+	margin-bottom: 15px;
+}
+
+/**
 MAIN IRC
 **/
 

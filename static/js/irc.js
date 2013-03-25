@@ -103,6 +103,10 @@ var ChangePage = function(page) {
                 open_settings();
             });
             break;
+        case "profile":
+            update_active_sidebar(page);
+            $('.content').load('ajx/profile');
+            break;
         default:
             break;
     }
@@ -390,6 +394,11 @@ var escape_html = function(str) {
         return tagsToReplace[tag] || tag;
     }
     return str.replace(/[&<>]/g, replaceTag);
+};
+
+var loadGravatar = function(data) {
+    //console.log("bou");
+    //$("#gravatar").html("<img src="+data+" />");
 };
 
 

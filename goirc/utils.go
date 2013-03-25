@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/md5"
 	"crypto/sha512"
 	"encoding/json"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"log"
 	"math/rand"
 	"strconv"
+	"strings"
 )
 
 //TODO : more flashy color
@@ -61,4 +63,11 @@ func get_config_file() {
 	if err != nil {
 		log.Panicln("Error in conf.json : ", err)
 	}
+}
+
+func get_mail_hash(mail string) string {
+	clean_mail := strings.Trim(strings.ToLower(mail), " ")
+	h := md5.New()
+	io.WriteString(h, clean_mail)
+	return fmt.Sprintf("%x", h.Sum(nil))
 }

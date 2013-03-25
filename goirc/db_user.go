@@ -126,7 +126,10 @@ func insert_new_user(user RegisteringUser) int {
 	// TODO : welcom mail to send
 
 	if (strings.Contains(user.InputMail, "@")) && (user.InputPass == user.InputPassVerif) && (len(user.InputPseudo) <= Pref.max_lenght_pseudo) {
-		_, err := db.Exec("INSERT INTO users (pseudo, mail, password) VALUES (?, ?, ?)", user.InputPseudo, user.InputMail, EncryptPass(user.InputPass))
+		cleanpseudo := strings.Trim(strings.ToLower(user.InputPseudo), " ")
+		cleanmail := strings.Trim(strings.ToLower(user.InputMail), " ")
+		cleanpass := strings.Trim(user.InputPass, " ")
+		_, err := db.Exec("INSERT INTO users (pseudo, mail, password) VALUES (?, ?, ?)", cleanpseudo, cleanmail, EncryptPass(cleanpass))
 		HandleErrorSql(err)
 	}
 	return -1
