@@ -5,7 +5,6 @@ import (
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"html/template"
 	"log"
-	"strings"
 	"time"
 )
 

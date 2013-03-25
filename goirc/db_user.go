@@ -1,12 +1,9 @@
 package main
 
 import (
-	"database/sql"
 	_ "github.com/Go-SQL-Driver/MySQL"
-	"html/template"
 	"log"
 	"strings"
-	"time"
 )
 
 // Get user UID by id
