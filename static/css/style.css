@@ -23,7 +23,7 @@ body {
 }
 
 .content {
-	margin-left: 221px; 
+	margin-left: 221px;
 }
 
 .pagetitle {
@@ -81,7 +81,7 @@ SIDEBAR
 	padding-top: 75px;
 	border-left: 1px solid #e5e5e5;
 	border-right: 1px solid #e5e5e5;
-	position:absolute; 
+	position:absolute;
 	top: 0;
 	width: 220px;
 	bottom: 0;
@@ -104,7 +104,7 @@ SIDEBAR
 }
 
 
-/** 
+/**
 HOME
 **/
 
@@ -265,7 +265,7 @@ MAIN IRC
 	height: 60px;
 }
 
-.menu-irc  .selected { 
+.menu-irc  .selected {
 	border-left: 1px solid rgb(65, 60, 60);
 	border-right: 1px solid rgb(65, 60, 60);
 	background-color: #111111;
@@ -287,7 +287,7 @@ MAIN IRC
 
 
 .main-irc {
-	margin-right: 203px; 
+	margin-right: 203px;
 	height: 80%;
 }
 
@@ -317,7 +317,7 @@ MAIN IRC
 }
 
 .tab-content .active {
-	
+
 }
 
 .remove-buffer {
@@ -359,6 +359,7 @@ MAIN IRC
 }
 
 .bufferchan .time {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color : #dddddd;
 	text-align: right;
 }
@@ -391,3 +392,32 @@ MAIN IRC
 	border: 1px solid gray !important;
 }
 
+.userlist-user .btn-group a {
+	display: block;
+}
+
+.userlist-user .btn-group .btn  {
+	text-align: left;
+	border-radius: none;
+	background-color: white;
+	background-image: none;
+	border: none;
+	box-shadow: none;
+	padding: 2px;
+}
+
+.userlist-user a .caret {
+	float: right;
+}
+
+/*.userlist-user li {
+	padding: 2px;
+	margin-top: 9px;
+}
+
+.userlist-user li:hover {
+  background-color: #e5e5e5;
+}
+
+
+*/

@@ -29,9 +29,9 @@
           <div class="tab-pane active" id="menu">
             <ul class="nav nav-list bs-docs-sidenav">
               <li id="home"><a href="#home">Home <i class="icon-chevron-right"></i> </a></li>
-              {{if .Data.login}} 
-              <li><a href="logout">Logout<i class="icon-chevron-right"></i> </a></li> 
-              {{else}} 
+              {{if .Data.login}}
+              <li><a href="logout">Logout<i class="icon-chevron-right"></i> </a></li>
+              {{else}}
               <li id="register"><a href="#register">Register<i class="icon-chevron-right"></i> </a></li>
               {{end}}
               {{if .Data.login}}  {{else}} <li id="login"><a href="#login">Login<i class="icon-chevron-right"></i> </a></li>  {{end}}
@@ -41,7 +41,7 @@
               <li><a href="#profile">Profile <i class="icon-chevron-right"></i> </a></li>
               <li><a href="#foo">Foo <i class="icon-chevron-right"></i> </a></li>
               <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
-            </ul> 
+            </ul>
           </div>
           <div class="tab-pane userslist" id="userlist">
             <span id="userlist-buffer0" class="userlist-buffer">
@@ -57,14 +57,14 @@
            </span>
           </div>
         </div>
-      
-      
+
+
     </div>
 
     <div class="content">
 
     </div>
-    {{if .Data.login}} 
+    {{if .Data.login}}
     <span class="hidden" id="clientirc">
       <h2 class="pagetitle"> Settings : </h2>
       <div class="menu-irc"> <span class="item-menu-irc">Servers</span>  <span class="item-menu-irc">Channels</span> </div>
@@ -97,7 +97,7 @@
         </div>
       </div>
     </span>
-    {{else}} 
+    {{else}}
     {{end}}
     <input type="hidden" value="{{.Data.uid}}" id="yuid" name="yuid" />
   </div>

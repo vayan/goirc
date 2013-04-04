@@ -13,7 +13,7 @@ import (
 	"strings"
 )
 
-//TODO : more flashy color
+//TODO : more flashy color and based on nick
 func GenerateColor() string {
 	var r, g, b int
 

@@ -168,9 +168,24 @@ var update_user_list = function(id) {
     });
 };
 
+var open_set_user = function(name) {
+
+};
+
 var add_user_list = function(name, color, id, buffer) {
     var newrulecss = ".nick-" + id + " {  color : " + color + " ; } ";
-    $("#userlist-buffer" + buffer + ' .userlist-user').append("<li class='nick-" + id + "'>" + name + "</li>");
+    $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> \
+      <a class=\"btn dropdown-toggle nick-" + id + "\" data-toggle=\"dropdown\" href=\"#\"> \
+        " + name + " \
+        <span class=\"caret\"></span> \
+      </a> \
+      <ul class=\"dropdown-menu\"> \
+       <li><a href=\"#\">Block</a></li> \
+       <li><a href=\"#\">Add as friend</a></li> \
+       <li><a href=\"#\">Foo</a></li> \
+      </ul> \
+    </div>");
+    //<li class='nick-" + id + "'>" + name + "<span onclick='open_set_user(\"" + name + "\")' class='caret'></span></li>");
     return newrulecss;
 };
 
