@@ -108,6 +108,8 @@ var ChangePage = function(page) {
             $('.content').load('ajx/profile');
             break;
         default:
+            update_active_sidebar("home");
+            $('.content').load('ajx/home');
             break;
     }
 };
@@ -145,8 +147,8 @@ var load_irc = function() {
 
 var switch_buffer = function(id) {
     aff_user_list(id);
-
     $(".inputpseudo").val($("#" + id + " .current-nick").val());
+    $('#' + id).scrollTop($('#' + id)[0].scrollHeight);
 };
 
 var update_user_list = function(id) {
@@ -264,6 +266,7 @@ var add_new_buffer = function(id, name, nick) {
         $('.contentbuffer #' + id + ' .allmsg').append(data);
         // TODO : JSON this stuff
         check_all_inline_element();
+        $('#' + id).scrollTop($('#' + id)[0].scrollHeight);
     });
 };
 
@@ -426,9 +429,5 @@ var escape_html = function(str) {
 $(".sidebar #menu li").click(function() {
     var name = $(this).find("a").attr("href").substring(1);
 
-    if (name == "irc") {
-        load_irc();
-    } else {
-        ChangePage(name);
-    }
+    ChangePage(name);
 });
