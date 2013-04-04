@@ -8,7 +8,7 @@ import (
 )
 
 /*
-int of ircObj is the id of the buffer 
+int of ircObj is the id of the buffer
 */
 
 type User struct {
@@ -94,4 +94,11 @@ type RestoreSession struct {
 	id_user int
 	server  string
 	channel string
+}
+
+type UserStats struct {
+	ConnectedServer int
+	ConnctedChan    int
+	CloudWords      string
+	MsgSend         int
 }

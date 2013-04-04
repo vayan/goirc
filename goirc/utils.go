@@ -22,6 +22,7 @@ func GenerateColor() string {
 	b = (rand.Intn(256) + 60) / 2
 
 	return ("rgb(" + strconv.Itoa(r) + ", " + strconv.Itoa(g) + ", " + strconv.Itoa(b) + ")")
+
 }
 
 func Atoi(str string) int {

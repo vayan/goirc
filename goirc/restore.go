@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-//TODO : warning uid change 
+//TODO : warning uid change
 
 func restore_lost_server() {
 	if serv_set.Restore_session == false {

@@ -65,7 +65,7 @@ func get_preference() {
 	Pref = Preference{name: name, descr: descr, short_descr: short_descr, long_descr: long_descr, base_url: base_url, max_lenght_pseudo: Atoi(max_lenght_pseudo)}
 }
 
-//get user settings 
+//get user settings
 //TODO : get settings in sql and update user
 
 //create user setting

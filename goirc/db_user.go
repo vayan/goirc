@@ -134,3 +134,8 @@ func insert_new_user(user RegisteringUser) int {
 	}
 	return -1
 }
+
+func get_stats_user(id_user int) UserStats {
+	//TODO : maybe..
+	return UserStats{1, 1, "", 1}
+}

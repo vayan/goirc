@@ -9,6 +9,12 @@ import (
 	"strconv"
 )
 
+func GetStatsHandler(w http.ResponseWriter, r *http.Request) {
+	if need_perm(REGIST, r) {
+		// TODO : stats
+	}
+}
+
 func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
 		//TODO : test si ws active

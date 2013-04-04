@@ -6,7 +6,7 @@ import (
 
 //TODO : function create user
 
-// Retourne un ID pas utiliser pour la list d'usr 
+// Retourne un ID pas utiliser pour la list d'usr
 func get_new_id_user() int {
 	if len(all_users) == 0 {
 		return 0
@@ -14,7 +14,7 @@ func get_new_id_user() int {
 	return len(all_users) + 1
 }
 
-//get client by id 
+//get client by id
 func get_user_id(id int) *User {
 	for _, us := range all_users {
 		if us.id == id {
@@ -34,7 +34,7 @@ func get_key_allusers_by_id(id int) int {
 	return -1
 }
 
-// get id/key client by ws 
+// get id/key client by ws
 func get_user_ws(ws *websocket.Conn) int {
 	for pl, _ := range all_users {
 		if all_users[pl].ws == ws {
