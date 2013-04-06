@@ -80,19 +80,34 @@ func get_user(email string, pass string) (bool, int, string, string, string) {
 
 //get session to restore (session with channel)
 func get_restore_sessions() []*RestoreSession {
-	rows, err := db.Query("SELECT id_user, server, channel FROM session_save")
+	rows, err := db.Query("SELECT id_user, server, channel, friends FROM session_save")
 	HandleErrorSql(err)
 	restoresessions := make([]*RestoreSession, 0, 10)
-	var server, channel string
+	var server, channel, friends string
 	var id_user int
 	for rows.Next() {
-		err = rows.Scan(&id_user, &server, &channel)
+		err = rows.Scan(&id_user, &server, &channel, &friends)
 		if err != nil {
 			// TODO : Handle error
 		}
-		restoresessions = append(restoresessions, &RestoreSession{id_user, server, channel})
+		restoresessions = append(restoresessions, &RestoreSession{id_user, server, channel, friends})
 	}
 	return restoresessions
+}
+
+func insert_new_friend_session(id_user int, server string, friends string) {
+	var ffriends string
+
+	row := db.QueryRow("SELECT friends FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
+	err := row.Scan(&ffriends)
+	for _, val := range strings.Split(ffriends, ",") {
+		if val == friends {
+			return
+		}
+	}
+	friends = "," + friends
+	_, err = db.Exec("UPDATE session_save SET friends = CONCAT(friends, ?) WHERE id_user = ? AND server = ?", friends, id_user, server)
+	HandleErrorSql(err)
 }
 
 func insert_new_server_session(id_user int, server string) {

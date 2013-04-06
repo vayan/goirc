@@ -152,7 +152,7 @@ var switch_buffer = function(id) {
 };
 
 var update_user_list = function(id) {
-    var newcss;
+    var newhtml;
 
     $.post("/ajx/userslist", {
         channel: id
@@ -161,9 +161,9 @@ var update_user_list = function(id) {
         jsonres = JSON.parse(data).UserList;
         $("#userlist-buffer" + id + " .userlist-style").html("<style></style>");
         for (var i = 0; i < jsonres.length; i++) {
-            newcss += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
+            newhtml += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
         }
-        $("#userlist-buffer" + id + " .userlist-style style").html(newcss);
+        $("#userlist-buffer" + id + " .userlist-style style").html(newhtml);
         $(".userlist-buffer").hide();
         //TODO : rendre visible uniquement la list active
         $("#userlist-buffer" + id).show();
@@ -175,7 +175,7 @@ var open_set_user = function(name) {
 };
 
 var add_user_list = function(name, color, id, buffer) {
-    var newrulecss = ".nick-" + id + " {  color : " + color + " ; } ";
+    var html = ".nick-" + id + " {  color : " + color + " ; } ";
     $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> \
       <a class=\"btn dropdown-toggle nick-" + id + "\" data-toggle=\"dropdown\" href=\"#\"> \
         " + name + " \
@@ -188,7 +188,7 @@ var add_user_list = function(name, color, id, buffer) {
       </ul> \
     </div>");
     //<li class='nick-" + id + "'>" + name + "<span onclick='open_set_user(\"" + name + "\")' class='caret'></span></li>");
-    return newrulecss;
+    return html;
 };
 
 var aff_user_list = function(id) {

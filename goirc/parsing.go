@@ -80,6 +80,16 @@ func parsemsg(id_user int, msg string) {
 				go all_users[id_user].send_me(buffer_id, buff[1])
 			}
 			return
+		case "/whois":
+			if check_buffer_exist(buffer_id, id_user) {
+				go all_users[id_user].whois(buffer_id, buff[1])
+			}
+			return
+		case "/addfriend":
+			if check_buffer_exist(buffer_id, id_user) {
+				go all_users[id_user].add_friend(buffer_id, buff[1])
+			}
+			return
 		default:
 			if check_buffer_exist(buffer_id, id_user) {
 				go all_users[id_user].send_msg(buffer_id, buff_msg)

@@ -53,6 +53,11 @@ func (user *User) leave_network(id_buffer_chan int) {
 	//TODO : Remove in db
 }
 
+func (user *User) whois(id_buffer int, nick string) {
+	id_server := user.Buffers[id_buffer].id_serv
+	user.ircObj[id_server].irc.SendRawf("WHOIS %s %s", user.Buffers[id_server].name, nick)
+}
+
 func (user *User) send_me(id_buffer int, msg string) {
 	user.ircObj[user.Buffers[id_buffer].id_serv].irc.SendRawf("PRIVMSG %s :\x01ACTION %s\x01", user.Buffers[id_buffer].name, msg)
 }

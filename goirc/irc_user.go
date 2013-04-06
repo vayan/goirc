@@ -92,3 +92,9 @@ func (user *User) close_buffer(id_buffer int) {
 		user.leave_channel(id_buffer)
 	}
 }
+
+func (user *User) add_friend(id_buffer int, nick string) {
+	//TODO : check nick is in buffer
+	id_server := user.Buffers[id_buffer].id_serv
+	insert_new_friend_session(user.id, user.Buffers[id_server].name, nick)
+}

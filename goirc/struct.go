@@ -94,6 +94,7 @@ type RestoreSession struct {
 	id_user int
 	server  string
 	channel string
+	friends string
 }
 
 type UserStats struct {
