@@ -428,6 +428,5 @@ var escape_html = function(str) {
 
 $(".sidebar #menu li").click(function() {
     var name = $(this).find("a").attr("href").substring(1);
-
     ChangePage(name);
 });

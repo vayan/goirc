@@ -81,6 +81,9 @@ func (user *User) on_me_join(id_buffer int) {
 func (user *User) on_part(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("PART", func(e *irc.Event) {
 		id_buffer_chan := user.find_id_buffer(e.Arguments[0], id_buffer)
+		if id_buffer_chan == -1 {
+			return
+		}
 		go ws_send("part]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
 		for j := user.Buffers[id_buffer_chan].users.Front(); j != nil; j = j.Next() {
 			if j.Value.(ChannelUser).Nick == e.Nick {
