@@ -2,12 +2,15 @@
 <html>
 <head>
   <title>GO#IRC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link href="static/css/bootstrap.css" rel="stylesheet" media="screen">
-  <link href="static/css/style.css" rel="stylesheet" media="screen">
+  <link href="static/css/style.css" rel="stylesheet" type="text/css" media="screen">
+  <link href="static/css/mobile.css" rel="stylesheet" type="text/css" media="handled" />
+
   <link href='http://fonts.googleapis.com/css?family=Oswald:700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Mako' rel='stylesheet' type='text/css'>
   <link href='static/css/jquery.scrollbars.css' rel='stylesheet' type='text/css'>
-  <link href='static/css/lightbox.css' rel='stylesheet' type='text/css'>
+  <link href='static/css/lightbox.css' rel='stylesheet' type='text/css' >
 </head>
 <body>
   <div class="top-header">
@@ -48,6 +51,7 @@
               <span class="userlist-style">
               </span>
               <ul class='nav nav-list'>
+              <span class="more-chatter">
                 <li class='nav-header'>Chatting</li>
                 <span class="userlist-chatting">
                 </span>
@@ -56,6 +60,7 @@
                 <span class="userlist-friends">
                 </span>
                 <li class='divider'></li>
+                </span>
                 <li class='nav-header'>User List</li>
                 <span class="userlist-user">
                 </span>
@@ -104,6 +109,7 @@
       </div>
     </span>
     {{else}}
+
     {{end}}
     <input type="hidden" value="{{.Data.uid}}" id="yuid" name="yuid" />
   </div>

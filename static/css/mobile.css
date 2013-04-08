@@ -1,0 +1,418 @@
+/***********************
+Mobile style by yann
+v 0.2
+
+TODO : fix scrolling sidebar no scrollbar
+
+***********************/
+
+/**
+GLOBAL
+**/
+
+body {
+	font-family: 'Mako', sans-serif;
+}
+
+.fourdigit {
+	max-width: 35px;
+}
+
+.wrap {
+	margin: 0 auto 0 0px;
+}
+
+.content {
+	margin-left: 80px;
+}
+
+.pagetitle {
+	position: absolute;
+	top: 5px;
+	color: white;
+}
+
+
+
+.hidden {
+	display: none;
+}
+
+/**
+HEADER
+**/
+
+.top-header {
+	z-index: 5;
+	background-color: #1b1b1b;
+	border-bottom: 3px solid #252525;
+	height: 55px;
+	box-shadow: 0 4px 2px -2px gray;
+}
+
+
+/**
+LOGO
+**/
+
+.logo {
+display: none;
+}
+
+
+
+
+/**
+SIDEBAR
+**/
+
+.sidebar {
+	font-size: 9px;
+	padding-top: 75px;
+	border-left: 1px solid #e5e5e5;
+	border-right: 1px solid #e5e5e5;
+	position:absolute;
+	top: 0;
+	width: 79px;
+	bottom: 0;
+}
+
+.switch-userlist {
+	display: none;
+}
+
+.sidebar li a {
+ padding: 8px 14px;
+}
+
+.sidebar .active {
+
+}
+
+.sidebar .icon-chevron-right {
+	float: right;
+}
+
+
+/**
+HOME
+**/
+
+.pres {
+	margin-left: 3px;
+	width: 100%;
+	text-align: center;
+}
+
+.prescontent {
+	background-image: url('../img/bg_home.png');
+	margin: -2px 0 0 -3px;
+	padding-left: 3px;
+	padding: 50px;
+}
+
+.pres .logogen {
+margin: 0 auto 0 auto;
+padding-top: 20px;
+color: white;
+font-family: 'Oswald', sans-serif;
+font-size: 4.5em;
+height: 50px;
+}
+
+.prestxt {
+	color: white;
+	font-size: 2em;
+}
+
+.social {
+	height: 50px;
+	margin-left: -3px;
+	border-bottom: 1px solid #ddd;
+	background-color: #f5f5f5;
+}
+
+.plan {
+	padding: 5px;
+	margin: 0 auto 0 auto;
+	width: 75%;
+}
+
+.plan th {
+	text-align: center;
+}
+
+.plan td {
+	text-align: center;
+}
+
+/**
+REGISER
+**/
+
+.register {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.register .control-label {
+	float: left;
+	width: 100px;
+}
+
+.register .controls {
+	margin-left: 100px;
+}
+
+/**
+LOGIN
+**/
+
+.login {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.login .control-label {
+	display: none;
+}
+
+/**
+REGISER
+**/
+
+.settings {
+	margin-top: 20px;
+	margin-left: 20px;
+}
+
+.settings .control-label {
+	float: left;
+	width: 100px;
+}
+
+.settings .controls {
+	margin-left: 100px;
+}
+
+/**
+PROFILE
+**/
+
+.profile-avatar {
+	float: left;
+}
+
+.profile-pseudo {
+	font-size: 3em;
+	margin-bottom: 15px;
+}
+
+/**
+MAIN IRC
+**/
+
+.allmsg {
+	font-size: 12px;
+}
+
+.menu-irc {
+	position: absolute;
+	right: 0;
+	top: 5px;
+	color: white;
+}
+
+.userslist {
+	font-size: 0px;
+	padding: 5px;
+	width: 89px;
+	overflow: auto;
+	position: absolute;
+	top: 115px;
+	bottom: 0;
+}
+
+.more-chatter {
+	display: none;
+}
+
+.userlist-buffer {
+	display: none;
+}
+
+.active-list {
+	display: block;
+}
+
+.nav-list {
+	margin-left: 0px;
+}
+
+.menu-settings {
+	border-bottom: 2px solid black;
+	padding: 5px;
+	display: none;
+	color: black;
+	background-color: rgb(206, 226, 236);
+	height: 60px;
+}
+
+.menu-irc  .selected {
+	border-left: 1px solid rgb(65, 60, 60);
+	border-right: 1px solid rgb(65, 60, 60);
+	background-color: #111111;
+}
+
+.item-menu-irc {
+	font-size: 2em;
+	line-height: 33px;
+	cursor: pointer;
+	text-align: center;
+	padding: 16px;
+}
+
+.sepport {
+	font-size: 2em;
+	line-height: 33px;
+}
+
+
+
+.main-irc {
+	margin-right: 203px;
+	height: 80%;
+}
+
+.list {
+	position: absolute;
+	right: 0;
+	width: 60px;
+	border-left: 1px solid #e5e5e5;
+	top: 60px;
+	bottom: -20px;
+}
+
+.list i {
+	float: left;
+}
+
+.list a {
+	padding-left: 75px;
+}
+
+.listbuffer li {
+	font-size: 0.8em;
+}
+
+.listbuffer li a {
+	padding: 0 0 0 5px;
+}
+
+.tab-content .active {
+
+}
+
+.remove-buffer {
+	display: none;
+}
+
+.bufferchan {
+	position: absolute;
+	left: 81px;
+	right: 61px;
+	bottom: 40px;
+	top: 60px;
+ 	overflow:auto;
+}
+
+.bufferchan table {
+}
+
+.bufferchan tr {
+	padding: 2px;
+}
+
+.bufferchan .pseudo {
+	width: 10%;
+	border-right: 1px solid #dddddd;
+}
+
+.bufferchan .message {
+	word-break: break-all;
+}
+
+.bufferchan .message img {
+	max-width: 300px;
+	max-height: 300px;
+}
+
+.bufferchan .messagediv {
+	word-break: break-all;
+}
+
+.bufferchan .time {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	color : #dddddd;
+	text-align: right;
+}
+
+.send-message {
+	position: absolute;
+	bottom: 0;
+}
+
+.send-message .inputtextirc {
+	width: 82%;
+}
+
+.formirc .add-on {
+	display: none;
+}
+
+.formirc .add-on i {
+	margin-top: 3px;
+	padding: 2px;
+}
+
+.inputpseudo {
+	border: none !important;
+	height: 15px !important;
+	width:  100px !important;
+	font-size: 0.9em !important;
+}
+
+.activate {
+	height: 11px !important;
+	border: 1px solid gray !important;
+}
+
+.userlist-user .btn-group a {
+	display: block;
+}
+
+.userlist-user .btn-group .btn  {
+	text-align: left;
+	border-radius: none;
+	background-color: white;
+	background-image: none;
+	border: none;
+	box-shadow: none;
+	padding: 2px;
+}
+
+.userlist-user a .caret {
+	float: right;
+}
+
+/*.userlist-user li {
+	padding: 2px;
+	margin-top: 9px;
+}
+
+.userlist-user li:hover {
+  background-color: #e5e5e5;
+}
+
+
+*/

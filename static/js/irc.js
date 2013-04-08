@@ -184,7 +184,7 @@ var add_user_list = function(name, color, id, buffer) {
       <ul class=\"dropdown-menu\"> \
        <li><a href=\"#\">Block</a></li> \
        <li><a href=\"#\">Add as friend</a></li> \
-       <li><a href=\"#\">Foo</a></li> \
+       <li><a href=\"#\">Private Message</a></li> \
       </ul> \
     </div>");
     //<li class='nick-" + id + "'>" + name + "<span onclick='open_set_user(\"" + name + "\")' class='caret'></span></li>");
@@ -430,3 +430,11 @@ $(".sidebar #menu li").click(function() {
     var name = $(this).find("a").attr("href").substring(1);
     ChangePage(name);
 });
+
+//JS for handled
+if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+    if (("#clientirc").length === 0) {
+        ChangePage("login");
+    }
+    ChangePage("irc");
+}
