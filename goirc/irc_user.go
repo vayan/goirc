@@ -2,6 +2,7 @@ package main
 
 import (
 	"container/list"
+	"log"
 	"strconv"
 	"strings"
 )
@@ -50,8 +51,19 @@ func (user *User) add_buffer(name string, front_name string, addr string, id int
 	// TODO : send new buffer to cl here, delete all other
 	name = strings.ToLower(name)
 	addr = strings.ToLower(addr)
-	new_buffer := Buffer{list.New(), name, front_name, addr, id, id_serv, false}
+	new_buffer := Buffer{list.New(), list.New(), name, front_name, addr, id, id_serv, false}
 	user.Buffers[id] = &new_buffer
+
+	//Restore friends
+	server_buffer := user.Buffers[user.Buffers[id].id_serv]
+	if session := user.raw_session[server_buffer.name]; session != nil {
+		bff := strings.Split(session.friends, ",")
+		for _, f := range bff {
+			if len(f) > 0 {
+				user.Buffers[id].friends.PushBack(f)
+			}
+		}
+	}
 }
 
 func (user *User) add_con_loop(id_buffer int) {
@@ -96,5 +108,6 @@ func (user *User) close_buffer(id_buffer int) {
 func (user *User) add_friend(id_buffer int, nick string) {
 	//TODO : check nick is in buffer
 	id_server := user.Buffers[id_buffer].id_serv
-	insert_new_friend_session(user.id, user.Buffers[id_server].name, nick)
+	go insert_new_friend_session(user.id, user.Buffers[id_server].name, nick)
+	user.Buffers[id_buffer].friends.PushBack(nick)
 }

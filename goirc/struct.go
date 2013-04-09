@@ -12,15 +12,16 @@ int of ircObj is the id of the buffer
 */
 
 type User struct {
-	uid      string
-	id       int
-	key      int
-	Nick     string
-	online   bool
-	Settings UserSettings
-	ircObj   map[int]*IrcConnec
-	Buffers  map[int]*Buffer
-	ws       *websocket.Conn
+	uid         string
+	id          int
+	key         int
+	Nick        string
+	online      bool
+	Settings    UserSettings
+	ircObj      map[int]*IrcConnec
+	Buffers     map[int]*Buffer
+	ws          *websocket.Conn
+	raw_session map[string]*RestoreSession
 }
 
 type UserSettings struct {
@@ -47,6 +48,7 @@ type BackLog struct {
 
 type Buffer struct {
 	users      *list.List
+	friends    *list.List
 	name       string
 	front_name string
 	addr       string

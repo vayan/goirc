@@ -49,6 +49,7 @@ func (user *User) on_connect(id_buffer int) {
 }
 
 func (user *User) on_message(id_buffer int) {
+	//TODO : save pm in db
 	user.ircObj[id_buffer].irc.AddCallback("PRIVMSG", func(e *irc.Event) {
 		buffer_name := e.Arguments[0]
 		if buffer_name[0] != '#' {

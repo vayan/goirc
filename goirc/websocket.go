@@ -44,7 +44,7 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 func WsHandle(ws *websocket.Conn) {
 	log.Printf("Nouveau client %s", ws.Request().RemoteAddr)
 	newid := get_new_id_user()
-	us := &User{"nil", 0, newid, "Anon3123123123", false, UserSettings{true, true}, nil, nil, ws}
+	us := &User{"nil", 0, newid, "Anon3123123123", false, UserSettings{true, true}, nil, nil, ws, nil}
 	all_users[newid] = us
 	for {
 

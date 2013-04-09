@@ -174,6 +174,11 @@ var open_set_user = function(name) {
 
 };
 
+var add_friend = function(id, nick) {
+    var msg = id + "]/addfriend " + nick;
+    ws.send(msg);
+};
+
 var add_user_list = function(name, color, id, buffer) {
     var html = ".nick-" + id + " {  color : " + color + " ; } ";
     $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> \
@@ -183,11 +188,10 @@ var add_user_list = function(name, color, id, buffer) {
       </a> \
       <ul class=\"dropdown-menu\"> \
        <li><a href=\"#\">Block</a></li> \
-       <li><a href=\"#\">Add as friend</a></li> \
+       <li><a onclick=\"add_friend("+buffer+",\'" + name + "\')\" href=\"#\">Add as friend</a></li> \
        <li><a href=\"#\">Private Message</a></li> \
       </ul> \
     </div>");
-    //<li class='nick-" + id + "'>" + name + "<span onclick='open_set_user(\"" + name + "\")' class='caret'></span></li>");
     return html;
 };
 
@@ -344,6 +348,7 @@ var send_change_nick = function() {
 };
 
 var changenick = function() {
+    //TODO handle pseudo in map
     var pseudo = $(".inputpseudo").val();
     $(".inputpseudo").removeAttr("disabled");
     $(".inputpseudo").addClass("activate");

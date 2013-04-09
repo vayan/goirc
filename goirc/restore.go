@@ -18,13 +18,14 @@ func restore_lost_server() {
 		var keyuser = -1
 		if get_key_allusers_by_id(session.id_user) == -1 {
 			newid := get_new_id_user()
-			us := &User{uid, session.id_user, newid, pseudo, false, UserSettings{true, true}, make(map[int]*IrcConnec), make(map[int]*Buffer), nil}
+			us := &User{uid, session.id_user, newid, pseudo, false, UserSettings{true, true}, make(map[int]*IrcConnec), make(map[int]*Buffer), nil, make(map[string]*RestoreSession)}
 			all_users[newid] = us
 			keyuser = newid
 		} else {
 			keyuser = get_key_allusers_by_id(session.id_user)
 		}
 		go all_users[keyuser].connect_server(session.server)
+		all_users[keyuser].raw_session[session.server] = session
 		log.Print("RESTORING : ", pseudo, " reconnecting on ", session.server)
 	}
 

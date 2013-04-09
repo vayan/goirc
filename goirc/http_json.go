@@ -15,6 +15,11 @@ func GetStatsHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func GetFriendsHandler(w http.ResponseWriter, r *http.Request) {
+	if need_perm(REGIST, r) {
+	}
+}
+
 func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
 		//TODO : test si ws active
