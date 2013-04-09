@@ -410,14 +410,99 @@ MAIN IRC
 	float: right;
 }
 
-/*.userlist-user li {
-	padding: 2px;
-	margin-top: 9px;
+
+/***********************
+Mobile style by yann
+v 0.2
+
+TODO : more feature mobile
+
+***********************/
+
+@media only screen and (max-width: 700px) {
+	.content {
+	    margin-left: 80px;
+	}
+
+	.wrap {
+		margin : 0;
+	}
+
+	.logo {
+	display: none;
+	}
+
+	.sidebar {
+	    font-size: 9px;
+	    padding-top: 75px;
+	    border-left: 1px solid #e5e5e5;
+	    border-right: 1px solid #e5e5e5;
+	    position:absolute;
+	    top: 0;
+	    width: 79px;
+	    bottom: 0;
+	}
+
+	.login .control-label {
+	    display: none;
+	}
+
+	.login .controls {
+	    margin-left: 0;
+	}
+
+	.userslist {
+	    font-size: 0px;
+	    padding: 5px;
+	    width: 89px;
+	    overflow: auto;
+	    position: absolute;
+	    top: 115px;
+	    bottom: 0;
+	}
+
+	.list {
+	    position: absolute;
+	    right: 0;
+	    width: 60px;
+	    border-left: 1px solid #e5e5e5;
+	    top: 60px;
+	    bottom: -20px;
+	}
+
+	.remove-buffer {
+	    display: none;
+	}
+
+	.bufferchan {
+	    position: absolute;
+	    left: 81px;
+	    right: 61px;
+	    bottom: 40px;
+	    top: 60px;
+	    overflow:auto;
+	}
+
+	.send-message {
+		left: 82px;
+	    position: absolute;
+	    bottom: 0;
+	}
+
+	.send-message .inputtextirc {
+		width: 176%;
+	}
+
+	.formirc .add-on {
+	    display: none;
+	}
+
+	.tabs-left > .nav-tabs > li > a, .tabs-right > .nav-tabs > li > a {
+		min-width: 50px;
+	}
+
+	.bufferchan .message img, .bufferchan .message iframe   {
+		max-width: 100px;
+		max-height: 100px;
+	}
 }
-
-.userlist-user li:hover {
-  background-color: #e5e5e5;
-}
-
-
-*/
