@@ -17,6 +17,19 @@ func GetStatsHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetFriendsHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
+		session, _ := store.Get(r, serv_set.Cookie_session)
+		us := get_user_id(session.Values["id"].(int))
+		idbuffer := Atoi(r.FormValue("idbuffer"))
+		if val, ok := us.Buffers[idbuffer]; ok {
+			jsonres := "{ \"FriendList\":["
+			for e := val.friends.Front(); e != nil; e = e.Next() {
+				b, _ := json.Marshal(e.Value.(string))
+				jsonres += string(b) + ","
+			}
+			jsonres = jsonres[:len(jsonres)-1]
+			jsonres += "]}"
+			fmt.Fprint(w, jsonres)
+		}
 	}
 }
 
@@ -43,6 +56,7 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 
 func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO : JSON all that
+	//TODO : check id correct
 	idbuffer := Atoi(r.FormValue("idbuffer"))
 	session, _ := store.Get(r, serv_set.Cookie_session)
 

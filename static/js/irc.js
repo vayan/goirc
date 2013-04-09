@@ -179,6 +179,15 @@ var add_friend = function(id, nick) {
     ws.send(msg);
 };
 
+var get_friends = function(id) {
+    $.post("/ajx/getfriends", {
+            channel: id
+        }).done(function(data) {
+            jsonres = JSON.parse(data).FriendList;
+            //
+        });
+};
+
 var add_user_list = function(name, color, id, buffer) {
     var html = ".nick-" + id + " {  color : " + color + " ; } ";
     $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> \
