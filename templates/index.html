@@ -3,10 +3,9 @@
 <head>
   <title>GO#IRC</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- TODO JS AND CSS HERE -->
   <link href="static/css/bootstrap.css" rel="stylesheet" media="screen">
   <link href="static/css/style.css" rel="stylesheet" type="text/css" media="screen">
-  <link href="static/css/mobile.css" rel="stylesheet" type="text/css" media="handled" />
-
   <link href='http://fonts.googleapis.com/css?family=Oswald:700' rel='stylesheet' type='text/css'>
   <link href='http://fonts.googleapis.com/css?family=Mako' rel='stylesheet' type='text/css'>
   <link href='static/css/jquery.scrollbars.css' rel='stylesheet' type='text/css'>
@@ -18,7 +17,7 @@
 
   <div class="wrap">
 
-    <div class="logo">
+    <div class="logo" id="logo-header">
       GO#IRC
     </div>
 
@@ -34,16 +33,13 @@
               <li id="home"><a href="#home">Home <i class="icon-chevron-right"></i> </a></li>
               {{if .Data.login}}
               <li><a href="logout">Logout<i class="icon-chevron-right"></i> </a></li>
-              {{else}}
-              <li id="register"><a href="#register">Register<i class="icon-chevron-right"></i> </a></li>
-              {{end}}
-              {{if .Data.login}}  {{else}} <li id="login"><a href="#login">Login<i class="icon-chevron-right"></i> </a></li>  {{end}}
-
               <li id="irc"><a href="#irc">Irc <i class="icon-chevron-right"></i> </a></li>
               <li id="settings"><a href="#settings">Settings <i class="icon-chevron-right"></i> </a></li>
               <li id="profile"><a href="#profile">Profile <i class="icon-chevron-right"></i> </a></li>
-              <li><a href="#foo">Foo <i class="icon-chevron-right"></i> </a></li>
-              <li><a href="#bar">Bar <i class="icon-chevron-right"></i> </a></li>
+              {{else}}
+              <li id="login"><a href="#login">Login<i class="icon-chevron-right"></i> </a></li>
+              <li id="register"><a href="#register">Register<i class="icon-chevron-right"></i> </a></li>
+              {{end}}
             </ul>
           </div>
           <div class="tab-pane userslist" id="userlist">

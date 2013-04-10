@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"log"
 	"net/http"
@@ -33,11 +35,19 @@ func ActionLogOut(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
+	ret := make(map[string]([]string))
+	ret["errors"] = make([]string, 10)
+	session, _ := store.Get(r, serv_set.Cookie_session)
 	mail := r.FormValue("InputMail")
 	pass := r.FormValue("InputPass")
 
-	session, _ := store.Get(r, serv_set.Cookie_session)
+	if len(mail) < 1 || len(pass) < 1 {
+		ret["errors"][0] = "Please fill all fields"
+	}
 	valid, id, pseudo, email, uid := get_user(mail, pass)
+	if !valid {
+		ret["errors"][1] = "Incorrect pseudo or password"
+	}
 	session.Values["login"] = valid
 	session.Values["id"] = id
 	session.Values["pseudo"] = pseudo
@@ -49,5 +59,6 @@ func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	session.Values["uid"] = uid
 	session.Save(r, w)
-	http.Redirect(w, r, "/", http.StatusFound)
+	b, _ := json.Marshal(ret)
+	fmt.Fprint(w, string(b))
 }

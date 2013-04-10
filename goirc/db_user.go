@@ -65,17 +65,21 @@ func get_user(email string, pass string) (bool, int, string, string, string) {
 	var pseudo, mail, uid string
 	var id int
 
-	valid := false
 	row := db.QueryRow("SELECT id, pseudo, mail, uid FROM users WHERE mail = ? AND password = ? ", email, EncryptPass(pass))
-
 	err := row.Scan(&id, &pseudo, &mail, &uid)
-	if len(pseudo) > 0 {
-		valid = true
-	}
 	if err != nil {
-		log.Println(err)
+		return false, id, pseudo, mail, uid
 	}
-	return valid, id, pseudo, mail, uid
+	return true, id, pseudo, mail, uid
+}
+
+func user_exist(mail string) bool {
+	row := db.QueryRow("SELECT mail FROM users WHERE mail = ?", mail)
+	err := row.Scan(&mail)
+	if err != nil {
+		return false
+	}
+	return true
 }
 
 //get session to restore (session with channel)
@@ -136,10 +140,13 @@ func insert_new_channel_session(id_user int, server string, channel string) {
 	HandleErrorSql(err)
 }
 
-func insert_new_user(user RegisteringUser) int {
+func insert_new_user(user RegisteringUser) (int, []string) {
+	msg_err := make([]string, 10)
 	//TODO : verif pseudo / mail pas deja existant
 	// TODO : welcom mail to send
-
+	if user_exist(user.InputMail) {
+		return -1
+	}
 	if (strings.Contains(user.InputMail, "@")) && (user.InputPass == user.InputPassVerif) && (len(user.InputPseudo) <= Pref.max_lenght_pseudo) {
 		cleanpseudo := strings.Trim(strings.ToLower(user.InputPseudo), " ")
 		cleanmail := strings.Trim(strings.ToLower(user.InputMail), " ")
@@ -147,7 +154,7 @@ func insert_new_user(user RegisteringUser) int {
 		_, err := db.Exec("INSERT INTO users (pseudo, mail, password) VALUES (?, ?, ?)", cleanpseudo, cleanmail, EncryptPass(cleanpass))
 		HandleErrorSql(err)
 	}
-	return -1
+	return 0
 }
 
 func get_stats_user(id_user int) UserStats {

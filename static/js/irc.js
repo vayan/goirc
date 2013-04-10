@@ -10,7 +10,9 @@ if (ws != null) {
 
 var get_user_pref = function() {
     $.post("/ajx/getsettings").done(function(data) {
+        if (data !== '') {
         usersettings = JSON.parse(data);
+    }
     });
 };
 
@@ -128,12 +130,10 @@ var load_irc = function() {
     $(".item-menu-irc").click(function() {
         $(".item-menu-irc").removeClass("selected");
         if ($(".menu-settings").css("display") == "block") {
-            console.log("hide");
             $(".list").css("top", "60px");
             $(".bufferchan").css("top", "60px");
             $(".menu-settings").hide();
         } else {
-            console.log("show");
             $(".list").css("top", "130px");
             $(".bufferchan").css("top", "130px");
             $('.menu-settings').load('ajx/set-' + $(this).html().toLowerCase());
@@ -157,16 +157,18 @@ var update_user_list = function(id) {
     $.post("/ajx/userslist", {
         channel: id
     }).done(function(data) {
-        $("#userlist-buffer" + id).html($("#userlist-buffer0").html());
-        jsonres = JSON.parse(data).UserList;
-        $("#userlist-buffer" + id + " .userlist-style").html("<style></style>");
-        for (var i = 0; i < jsonres.length; i++) {
-            newhtml += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
+        if (data !== '') {
+            $("#userlist-buffer" + id).html($("#userlist-buffer0").html());
+            jsonres = JSON.parse(data).UserList;
+            $("#userlist-buffer" + id + " .userlist-style").html("<style></style>");
+            for (var i = 0; i < jsonres.length; i++) {
+                newhtml += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
+            }
+            $("#userlist-buffer" + id + " .userlist-style style").html(newhtml);
+            $(".userlist-buffer").hide();
+            //TODO : rendre visible uniquement la list active
+            $("#userlist-buffer" + id).show();
         }
-        $("#userlist-buffer" + id + " .userlist-style style").html(newhtml);
-        $(".userlist-buffer").hide();
-        //TODO : rendre visible uniquement la list active
-        $("#userlist-buffer" + id).show();
     });
 };
 
@@ -183,8 +185,10 @@ var get_friends = function(id) {
     $.post("/ajx/getfriends", {
             channel: id
         }).done(function(data) {
+            if (data !== '') {
             jsonres = JSON.parse(data).FriendList;
             //
+           }
         });
 };
 
@@ -211,16 +215,18 @@ var aff_user_list = function(id) {
         $.post("/ajx/userslist", {
             channel: id
         }).done(function(data) {
-            $("#userlist").append("<span id='userlist-buffer" + id + "' class='userlist-buffer' >" + $("#userlist-buffer0").html() + "</span>");
-            jsonres = JSON.parse(data).UserList;
-            // $('#userlist-user').html("");
-            $("#userlist-buffer" + id + " .userlist-style").html("<style></style>");
-            for (var i = 0; i < jsonres.length; i++) {
-                newcss += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
+            if (data !== '') {
+                $("#userlist").append("<span id='userlist-buffer" + id + "' class='userlist-buffer' >" + $("#userlist-buffer0").html() + "</span>");
+                jsonres = JSON.parse(data).UserList;
+                // $('#userlist-user').html("");
+                $("#userlist-buffer" + id + " .userlist-style").html("<style></style>");
+                for (var i = 0; i < jsonres.length; i++) {
+                    newcss += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
+                }
+                $("#userlist-buffer" + id + " .userlist-style style").html(newcss);
+                $(".userlist-buffer").hide();
+                $("#userlist-buffer" + id).show();
             }
-            $("#userlist-buffer" + id + " .userlist-style style").html(newcss);
-            $(".userlist-buffer").hide();
-            $("#userlist-buffer" + id).show();
         });
     } else {
         $(".userlist-buffer").hide();
@@ -339,11 +345,6 @@ var parse_irc = function(msg) {
     }
 };
 
-$(document).ready(function() {
-    var hash = window.location.hash.substring(1);
-    ChangePage(hash);
-});
-
 var resetnick = function(nick) {
     $(".formirc .add-on").html("<i onclick='changenick()' class='icon-edit'></i><input type='text' disabled='disabled' value='" + nick + "' class='inputpseudo'>");
 };
@@ -427,6 +428,10 @@ var notify = function(title, body) {
     }
 };
 
+var notify_alert = function(div, message, type) {
+    div.append("<div class=\"alert alert-"+type+"\">"+ message +"</div>");
+}
+
 var escape_html = function(str) {
     var tagsToReplace = {
     '&': '&amp;',
@@ -440,9 +445,46 @@ var escape_html = function(str) {
     return str.replace(/[&<>]/g, replaceTag);
 };
 
-$(".sidebar #menu li").click(function() {
-    var name = $(this).find("a").attr("href").substring(1);
-    ChangePage(name);
+$(document).ready(function() {
+    var hash = window.location.hash.substring(1);
+    ChangePage(hash);
+
+    $("#logo-header").click(function(){
+        ChangePage("home");
+    });
+
+    $(".sidebar #menu li").click(function() {
+        var name = $(this).find("a").attr("href").substring(1);
+        ChangePage(name);
+    });
+
+    $(".content").on("submit", "#login-form", function(event){
+      event.preventDefault();
+      var $form = $(this),
+          mail = $form.find('input[name="InputMail"]').val(),
+          pass = $form.find('input[name="InputPass"]').val(),
+          button = $form.find('button[type="submit"]'),
+          url = $form.attr('action');
+          button.attr("disabled", "disabled");
+          button.html("Connecting...");
+      $.post( url, {
+        InputMail: mail,
+        InputPass: pass
+        }).done(function(data) {
+            button.removeAttr("disabled");
+            button.html("Submit");
+            if (data !== '') {
+             json = JSON.parse(data);
+             for (var i in json["errors"]) {
+                if (json["errors"][i].length > 0) {
+                    notify_alert($("#message-alert"), json["errors"][i], "error");
+                }
+             }
+            } else {
+                //good
+            }
+      });
+    });
 });
 
 //JS for handled

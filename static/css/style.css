@@ -56,6 +56,7 @@ LOGO
 **/
 
 .logo {
+cursor: pointer;
 border-left: 1px solid #e5e5e5;
 border-right: 1px solid #e5e5e5;
 text-align: center;
@@ -68,6 +69,7 @@ top: 0;
 background-color: white;
 width: 220px;
 height: 50px;
+z-index: 6;
 }
 
 
@@ -179,8 +181,7 @@ LOGIN
 **/
 
 .login {
-	margin-top: 20px;
-	margin-left: 20px;
+	margin : 20px 20px 0 20px;
 }
 
 .login .control-label {
