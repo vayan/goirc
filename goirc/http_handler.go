@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"fmt"
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"html/template"
 	"log"
@@ -75,8 +77,12 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	use := new(RegisteringUser)
 	decoder.Decode(use, r.Form)
-	insert_new_user(*use)
-	http.Redirect(w, r, "/", http.StatusFound)
+	_, ret := insert_new_user(*use)
+	ret_json := make(map[string]([]string))
+	ret_json["errors"] = ret
+	b, _ := json.Marshal(ret_json)
+	fmt.Fprint(w, string(b))
+	//http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {

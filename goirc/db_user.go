@@ -142,19 +142,33 @@ func insert_new_channel_session(id_user int, server string, channel string) {
 
 func insert_new_user(user RegisteringUser) (int, []string) {
 	msg_err := make([]string, 10)
-	//TODO : verif pseudo / mail pas deja existant
+	ret := 0
 	// TODO : welcom mail to send
 	if user_exist(user.InputMail) {
-		return -1
+		msg_err[0] = "Email already used"
+		ret = 1
 	}
-	if (strings.Contains(user.InputMail, "@")) && (user.InputPass == user.InputPassVerif) && (len(user.InputPseudo) <= Pref.max_lenght_pseudo) {
+	if !strings.Contains(user.InputMail, "@") {
+		msg_err[1] = "Incorrect Email"
+		ret = 1
+	}
+	if user.InputPass != user.InputPassVerif {
+		msg_err[2] = "Passwords don't match"
+		ret = 1
+	}
+	//TODO : min lenght not max
+	if len(user.InputPseudo) > Pref.max_lenght_pseudo {
+		msg_err[3] = "Passwords too short"
+		ret = 1
+	}
+	if ret == 0 {
 		cleanpseudo := strings.Trim(strings.ToLower(user.InputPseudo), " ")
 		cleanmail := strings.Trim(strings.ToLower(user.InputMail), " ")
 		cleanpass := strings.Trim(user.InputPass, " ")
 		_, err := db.Exec("INSERT INTO users (pseudo, mail, password) VALUES (?, ?, ?)", cleanpseudo, cleanmail, EncryptPass(cleanpass))
 		HandleErrorSql(err)
 	}
-	return 0
+	return ret, msg_err
 }
 
 func get_stats_user(id_user int) UserStats {

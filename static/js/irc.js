@@ -429,7 +429,7 @@ var notify = function(title, body) {
 };
 
 var notify_alert = function(div, message, type) {
-    div.append("<div class=\"alert alert-"+type+"\">"+ message +"</div>");
+    div.append("<div class=\"alert alert-"+type+"\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>"+ message +"</div>");
 }
 
 var escape_html = function(str) {
@@ -460,6 +460,7 @@ $(document).ready(function() {
 
     $(".content").on("submit", "#login-form", function(event){
       event.preventDefault();
+      var no_err = true;
       var $form = $(this),
           mail = $form.find('input[name="InputMail"]').val(),
           pass = $form.find('input[name="InputPass"]').val(),
@@ -471,17 +472,57 @@ $(document).ready(function() {
         InputMail: mail,
         InputPass: pass
         }).done(function(data) {
+            $("#message-alert").html("");
             button.removeAttr("disabled");
             button.html("Submit");
             if (data !== '') {
              json = JSON.parse(data);
              for (var i in json["errors"]) {
                 if (json["errors"][i].length > 0) {
+                    no_err = false;
                     notify_alert($("#message-alert"), json["errors"][i], "error");
                 }
              }
-            } else {
-                //good
+            }
+            if (no_err) {
+                window.location.href = "/";
+            }
+      });
+    });
+
+    $(".content").on("submit", "#register-form", function(event){
+      event.preventDefault();
+      var no_err = true;
+      var $form = $(this),
+          mail = $form.find('input[name="InputMail"]').val(),
+          pseudo = $form.find('input[name="InputPseudo"]').val(),
+          pass = $form.find('input[name="InputPass"]').val(),
+          pass2 = $form.find('input[name="InputPassVerif"]').val(),
+          button = $form.find('button[type="submit"]'),
+          url = $form.attr('action');
+          button.attr("disabled", "disabled");
+          button.html("Registering...");
+      $.post( url, {
+        InputMail: mail,
+        InputPseudo: pseudo,
+        InputPass: pass,
+        InputPassVerif: pass2
+        }).done(function(data) {
+            $("#message-alert").html("");
+            button.removeAttr("disabled");
+            button.html("Submit");
+            if (data !== '') {
+             json = JSON.parse(data);
+             for (var i in json["errors"]) {
+                if (json["errors"][i].length > 0) {
+                    no_err = false;
+                    notify_alert($("#message-alert"), json["errors"][i], "error");
+                }
+             }
+            }
+            if (no_err) {
+                $("#register-form").html("");
+                notify_alert($("#register-form"), "All good ! Check your mails at " + mail, "success");
             }
       });
     });
