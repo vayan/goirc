@@ -11,8 +11,8 @@ if (ws != null) {
 var get_user_pref = function() {
     $.post("/ajx/getsettings").done(function(data) {
         if (data !== '') {
-        usersettings = JSON.parse(data);
-    }
+            usersettings = JSON.parse(data);
+        }
     });
 };
 
@@ -84,35 +84,35 @@ var update_active_sidebar = function(page) {
 var ChangePage = function(page) {
     switch (page) {
         case "irc":
-            update_active_sidebar(page);
-            load_irc();
-            break;
+        update_active_sidebar(page);
+        load_irc();
+        break;
         case "home":
-            update_active_sidebar(page);
-            $('.content').load('ajx/home');
-            break;
+        update_active_sidebar(page);
+        $('.content').load('ajx/home');
+        break;
         case "register":
-            update_active_sidebar(page);
-            $('.content').load('ajx/register');
-            break;
+        update_active_sidebar(page);
+        $('.content').load('ajx/register');
+        break;
         case "login":
-            update_active_sidebar(page);
-            $('.content').load('ajx/login');
-            break;
+        update_active_sidebar(page);
+        $('.content').load('ajx/login');
+        break;
         case "settings":
-            update_active_sidebar(page);
-            $('.content').load('ajx/settings', function() {
-                open_settings();
-            });
-            break;
+        update_active_sidebar(page);
+        $('.content').load('ajx/settings', function() {
+            open_settings();
+        });
+        break;
         case "profile":
-            update_active_sidebar(page);
-            $('.content').load('ajx/profile');
-            break;
+        update_active_sidebar(page);
+        $('.content').load('ajx/profile');
+        break;
         default:
-            update_active_sidebar("home");
-            $('.content').load('ajx/home');
-            break;
+        update_active_sidebar("home");
+        $('.content').load('ajx/home');
+        break;
     }
 };
 
@@ -183,28 +183,28 @@ var add_friend = function(id, nick) {
 
 var get_friends = function(id) {
     $.post("/ajx/getfriends", {
-            channel: id
-        }).done(function(data) {
-            if (data !== '') {
+        channel: id
+    }).done(function(data) {
+        if (data !== '') {
             jsonres = JSON.parse(data).FriendList;
             //
-           }
-        });
+        }
+    });
 };
 
 var add_user_list = function(name, color, id, buffer) {
     var html = ".nick-" + id + " {  color : " + color + " ; } ";
     $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> \
       <a class=\"btn dropdown-toggle nick-" + id + "\" data-toggle=\"dropdown\" href=\"#\"> \
-        " + name + " \
-        <span class=\"caret\"></span> \
+      " + name + " \
+      <span class=\"caret\"></span> \
       </a> \
       <ul class=\"dropdown-menu\"> \
-       <li><a href=\"#\">Block</a></li> \
-       <li><a onclick=\"add_friend("+buffer+",\'" + name + "\')\" href=\"#\">Add as friend</a></li> \
-       <li><a href=\"#\">Private Message</a></li> \
+      <li><a href=\"#\">Block</a></li> \
+      <li><a onclick=\"add_friend("+buffer+",\'" + name + "\')\" href=\"#\">Add as friend</a></li> \
+      <li><a href=\"#\">Private Message</a></li> \
       </ul> \
-    </div>");
+      </div>");
     return html;
 };
 
@@ -319,29 +319,29 @@ var parse_irc = function(msg) {
     var buff = SplitN(msg, ']', 2);
     switch (buff[0]) {
         case "buffer":
-            var buff_nick = buff[2].split(' ');
-            console.log("new buffer " + buff[1]);
-            add_new_buffer(buff[1], buff_nick[0], buff_nick[1]);
-            break;
+        var buff_nick = buff[2].split(' ');
+        console.log("new buffer " + buff[1]);
+        add_new_buffer(buff[1], buff_nick[0], buff_nick[1]);
+        break;
         case "nick":
-            var nicks = buff[2].split(' ');
-            nick_changed(nicks[0], nicks[1], buff[1]);
-            break;
+        var nicks = buff[2].split(' ');
+        nick_changed(nicks[0], nicks[1], buff[1]);
+        break;
         case "upul":
-            aff_user_list(buff[1]);
-            break;
+        aff_user_list(buff[1]);
+        break;
         case "join":
-            new_message(buff[1], "<----", buff[2] + " has joined");
-            update_user_list(buff[1]);
-            break;
+        new_message(buff[1], "<----", buff[2] + " has joined");
+        update_user_list(buff[1]);
+        break;
         case "part":
-            new_message(buff[1], "---->", buff[2] + " has left");
-            update_user_list(buff[1]);
-            break;
+        new_message(buff[1], "---->", buff[2] + " has left");
+        update_user_list(buff[1]);
+        break;
         default:
-            new_message(buff[0], buff[1], buff[2]);
-            check_mention(buff[0], buff[2]);
-            break;
+        new_message(buff[0], buff[1], buff[2]);
+        check_mention(buff[0], buff[2]);
+        break;
     }
 };
 
@@ -385,25 +385,25 @@ var check_inline_element = function(string) {
     var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
     return string.replace(exp,
 
-    function(url) {
-        if (string[string.indexOf(url) - 2] != "=") {
-            var clean_url = url.split("?")[0];
-            var yt = youtube_valid(url);
-            if (yt !== false) {
-                return '<iframe width="90%" height="280%" src="http://www.youtube.com/embed/'+yt+'" frameborder="0" allowfullscreen></iframe>';
-            }
-            if (clean_url.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
-                var img = new Image();
-                img.src = url;
-                if ( (typeof img.width === 'number') && (typeof img.height === 'number') && img.width <= 1500 && img.height <= 1500) {
-                    return '<a rel="lightbox" target="_blank" href="' + url + '"><img src="' + url + '" alt="bou" /></a>';
+        function(url) {
+            if (string[string.indexOf(url) - 2] != "=") {
+                var clean_url = url.split("?")[0];
+                var yt = youtube_valid(url);
+                if (yt !== false) {
+                    return '<iframe width="90%" height="280%" src="http://www.youtube.com/embed/'+yt+'" frameborder="0" allowfullscreen></iframe>';
                 }
+                if (clean_url.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
+                    var img = new Image();
+                    img.src = url;
+                    if ( (typeof img.width === 'number') && (typeof img.height === 'number') && img.width <= 1500 && img.height <= 1500) {
+                        return '<a rel="lightbox" target="_blank" href="' + url + '"><img src="' + url + '" alt="bou" /></a>';
+                    }
+                }
+                return '<a target="_blank" href="' + url + '">' + url + '</a>';
+            } else {
+                return url;
             }
-            return '<a target="_blank" href="' + url + '">' + url + '</a>';
-        } else {
-            return url;
-        }
-    });
+        });
 };
 
 var check_mention = function(id, string) {
@@ -419,9 +419,9 @@ var notify = function(title, body) {
     var perm = window.webkitNotifications.checkPermission();
     if (perm === 0 && title !== '' && body !== '' && usersettings.Notify) { //si perm
         var notification = window.webkitNotifications.createNotification(
-        icon,
-        title,
-        body);
+            icon,
+            title,
+            body);
         notification.show();
     } else { //sinn request perm
         window.webkitNotifications.requestPermission();
@@ -434,9 +434,9 @@ var notify_alert = function(div, message, type) {
 
 var escape_html = function(str) {
     var tagsToReplace = {
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;'
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;'
     };
 
     function replaceTag(tag) {
@@ -450,6 +450,7 @@ $(document).ready(function() {
     ChangePage(hash);
 
     $("#logo-header").click(function(){
+        $('#mainmenutab').click();
         ChangePage("home");
     });
 
@@ -462,70 +463,70 @@ $(document).ready(function() {
       event.preventDefault();
       var no_err = true;
       var $form = $(this),
-          mail = $form.find('input[name="InputMail"]').val(),
-          pass = $form.find('input[name="InputPass"]').val(),
-          button = $form.find('button[type="submit"]'),
-          url = $form.attr('action');
-          button.attr("disabled", "disabled");
-          button.html("Connecting...");
+      mail = $form.find('input[name="InputMail"]').val(),
+      pass = $form.find('input[name="InputPass"]').val(),
+      button = $form.find('button[type="submit"]'),
+      url = $form.attr('action');
+      button.attr("disabled", "disabled");
+      button.html("Connecting...");
       $.post( url, {
         InputMail: mail,
         InputPass: pass
-        }).done(function(data) {
-            $("#message-alert").html("");
-            button.removeAttr("disabled");
-            button.html("Submit");
-            if (data !== '') {
-             json = JSON.parse(data);
-             for (var i in json["errors"]) {
-                if (json["errors"][i].length > 0) {
-                    no_err = false;
-                    notify_alert($("#message-alert"), json["errors"][i], "error");
-                }
-             }
+    }).done(function(data) {
+        $("#message-alert").html("");
+        button.removeAttr("disabled");
+        button.html("Submit");
+        if (data !== '') {
+           json = JSON.parse(data);
+           for (var i in json["errors"]) {
+            if (json["errors"][i].length > 0) {
+                no_err = false;
+                notify_alert($("#message-alert"), json["errors"][i], "error");
             }
-            if (no_err) {
-                window.location.href = "/";
-            }
-      });
-    });
+        }
+    }
+    if (no_err) {
+        window.location.href = "/";
+    }
+});
+});
 
     $(".content").on("submit", "#register-form", function(event){
       event.preventDefault();
       var no_err = true;
       var $form = $(this),
-          mail = $form.find('input[name="InputMail"]').val(),
-          pseudo = $form.find('input[name="InputPseudo"]').val(),
-          pass = $form.find('input[name="InputPass"]').val(),
-          pass2 = $form.find('input[name="InputPassVerif"]').val(),
-          button = $form.find('button[type="submit"]'),
-          url = $form.attr('action');
-          button.attr("disabled", "disabled");
-          button.html("Registering...");
+      mail = $form.find('input[name="InputMail"]').val(),
+      pseudo = $form.find('input[name="InputPseudo"]').val(),
+      pass = $form.find('input[name="InputPass"]').val(),
+      pass2 = $form.find('input[name="InputPassVerif"]').val(),
+      button = $form.find('button[type="submit"]'),
+      url = $form.attr('action');
+      button.attr("disabled", "disabled");
+      button.html("Registering...");
       $.post( url, {
         InputMail: mail,
         InputPseudo: pseudo,
         InputPass: pass,
         InputPassVerif: pass2
-        }).done(function(data) {
-            $("#message-alert").html("");
-            button.removeAttr("disabled");
-            button.html("Submit");
-            if (data !== '') {
-             json = JSON.parse(data);
-             for (var i in json["errors"]) {
-                if (json["errors"][i].length > 0) {
-                    no_err = false;
-                    notify_alert($("#message-alert"), json["errors"][i], "error");
-                }
-             }
+    }).done(function(data) {
+        $("#message-alert").html("");
+        button.removeAttr("disabled");
+        button.html("Submit");
+        if (data !== '') {
+           json = JSON.parse(data);
+           for (var i in json["errors"]) {
+            if (json["errors"][i].length > 0) {
+                no_err = false;
+                notify_alert($("#message-alert"), json["errors"][i], "error");
             }
-            if (no_err) {
-                $("#register-form").html("");
-                notify_alert($("#register-form"), "All good ! Check your mails at " + mail, "success");
-            }
-      });
-    });
+        }
+    }
+    if (no_err) {
+        $("#register-form").html("");
+        notify_alert($("#register-form"), "All good ! Check your mails at " + mail, "success");
+    }
+});
+});
 });
 
 //JS for handled
