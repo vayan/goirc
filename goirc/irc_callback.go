@@ -18,6 +18,7 @@ func (user *User) add_all_callback(id_buffer int) {
 	user.on_part(id_buffer)
 	user.on_join(id_buffer)
 	user.on_whois(id_buffer)
+	user.on_error(id_buffer)
 }
 
 func (user *User) on_user_list(id_buffer int) {
@@ -123,11 +124,18 @@ func (user *User) on_nick_used(id_buffer int) {
 	//TODO : randomize random pseudo
 	user.ircObj[id_buffer].irc.AddCallback("433", func(e *irc.Event) {
 		user.change_nick(id_buffer, "_"+user.Nick)
+		user.Nick = "_" + user.Nick
 	})
 }
 
 func (user *User) on_whois(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("311", func(e *irc.Event) {
 		//arg : 0 = user , 2 = hostname , 3 = netmask
+	})
+}
+
+func (user *User) on_error(id_buffer int) {
+	user.ircObj[id_buffer].irc.AddCallback("ERROR", func(e *irc.Event) {
+		user.leave_channel(user.Buffers[id_buffer].id_serv, false)
 	})
 }

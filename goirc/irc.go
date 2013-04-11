@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/thoj/go-ircevent"
+	"strconv"
 	"strings"
 )
 
@@ -35,9 +36,13 @@ func (user *User) connect_server(url string) {
 	}
 }
 
-func (user *User) leave_channel(id_buffer_chan int) {
+func (user *User) leave_channel(id_buffer_chan int, remove_session bool) {
 	id_ircobj := user.Buffers[id_buffer_chan].id_serv
-	go remove_channel_session(user.id, user.Buffers[id_ircobj].name, user.Buffers[id_buffer_chan].name)
+	if remove_session {
+		go remove_channel_session(user.id, user.Buffers[id_ircobj].name, user.Buffers[id_buffer_chan].name)
+	} else {
+		go ws_send("leave]"+strconv.Itoa(id_buffer_chan), user.ws)
+	}
 	user.ircObj[id_ircobj].irc.Part(user.Buffers[id_buffer_chan].name)
 	delete(user.Buffers, id_buffer_chan)
 }

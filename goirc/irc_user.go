@@ -85,13 +85,14 @@ func (user *User) send_change_nick(id_buffer int, old_nick string, new_nick stri
 	for _, buff := range user.Buffers {
 		if buff.id_serv == user.Buffers[id_buffer].id_serv {
 			for e := user.Buffers[buff.id].users.Front(); e != nil; e = e.Next() {
-				if e.Value.(ChannelUser).Nick == old_nick {
+				if e.Value.(ChannelUser).NickClean == old_nick {
 					val := user.Buffers[buff.id].users.Remove(e)
 					chanuser := ChannelUser{new_nick, strings.Replace(new_nick, "@", "", 1), val.(ChannelUser).Color}
 					user.Buffers[buff.id].users.PushBack(chanuser)
+					ws_send("nick]"+strconv.Itoa(buff.id)+"]"+old_nick+" "+new_nick, user.ws)
 				}
 			}
-			ws_send("nick]"+strconv.Itoa(buff.id)+"]"+old_nick+" "+new_nick, user.ws)
+
 		}
 	}
 }
@@ -100,7 +101,7 @@ func (user *User) close_buffer(id_buffer int) {
 	if user.Buffers[id_buffer].id_serv == id_buffer {
 		user.leave_network(id_buffer)
 	} else {
-		user.leave_channel(id_buffer)
+		user.leave_channel(id_buffer, true)
 	}
 }
 

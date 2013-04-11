@@ -333,6 +333,10 @@ var get_timestamp_now = function() {
     return timestamp;
 };
 
+var disable_buffer = function(id) {
+
+}
+
 var parse_irc = function(msg) {
     var buff = SplitN(msg, ']', 2);
     switch (buff[0]) {
@@ -355,6 +359,9 @@ var parse_irc = function(msg) {
         case "part":
         new_message(buff[1], "---->", buff[2] + " has left");
         update_user_list(buff[1]);
+        break;
+        case "leave" :
+        disable_buffer(buff[1]);
         break;
         default:
         new_message(buff[0], buff[1], buff[2]);

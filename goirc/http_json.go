@@ -39,7 +39,7 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 		session, _ := store.Get(r, serv_set.Cookie_session)
 		us := get_user_id(session.Values["id"].(int))
 		for _, irco := range us.Buffers {
-			if irco.name[0] != '#' {
+			if irco.id == irco.id_serv {
 				allserv[irco.name] = strconv.Itoa(irco.id)
 			}
 		}
