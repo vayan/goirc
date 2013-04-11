@@ -2,6 +2,7 @@ var ws;
 var host = window.location.hostname;
 var buffers;
 var usersettings = null;
+var all_buffers = [];
 
 if (ws != null) {
     ws.close();
@@ -129,11 +130,13 @@ var load_irc = function() {
 
     $("#join-channel").click(function() {
         $("#idnetwork").html("");
+        var select = "selected=\"selected\"";
         $.ajax({url: "ajx/set-channels"}).done(function(data){
             if (data !== '') {
                 jsonres = JSON.parse(data);
                 for (var key in jsonres) {
-                    $("#idnetwork").append("<option value='" + jsonres[key] + "'>" + key + "</option>")
+                    $("#idnetwork").append("<option "+select+" value='" + jsonres[key] + "'>" + key + "</option>")
+                    select = "";
                 }
             }
         });
@@ -141,11 +144,15 @@ var load_irc = function() {
 
     $('.switch-userlist').show();
     $('#userlisttab').click();
+
+    $(".menu-irc").on("click", ".dropdown-menu", function(event){
+        event.stopPropagation();
+    });
 };
 
 var switch_buffer = function(id) {
     aff_user_list(id);
-    $(".inputpseudo").val($("#" + id + " .current-nick").val());
+    $(".inputpseudo").val(all_buffers[id].nick);
     $('#' + id).scrollTop($('#' + id)[0].scrollHeight);
 };
 
@@ -244,6 +251,7 @@ var send_new_join_chan = function() {
     ws.send(msg);
     new_message("log", "log", "Joining " + $("#adresschan").val() + "...");
     $(".menu-irc > .selected").click();
+    $("body").click();
 };
 
 var send_message = function() {
@@ -274,6 +282,8 @@ var add_new_buffer = function(id, name, nick) {
     } else {
         new_message("log", "log", "Joined " + name + "!");
     }
+    all_buffers.push(id);
+    all_buffers[id] = {nick: nick};
     $('.listbuffer').append('<li id="bufferid' + id + '" onclick="switch_buffer(' + id + ')" ><a href="#' + id + '" data-toggle="tab">' + name + '<span class="remove-buffer" onclick="remove_buffer(' + id + ')">X</span></a></li>');
     $('.contentbuffer').append('<div class="tab-pane bufferchan" id="' + id + '"><table class="table table-striped allmsg"></table> <input type="hidden" class="current-nick" value="log" /></div>');
     $("#" + id + " .current-nick").val(nick);
@@ -290,8 +300,8 @@ var add_new_buffer = function(id, name, nick) {
 var nick_changed = function(oldnick, newnick, buffer) {
     new_message(buffer, "----", oldnick + " is now known as " + newnick);
 
-    if ($("#" + buffer + " .current-nick").val() == oldnick) {
-        $("#" + buffer + " .current-nick").val(newnick);
+    if (all_buffers[buffer].nick == oldnick) {
+        all_buffers[buffer].nick = newnick;
     }
     update_user_list(buffer);
 };
@@ -405,9 +415,7 @@ var check_inline_element = function(string) {
 };
 
 var check_mention = function(id, string) {
-    var mynick = $("#" + id + " .current-nick").val();
-    if (string.indexOf(mynick) != -1) {
-        console.log("mention!");
+    if (string.indexOf(all_buffers[id].nick) != -1) {
         notify("test", "hey !");
     }
 };
@@ -521,11 +529,6 @@ $(document).ready(function() {
             }
         });
     });
-
-    $(".menu-irc").on("click", ".dropdown-menu", function(event){
-        event.stopPropagation();
-    });
-
 });
 
 //JS for handled

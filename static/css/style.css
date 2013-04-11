@@ -250,6 +250,15 @@ MAIN IRC
 	padding: 5px;
 }
 
+.sepport {
+        font-size: 2em;
+        line-height: 33px;
+}
+
+.form-set-chan input, .form-set-chan select, .form-set-chan button {
+display: block;
+}
+
 .userslist {
 	padding: 5px;
 	width: 210px;

@@ -77,30 +77,34 @@
       <div class="menu-irc btn-toolbar unselect">
         <div class="btn-group">
           <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-            Servers
+            Connect to new server
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
+          <li>
             <span class="form-inline" id="formsetserv">
               <input type="text" name="adressserv" id="adressserv" placeholder="Server's adress" /> <span class="sepport"> : </span>
               <input type="text" class="fourdigit" name="portserv" id="portserv" value="6667"/>
               <button type="button" onclick="send_new_co_serv()" class="btn" name="sendserv" id="sendserv">Connect</button>
             </span>
+            </li>
           </ul>
         </div>
-        <div id="join-channel" class="btn-group">
-          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-            Channels
+        <div  class="btn-group">
+          <a id="join-channel" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            Join new channel
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu">
-            <span class="form-inline" id="formsetchan">
+          <li>
+            <span class="form-set-chan" id="formsetchan">
+              <input type="text" name="adresschan" id="adresschan" placeholder="#channel" />
               <select id="idnetwork">
 
               <select>
-              <input type="text" name="adresschan" id="adresschan" placeholder="#channel" />
               <button type="button" onclick="send_new_join_chan()" class="btn" name="sendchan" id="sendserv">Join</button>
             </span>
+            </li>
           </ul>
         </div>
       </div>
@@ -121,7 +125,6 @@
                   <td class="time">Time</td>
                 </tr>
               </table>
-              <input type="hidden" class="current-nick" value="log" />
             </div>
           </div>
           <div class="input-prepend input-append send-message formirc">
