@@ -19,8 +19,8 @@ func GetFriendsHandler(w http.ResponseWriter, r *http.Request) {
 		session, _ := store.Get(r, serv_set.Cookie_session)
 		us := get_user_id(session.Values["id"].(int))
 		idbuffer := Atoi(r.FormValue("idbuffer"))
-		if val, ok := us.Buffers[idbuffer]; ok {
-			jsonres := "{["
+		if val, ok := us.Buffers[idbuffer]; ok && us.Buffers[idbuffer].friends.Len() > 0 {
+			jsonres := "{ \"FriendList\":["
 			for e := val.friends.Front(); e != nil; e = e.Next() {
 				b, _ := json.Marshal(e.Value.(string))
 				jsonres += string(b) + ","
@@ -77,7 +77,7 @@ func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 		session, _ := store.Get(r, serv_set.Cookie_session)
 		us := get_user_id(session.Values["id"].(int))
 
-		if _, ok := us.Buffers[id]; ok {
+		if _, ok := us.Buffers[id]; ok && us.Buffers[id].users.Len() > 0 {
 			for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
 				b, _ := json.Marshal(e.Value.(ChannelUser))
 				jsonres += string(b) + ","
@@ -91,8 +91,7 @@ func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetSettingsHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, serv_set.Cookie_session)
-	if need_perm(REGIST, r) {
-		user := get_user_id(session.Values["id"].(int))
+	if user := get_user_id(session.Values["id"].(int)); need_perm(REGIST, r) && user != nil {
 		jsonres, _ := json.Marshal(user.Settings)
 		fmt.Fprint(w, string(jsonres))
 	}

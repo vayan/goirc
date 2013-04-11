@@ -157,7 +157,7 @@ var update_user_list = function(id) {
     }).done(function(data) {
         if (data !== '') {
             $("#userlist-buffer" + id).html($("#userlist-buffer0").html());
-            jsonres = JSON.parse(data);
+            jsonres = JSON.parse(data).UserList;
             $("#userlist-buffer" + id + " .userlist-style").html("<style></style>");
             for (var i = 0; i < jsonres.length; i++) {
                 newhtml += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);

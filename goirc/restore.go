@@ -39,7 +39,7 @@ func restore_lost_channels(server string, server_id int, user_key int) {
 	log.Print("=== Crash ? Restoring channels....")
 
 	for _, session := range sessions {
-		if session.server == server {
+		if session.server == server && all_users[user_key].id == session.id_user {
 			channels := strings.Split(session.channel, ",")
 			for _, channel := range channels {
 				if len(channel) > 1 {
