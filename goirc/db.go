@@ -8,9 +8,6 @@ import (
 	"time"
 )
 
-//TODO : Check loose connexion
-// TODO : timeout sql deco
-
 func HandleErrorSql(er error) bool {
 	if er != nil {
 		log.Println(er)
@@ -22,10 +19,6 @@ func connect_sql() *sql.DB {
 	db, _ := sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
 	return db
 }
-
-// func close_sql(db *sql.DB) {
-// 	db.Close()
-// }
 
 // Get backlog from channel
 func get_backlog(id_user int, buffer string) []*BackLog {
