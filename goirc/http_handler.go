@@ -24,8 +24,7 @@ func need_perm(need_defcon int, r *http.Request) bool {
 	return false
 }
 
-func loadPage() *Page {
-	title := "test"
+func loadPage(title string) *Page {
 	return &Page{Title: title}
 }
 
@@ -68,12 +67,13 @@ func IrcHandler(w http.ResponseWriter, r *http.Request) {
 
 func SetServHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
-		p := loadPage()
+		p := loadPage("")
 		RenderHtml(w, "ajx/set-servers", p)
 	}
 }
 
 func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO : captcha
 	r.ParseForm()
 	use := new(RegisteringUser)
 	decoder.Decode(use, r.Form)
@@ -82,7 +82,6 @@ func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	ret_json["errors"] = ret
 	b, _ := json.Marshal(ret_json)
 	fmt.Fprint(w, string(b))
-	//http.Redirect(w, r, "/", http.StatusFound)
 }
 
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
@@ -110,7 +109,7 @@ func SettingsHandler(w http.ResponseWriter, r *http.Request) {
 			}
 			update_settings(*user)
 		}
-		p := loadPage()
+		p := loadPage("Settings")
 		RenderHtml(w, "ajx/settings", p)
 		return
 	}

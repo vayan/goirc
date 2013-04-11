@@ -12,12 +12,12 @@
   <link href='static/css/lightbox.css' rel='stylesheet' type='text/css' >
 </head>
 <body>
-  <div class="top-header">
+  <div class="top-header unselect">
   </div>
 
   <div class="wrap">
 
-    <div class="logo" id="logo-header">
+    <div class="logo unselect" id="logo-header">
       GO#IRC
     </div>
 
@@ -73,8 +73,8 @@
     </div>
     {{if .Data.login}}
     <span class="hidden" id="clientirc">
-      <h2 class="pagetitle"> Settings : </h2>
-      <div class="menu-irc"> <span class="item-menu-irc">Servers</span>  <span class="item-menu-irc">Channels</span> </div>
+      <h2 class="pagetitle unselect"> Settings : </h2>
+      <div class="menu-irc unselect"> <span class="item-menu-irc">Servers</span>  <span class="item-menu-irc">Channels</span> </div>
       <div class="menu-settings"></div>
       <div class="main-irc">
         <input type="hidden" name="activeserver" value="" />

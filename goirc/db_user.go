@@ -114,17 +114,6 @@ func insert_new_friend_session(id_user int, server string, friends string) {
 	HandleErrorSql(err)
 }
 
-func insert_new_server_session(id_user int, server string) {
-	var sserver string
-
-	row := db.QueryRow("SELECT server FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
-	err := row.Scan(&sserver)
-	if len(sserver) < 1 {
-		_, err = db.Exec("INSERT INTO session_save (id_user, server, channel) VALUES (?, ?, ?)", id_user, server, "")
-		HandleErrorSql(err)
-	}
-}
-
 func insert_new_channel_session(id_user int, server string, channel string) {
 	var cchanel string
 
@@ -137,6 +126,45 @@ func insert_new_channel_session(id_user int, server string, channel string) {
 	}
 	channel = "," + channel
 	_, err = db.Exec("UPDATE session_save SET channel = CONCAT(channel, ?) WHERE id_user = ? AND server = ?", channel, id_user, server)
+	HandleErrorSql(err)
+}
+
+func insert_new_server_session(id_user int, server string) {
+	var sserver string
+
+	row := db.QueryRow("SELECT server FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
+	err := row.Scan(&sserver)
+	if len(sserver) < 1 {
+		_, err = db.Exec("INSERT INTO session_save (id_user, server, channel) VALUES (?, ?, ?)", id_user, server, "")
+		HandleErrorSql(err)
+	}
+}
+
+func remove_server_session(id_user int, server string) {
+	var sserver string
+
+	row := db.QueryRow("SELECT server FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
+	err := row.Scan(&sserver)
+	if err == nil {
+		_, err = db.Exec("DELETE FROM session_save WHERE server = ?", server)
+		HandleErrorSql(err)
+	}
+}
+
+func remove_channel_session(id_user int, server string, channel string) {
+	var cchanel string
+
+	row := db.QueryRow("SELECT channel FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
+	err := row.Scan(&cchanel)
+	array_chan := strings.Split(cchanel, ",")
+	for key, val := range array_chan {
+		if val == channel {
+			array_chan = array_chan[:key+copy(array_chan[key:], array_chan[key+1:])]
+			break
+		}
+	}
+	channel = strings.Join(array_chan, ",")
+	_, err = db.Exec("UPDATE session_save SET channel = ? WHERE id_user = ? AND server = ?", channel, id_user, server)
 	HandleErrorSql(err)
 }
 

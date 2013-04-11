@@ -428,10 +428,6 @@ var notify = function(title, body) {
     }
 };
 
-var notify_alert = function(div, message, type) {
-    div.append("<div class=\"alert alert-"+type+"\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>"+ message +"</div>");
-}
-
 var escape_html = function(str) {
     var tagsToReplace = {
         '&': '&amp;',
@@ -444,6 +440,24 @@ var escape_html = function(str) {
     }
     return str.replace(/[&<>]/g, replaceTag);
 };
+
+var notify_alert = function(div, message, type) {
+    div.append("<div class=\"alert alert-"+type+"\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>"+ message +"</div>");
+}
+
+var process_pool_error = function(data) {
+    no_err = true;
+    if (data !== '') {
+       json = JSON.parse(data);
+       for (var i in json["errors"]) {
+            if (json["errors"][i].length > 0) {
+                no_err = false;
+                notify_alert($("#message-alert"), json["errors"][i], "error");
+            }
+        }
+    }
+    return no_err;
+}
 
 $(document).ready(function() {
     var hash = window.location.hash.substring(1);
@@ -476,19 +490,10 @@ $(document).ready(function() {
         $("#message-alert").html("");
         button.removeAttr("disabled");
         button.html("Submit");
-        if (data !== '') {
-           json = JSON.parse(data);
-           for (var i in json["errors"]) {
-            if (json["errors"][i].length > 0) {
-                no_err = false;
-                notify_alert($("#message-alert"), json["errors"][i], "error");
-            }
+        if (process_pool_error(data)) {
+            window.location.href = "/";
         }
-    }
-    if (no_err) {
-        window.location.href = "/";
-    }
-});
+    });
 });
 
     $(".content").on("submit", "#register-form", function(event){
@@ -508,25 +513,16 @@ $(document).ready(function() {
         InputPseudo: pseudo,
         InputPass: pass,
         InputPassVerif: pass2
-    }).done(function(data) {
+        }).done(function(data) {
         $("#message-alert").html("");
-        button.removeAttr("disabled");
-        button.html("Submit");
-        if (data !== '') {
-           json = JSON.parse(data);
-           for (var i in json["errors"]) {
-            if (json["errors"][i].length > 0) {
-                no_err = false;
-                notify_alert($("#message-alert"), json["errors"][i], "error");
+            button.removeAttr("disabled");
+            button.html("Submit");
+            if (process_pool_error(data)) {
+                $("#register-form").html("");
+                notify_alert($("#register-form"), "All good ! Check your mails at " + mail, "success");
             }
-        }
-    }
-    if (no_err) {
-        $("#register-form").html("");
-        notify_alert($("#register-form"), "All good ! Check your mails at " + mail, "success");
-    }
-});
-});
+        });
+    });
 });
 
 //JS for handled

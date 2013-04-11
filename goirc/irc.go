@@ -35,13 +35,15 @@ func (user *User) connect_server(url string) {
 
 func (user *User) leave_channel(id_buffer_chan int) {
 	id_ircobj := user.Buffers[id_buffer_chan].id_serv
+	go remove_channel_session(user.id, user.Buffers[id_ircobj].name, user.Buffers[id_buffer_chan].name)
 	user.ircObj[id_ircobj].irc.Part(user.Buffers[id_buffer_chan].name)
 	delete(user.Buffers, id_buffer_chan)
-	//TODO : remove in DB
 }
 
 func (user *User) leave_network(id_buffer_chan int) {
+	//TODO : remove all buffer channel
 	id_ircobj := user.Buffers[id_buffer_chan].id_serv
+	go remove_server_session(user.id, user.Buffers[id_ircobj].name)
 	user.ircObj[id_ircobj].irc.Quit()
 
 	for key, buff := range user.Buffers {
@@ -50,7 +52,6 @@ func (user *User) leave_network(id_buffer_chan int) {
 		}
 	}
 	delete(user.ircObj, id_ircobj)
-	//TODO : Remove in db
 }
 
 func (user *User) whois(id_buffer int, nick string) {

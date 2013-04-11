@@ -36,21 +36,16 @@ func GetFriendsHandler(w http.ResponseWriter, r *http.Request) {
 func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
 		//TODO : test si ws active
-		//TODO : Json
-
-		var allserv string
+		var allserv = make(map[string]string)
 		session, _ := store.Get(r, serv_set.Cookie_session)
 		us := get_user_id(session.Values["id"].(int))
-
 		for _, irco := range us.Buffers {
 			if irco.name[0] != '#' {
-				allserv += "<option value='" + strconv.Itoa(irco.id) + "'>" + irco.name + "</option>"
+				allserv[irco.name] = strconv.Itoa(irco.id)
 			}
 		}
-		p := &Page{
-			Title: "IRC in your browser",
-			Data:  map[string]interface{}{"servers": template.HTML(allserv)}}
-		RenderHtml(w, "ajx/set-channels", p)
+		b, _ := json.Marshal(allserv)
+		fmt.Fprint(w, string(b))
 	}
 }
 

@@ -9,7 +9,7 @@ import (
 )
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	p := loadPage()
+	p := loadPage("Register")
 	if need_perm(ANON, r) {
 		RenderHtml(w, "ajx/register", p)
 		return
@@ -18,7 +18,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	p := loadPage()
+	p := loadPage("Login")
 	if need_perm(ANON, r) {
 		RenderHtml(w, "ajx/login", p)
 		return
@@ -35,6 +35,7 @@ func ActionLogOut(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
+	//TODO : limit number of try and captcha
 	ret := make(map[string]([]string))
 	ret["errors"] = make([]string, 10)
 	session, _ := store.Get(r, serv_set.Cookie_session)
