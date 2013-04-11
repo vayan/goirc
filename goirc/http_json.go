@@ -49,7 +49,6 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO : JSON all that
 	//TODO : check id correct
 	idbuffer := Atoi(r.FormValue("idbuffer"))
 	session, _ := store.Get(r, serv_set.Cookie_session)
@@ -60,9 +59,8 @@ func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 		for _, buff := range buffers {
 			if buff.id == idbuffer {
 				backlog := get_backlog(user.id, user.Buffers[idbuffer].addr)
-				for _, log := range backlog {
-					fmt.Fprint(w, "<tr class=\"msg\"><td class=\"pseudo "+log.nick+"\">"+log.nick+"</td><td class=\"message\"><div class='messagediv'>"+log.message+"</div></td><td class=\"time\">"+log.time+"</td></tr>")
-				}
+				b, _ := json.Marshal(backlog)
+				fmt.Fprint(w, string(b))
 				return
 			}
 		}

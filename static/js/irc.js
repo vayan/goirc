@@ -300,10 +300,15 @@ var add_new_buffer = function(id, name, nick) {
     $.post("/ajx/backlog", {
         idbuffer: id
     }).done(function(data) {
-        $('.contentbuffer #' + id + ' .allmsg').append(data);
-        // TODO : JSON this stuff
+        if (data !== '') {
+            jsonres = JSON.parse(data);
+            var html;
+            for (var key in jsonres) {
+                html += gen_html_new_message(jsonres[key].Nick, jsonres[key].Message, jsonres[key].Time);
+            }
+            $('.contentbuffer #' + id + ' .allmsg').append(html);
+        }
         check_all_inline_element();
-        $('#' + id).scrollTop($('#' + id)[0].scrollHeight);
     });
 };
 
@@ -316,12 +321,24 @@ var nick_changed = function(oldnick, newnick, buffer) {
     update_user_list(buffer);
 };
 
-var new_message = function(id_buffer, nick, msg) {
+var gen_html_new_message = function(nick, msg, time) {
+    nick = nick.substr(0, 15);
+    msg = escape_html(msg);
+    if (msg.charAt(0) == '/') return;
+    return '<tr class="msg"><td  class="pseudo nick-' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + time + '</td></tr>'
+}
+
+var new_message = function(id_buffer, nick, msg, time) {
+    time = typeof time !== 'undefined' ? time : '';
+    if (time.length < 1 ) {
+        time = get_timestamp_now();
+    }
+    nick = nick.substr(0, 15);
     msg = escape_html(msg);
     console.log(msg);
     msg = check_inline_element(msg);
     if (msg.charAt(0) == '/') return;
-    $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo nick-' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + get_timestamp_now() + '</td></tr>');
+    $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo nick-' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + time + '</td></tr>');
     $('#' + id_buffer).scrollTop($('#' + id_buffer)[0].scrollHeight);
 };
 
