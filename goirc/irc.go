@@ -25,12 +25,14 @@ func (user *User) connect_server(url string) {
 	if len(urlport) == 1 {
 		url += ":6667"
 	}
-	id_buffer := user.get_new_id_buffer()
-	user.add_buffer(urlport[0], urlport[0], url, id_buffer, id_buffer)
-	user.add_connexion(user.Nick, "test", id_buffer)
-	user.start_connexion(id_buffer, url)
-	user.add_all_callback(id_buffer)
-	user.add_con_loop(id_buffer)
+	if url != ":6667" {
+		id_buffer := user.get_new_id_buffer()
+		user.add_buffer(urlport[0], urlport[0], url, id_buffer, id_buffer)
+		user.add_connexion(user.Nick, "test", id_buffer)
+		user.start_connexion(id_buffer, url)
+		user.add_all_callback(id_buffer)
+		user.add_con_loop(id_buffer)
+	}
 }
 
 func (user *User) leave_channel(id_buffer_chan int) {

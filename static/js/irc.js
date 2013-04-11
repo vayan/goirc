@@ -117,6 +117,21 @@ var ChangePage = function(page) {
     }
 };
 
+var send_new_co_serv = function() {
+    var msg = "log]/connect " + $("#adressserv").val() + ":" + $("#portserv").val();
+    ws.send(msg);
+    new_message("log", "log", "Connecting to " + $("#adressserv").val() + "...");
+    $(".menu-irc > .selected").click();
+};
+
+var send_new_join_chan = function() {
+    var msg = $("#idnetwork").val() + "]/join " + $("#adresschan").val();
+    ws.send(msg);
+    new_message("log", "log", "Joining " + $("#adresschan").val() + "...");
+    $(".menu-irc > .selected").click();
+    $("body").click();
+};
+
 
 var load_irc = function() {
     var irc = $("#clientirc").html();
@@ -147,6 +162,16 @@ var load_irc = function() {
 
     $(".menu-irc").on("click", ".dropdown-menu", function(event){
         event.stopPropagation();
+    });
+
+    $("#formsetserv").on("submit", "form", function(event){
+        event.preventDefault();
+        send_new_co_serv();
+    });
+
+    $("#formsetchan").on("submit", "form", function(event){
+        event.preventDefault();
+        send_new_join_chan();
     });
 };
 
@@ -237,21 +262,6 @@ var aff_user_list = function(id) {
         $(".userlist-buffer").hide();
         $("#userlist-buffer" + id).show();
     }
-};
-
-var send_new_co_serv = function() {
-    var msg = "log]/connect " + $("#adressserv").val() + ":" + $("#portserv").val();
-    ws.send(msg);
-    new_message("log", "log", "Connecting to " + $("#adressserv").val() + "...");
-    $(".menu-irc > .selected").click();
-};
-
-var send_new_join_chan = function() {
-    var msg = $("#idnetwork").val() + "]/join " + $("#adresschan").val();
-    ws.send(msg);
-    new_message("log", "log", "Joining " + $("#adresschan").val() + "...");
-    $(".menu-irc > .selected").click();
-    $("body").click();
 };
 
 var send_message = function() {

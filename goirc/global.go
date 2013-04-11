@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	_ "github.com/Go-SQL-Driver/MySQL"
 	"github.com/gorilla/schema"
 	"github.com/gorilla/sessions"
@@ -14,7 +13,6 @@ const (
 
 var (
 	all_users = make(map[int]*User)
-	db        *sql.DB
 	Pref      Preference
 	decoder   = schema.NewDecoder()
 	store     = sessions.NewCookieStore([]byte("supersecretkeydelamortquitue"))

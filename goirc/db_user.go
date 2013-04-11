@@ -8,6 +8,8 @@ import (
 
 // Get user UID by id
 func get_uid(id int) string {
+	db := connect_sql()
+	defer db.Close()
 	var uid string
 
 	row := db.QueryRow("SELECT uid FROM users WHERE id = ?", id)
@@ -20,6 +22,8 @@ func get_uid(id int) string {
 
 //Set UID user
 func set_uid(id int, uid string) {
+	db := connect_sql()
+	defer db.Close()
 	_, err := db.Exec("UPDATE users SET uid = ? WHERE id = ?", uid, id)
 	HandleErrorSql(err)
 }
@@ -27,6 +31,8 @@ func set_uid(id int, uid string) {
 //return user by uid
 // TODO : return struct user
 func get_user_by_uid(uid string) (bool, int, string, string) {
+	db := connect_sql()
+	defer db.Close()
 	var pseudo, mail string
 	var id int
 
@@ -45,6 +51,8 @@ func get_user_by_uid(uid string) (bool, int, string, string) {
 
 //TODO : return struct
 func get_user_by_id(id int) (bool, string, string, string) {
+	db := connect_sql()
+	defer db.Close()
 	var pseudo, mail, uid string
 
 	valid := false
@@ -62,6 +70,8 @@ func get_user_by_id(id int) (bool, string, string, string) {
 
 //get user from mail / pass
 func get_user(email string, pass string) (bool, int, string, string, string) {
+	db := connect_sql()
+	defer db.Close()
 	var pseudo, mail, uid string
 	var id int
 
@@ -74,6 +84,8 @@ func get_user(email string, pass string) (bool, int, string, string, string) {
 }
 
 func user_exist(mail string) bool {
+	db := connect_sql()
+	defer db.Close()
 	row := db.QueryRow("SELECT mail FROM users WHERE mail = ?", mail)
 	err := row.Scan(&mail)
 	if err != nil {
@@ -84,6 +96,8 @@ func user_exist(mail string) bool {
 
 //get session to restore (session with channel)
 func get_restore_sessions() []*RestoreSession {
+	db := connect_sql()
+	defer db.Close()
 	rows, err := db.Query("SELECT id_user, server, channel, friends FROM session_save")
 	HandleErrorSql(err)
 	restoresessions := make([]*RestoreSession, 0, 10)
@@ -100,6 +114,8 @@ func get_restore_sessions() []*RestoreSession {
 }
 
 func insert_new_friend_session(id_user int, server string, friends string) {
+	db := connect_sql()
+	defer db.Close()
 	var ffriends string
 
 	row := db.QueryRow("SELECT friends FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
@@ -115,6 +131,8 @@ func insert_new_friend_session(id_user int, server string, friends string) {
 }
 
 func insert_new_channel_session(id_user int, server string, channel string) {
+	db := connect_sql()
+	defer db.Close()
 	var cchanel string
 
 	row := db.QueryRow("SELECT channel FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
@@ -130,6 +148,8 @@ func insert_new_channel_session(id_user int, server string, channel string) {
 }
 
 func insert_new_server_session(id_user int, server string) {
+	db := connect_sql()
+	defer db.Close()
 	var sserver string
 
 	row := db.QueryRow("SELECT server FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
@@ -141,6 +161,8 @@ func insert_new_server_session(id_user int, server string) {
 }
 
 func remove_server_session(id_user int, server string) {
+	db := connect_sql()
+	defer db.Close()
 	var sserver string
 
 	row := db.QueryRow("SELECT server FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
@@ -152,6 +174,8 @@ func remove_server_session(id_user int, server string) {
 }
 
 func remove_channel_session(id_user int, server string, channel string) {
+	db := connect_sql()
+	defer db.Close()
 	var cchanel string
 
 	row := db.QueryRow("SELECT channel FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
@@ -169,6 +193,8 @@ func remove_channel_session(id_user int, server string, channel string) {
 }
 
 func insert_new_user(user RegisteringUser) (int, []string) {
+	db := connect_sql()
+	defer db.Close()
 	msg_err := make([]string, 10)
 	ret := 0
 	// TODO : welcom mail to send

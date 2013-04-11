@@ -55,13 +55,17 @@ func parsemsg(id_user int, msg string) {
 
 		switch buff[0] {
 		case "/connect":
-			go all_users[id_user].connect_server(buff[1])
+			if len(buff[1]) > 0 {
+				go all_users[id_user].connect_server(buff[1])
+			}
 			return
 		case "/join":
-			go all_users[id_user].join_channel(user.find_server_by_channel(buffer_id), buff[1])
+			if len(buff[1]) > 0 {
+				go all_users[id_user].join_channel(user.find_server_by_channel(buffer_id), buff[1])
+			}
 			return
 		case "/msg":
-			if check_buffer_exist(buffer_id, id_user) {
+			if check_buffer_exist(buffer_id, id_user) && len(buff[1]) > 0 {
 				go all_users[id_user].send_msg(buffer_id, buff[1])
 			}
 			return
@@ -71,22 +75,22 @@ func parsemsg(id_user int, msg string) {
 			}
 			return
 		case "/nick":
-			if check_buffer_exist(buffer_id, id_user) {
+			if check_buffer_exist(buffer_id, id_user) && len(buff[1]) > 0 {
 				go all_users[id_user].change_nick(buffer_id, buff[1])
 			}
 			return
 		case "/me":
-			if check_buffer_exist(buffer_id, id_user) {
+			if check_buffer_exist(buffer_id, id_user) && len(buff[1]) > 0 {
 				go all_users[id_user].send_me(buffer_id, buff[1])
 			}
 			return
 		case "/whois":
-			if check_buffer_exist(buffer_id, id_user) {
+			if check_buffer_exist(buffer_id, id_user) && len(buff[1]) > 0 {
 				go all_users[id_user].whois(buffer_id, buff[1])
 			}
 			return
 		case "/addfriend":
-			if check_buffer_exist(buffer_id, id_user) {
+			if check_buffer_exist(buffer_id, id_user) && len(buff[1]) > 0 {
 				go all_users[id_user].add_friend(buffer_id, buff[1])
 			}
 			return

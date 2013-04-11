@@ -18,15 +18,19 @@ func HandleErrorSql(er error) bool {
 	return false
 }
 
-func connect_sql() {
-	log.Println("=== Start Connexion DB ===")
-	var err error
-	db, err = sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
-	HandleErrorSql(err)
+func connect_sql() *sql.DB {
+	db, _ := sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
+	return db
 }
+
+// func close_sql(db *sql.DB) {
+// 	db.Close()
+// }
 
 // Get backlog from channel
 func get_backlog(id_user int, buffer string) []*BackLog {
+	db := connect_sql()
+	defer db.Close()
 	rows, err := db.Query("SELECT nick, message, time FROM logirc WHERE id_user = ? AND buffer = ? ORDER BY time ASC", id_user, buffer)
 	HandleErrorSql(err)
 	backlog := make([]*BackLog, 0, 10)
@@ -44,6 +48,8 @@ func get_backlog(id_user int, buffer string) []*BackLog {
 }
 
 func insert_new_message(id_user int, buffer string, nick string, message string) {
+	db := connect_sql()
+	defer db.Close()
 	message = template.HTMLEscapeString(message)
 	_, err := db.Exec("INSERT INTO logirc (id_user, buffer, nick, message, time) VALUES (?, ?, ?, ?, NOW())", id_user, buffer, nick, message)
 	HandleErrorSql(err)
@@ -51,6 +57,8 @@ func insert_new_message(id_user int, buffer string, nick string, message string)
 
 //get preference for ui
 func get_preference() {
+	db := connect_sql()
+	defer db.Close()
 	var name string
 	var descr string
 	var short_descr string
@@ -70,6 +78,8 @@ func get_preference() {
 
 //create user setting
 func create_settings(user User) {
+	db := connect_sql()
+	defer db.Close()
 	_, err := db.Exec(
 		"INSERT INTO users_settings (id_user, notify, save_session) VALUES (?, ?, ?)",
 		user.id,
@@ -80,6 +90,8 @@ func create_settings(user User) {
 
 //update user setting
 func update_settings(user User) {
+	db := connect_sql()
+	defer db.Close()
 	var id int
 
 	row := db.QueryRow("SELECT id FROM users_settings WHERE id_user = ? ", user.id)
