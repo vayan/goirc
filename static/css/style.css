@@ -241,9 +241,13 @@ MAIN IRC
 
 .menu-irc {
 	position: absolute;
-	right: 0;
+	margin-left: 10px;
 	top: 5px;
 	color: white;
+}
+
+.menu-irc .dropdown-menu {
+	padding: 5px;
 }
 
 .userslist {
@@ -263,28 +267,6 @@ MAIN IRC
 	display: block;
 }
 
-.menu-settings {
-	border-bottom: 2px solid black;
-	padding: 5px;
-	display: none;
-	color: black;
-	background-color: rgb(206, 226, 236);
-	height: 60px;
-}
-
-.menu-irc  .selected {
-	border-left: 1px solid rgb(65, 60, 60);
-	border-right: 1px solid rgb(65, 60, 60);
-	background-color: #111111;
-}
-
-.item-menu-irc {
-	font-size: 2em;
-	line-height: 33px;
-	cursor: pointer;
-	text-align: center;
-	padding: 16px;
-}
 
 .sepport {
 	font-size: 2em;

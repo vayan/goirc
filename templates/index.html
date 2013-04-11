@@ -73,9 +73,38 @@
     </div>
     {{if .Data.login}}
     <span class="hidden" id="clientirc">
-      <h2 class="pagetitle unselect"> Settings : </h2>
-      <div class="menu-irc unselect"> <span class="item-menu-irc">Servers</span>  <span class="item-menu-irc">Channels</span> </div>
-      <div class="menu-settings"></div>
+
+      <div class="menu-irc btn-toolbar unselect">
+        <div class="btn-group">
+          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            Servers
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <span class="form-inline" id="formsetserv">
+              <input type="text" name="adressserv" id="adressserv" placeholder="Server's adress" /> <span class="sepport"> : </span>
+              <input type="text" class="fourdigit" name="portserv" id="portserv" value="6667"/>
+              <button type="button" onclick="send_new_co_serv()" class="btn" name="sendserv" id="sendserv">Connect</button>
+            </span>
+          </ul>
+        </div>
+        <div id="join-channel" class="btn-group">
+          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+            Channels
+            <span class="caret"></span>
+          </a>
+          <ul class="dropdown-menu">
+            <span class="form-inline" id="formsetchan">
+              <select id="idnetwork">
+
+              <select>
+              <input type="text" name="adresschan" id="adresschan" placeholder="#channel" />
+              <button type="button" onclick="send_new_join_chan()" class="btn" name="sendchan" id="sendserv">Join</button>
+            </span>
+          </ul>
+        </div>
+      </div>
+
       <div class="main-irc">
         <input type="hidden" name="activeserver" value="" />
         <input type="hidden" name="activechannel" value="" />

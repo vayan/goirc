@@ -24,9 +24,6 @@ func start_http_server() {
 	r.HandleFunc("/ajx/getsettings", GetSettingsHandler)
 	r.HandleFunc("/ajx/getfriends", GetFriendsHandler)
 	r.HandleFunc("/ajx/profile", ProfileHandler)
-
-	//ajx html settings
-	r.HandleFunc("/ajx/set-servers", SetServHandler)
 	r.HandleFunc("/ajx/set-channels", SetChanHandler)
 
 	//action form

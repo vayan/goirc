@@ -65,13 +65,6 @@ func IrcHandler(w http.ResponseWriter, r *http.Request) {
 	HomeHandler(w, r)
 }
 
-func SetServHandler(w http.ResponseWriter, r *http.Request) {
-	if need_perm(REGIST, r) {
-		p := loadPage("")
-		RenderHtml(w, "ajx/set-servers", p)
-	}
-}
-
 func ActionRegisterHandler(w http.ResponseWriter, r *http.Request) {
 	//TODO : captcha
 	r.ParseForm()

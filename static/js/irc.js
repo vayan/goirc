@@ -127,20 +127,18 @@ var load_irc = function() {
         }
     });
 
-    $(".item-menu-irc").click(function() {
-        $(".item-menu-irc").removeClass("selected");
-        if ($(".menu-settings").css("display") == "block") {
-            $(".list").css("top", "60px");
-            $(".bufferchan").css("top", "60px");
-            $(".menu-settings").hide();
-        } else {
-            $(".list").css("top", "130px");
-            $(".bufferchan").css("top", "130px");
-            $('.menu-settings').load('ajx/set-' + $(this).html().toLowerCase());
-            $(".menu-settings").show();
-            $(this).addClass("selected");
-        }
+    $("#join-channel").click(function() {
+        $("#idnetwork").html("");
+        $.ajax({url: "ajx/set-channels"}).done(function(data){
+            if (data !== '') {
+                jsonres = JSON.parse(data);
+                for (var key in jsonres) {
+                    $("#idnetwork").append("<option value='" + jsonres[key] + "'>" + key + "</option>")
+                }
+            }
+        });
     });
+
     $('.switch-userlist').show();
     $('#userlisttab').click();
 };
@@ -159,7 +157,7 @@ var update_user_list = function(id) {
     }).done(function(data) {
         if (data !== '') {
             $("#userlist-buffer" + id).html($("#userlist-buffer0").html());
-            jsonres = JSON.parse(data).UserList;
+            jsonres = JSON.parse(data);
             $("#userlist-buffer" + id + " .userlist-style").html("<style></style>");
             for (var i = 0; i < jsonres.length; i++) {
                 newhtml += add_user_list(jsonres[i].Nick, jsonres[i].Color, jsonres[i].NickClean, id);
@@ -523,6 +521,11 @@ $(document).ready(function() {
             }
         });
     });
+
+    $(".menu-irc").on("click", ".dropdown-menu", function(event){
+        event.stopPropagation();
+    });
+
 });
 
 //JS for handled
