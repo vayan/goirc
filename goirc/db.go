@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	_ "github.com/Go-SQL-Driver/MySQL"
-	"html/template"
 	"log"
 	"time"
 )
@@ -43,7 +42,6 @@ func get_backlog(id_user int, buffer string) []BackLog {
 func insert_new_message(id_user int, buffer string, nick string, message string) {
 	db := connect_sql()
 	defer db.Close()
-	message = template.HTMLEscapeString(message)
 	_, err := db.Exec("INSERT INTO logirc (id_user, buffer, nick, message, time) VALUES (?, ?, ?, ?, NOW())", id_user, buffer, nick, message)
 	HandleErrorSql(err)
 }

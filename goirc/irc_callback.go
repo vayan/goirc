@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/thoj/go-ircevent"
-	"html/template"
 	"log"
 	"strconv"
 	"strings"
@@ -65,7 +64,7 @@ func (user *User) on_message(id_buffer int) {
 		}
 		log.Print(e.Arguments)
 		go insert_new_message(user.id, user.Buffers[id_buffer].addr+e.Arguments[0], e.Nick, e.Message)
-		go ws_send(strconv.Itoa(id_buffer_chan)+"]"+e.Nick+"]"+template.HTMLEscapeString(e.Message), user.ws)
+		go ws_send(strconv.Itoa(id_buffer_chan)+"]"+e.Nick+"]"+e.Message, user.ws)
 	})
 }
 

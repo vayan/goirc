@@ -45,6 +45,15 @@ body {
 	display: none;
 }
 
+.status {
+	z-index: 15;
+	display: none;
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	width: 250px;
+}
+
 /**
 HEADER
 **/

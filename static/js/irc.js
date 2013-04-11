@@ -28,7 +28,6 @@ var open_settings = function() {
 };
 
 var set_user_pref = function() {
-    console.log("gere");
     var notify = $("#settings-notify").bootstrapSwitch('status');
     var Save_session = $("#settings-savesession").bootstrapSwitch('status');
 
@@ -49,10 +48,10 @@ ws = new WebSocket("ws://" + host + ":1112/ws");
 
 
 ws.onopen = function() {
-    console.log("open ws");
     if ($("#yuid").val() != "") {
         ws.send("co]" + $("#yuid").val());
     }
+    $("#status-connexion").hide();
 };
 
 ws.onmessage = function(e) {
@@ -62,7 +61,7 @@ ws.onmessage = function(e) {
 };
 
 ws.onclose = function(e) {
-    console.log("close ws");
+    $("#status-connexion").show();
 };
 
 
@@ -135,13 +134,18 @@ var send_new_join_chan = function() {
 
 var load_irc = function() {
     var irc = $("#clientirc").html();
-
+    console.log("load irc");
     $('.content').html(irc);
     $(".inputtextirc").keyup(function(event) {
         if (event.keyCode == 13) {
             send_message();
         }
     });
+
+    $('.listbuffer').on('shown', 'a[data-toggle="tab"]', function (e) {
+        var id = $(this).attr("href").substring(1)
+        switch_buffer(id);
+    })
 
     $("#join-channel").click(function() {
         $("#idnetwork").html("");
@@ -176,8 +180,10 @@ var load_irc = function() {
 };
 
 var switch_buffer = function(id) {
+    if (id == "log") return;
     aff_user_list(id);
     $(".inputpseudo").val(all_buffers[id].nick);
+    $(".message iframe").height($(".message iframe").width() / 1.77);
     $('#' + id).scrollTop($('#' + id)[0].scrollHeight);
 };
 
@@ -279,7 +285,6 @@ var send_message = function() {
 
 var remove_buffer = function(bufferid) {
     //TODO : alert to confirm
-    console.log("rm buffer");
     $("#bufferid" + bufferid).hide();
     $("#" + bufferid).hide();
     ws.send(bufferid + "]/close");
@@ -294,7 +299,7 @@ var add_new_buffer = function(id, name, nick) {
     }
     all_buffers.push(id);
     all_buffers[id] = {nick: nick};
-    $('.listbuffer').append('<li id="bufferid' + id + '" onclick="switch_buffer(' + id + ')" ><a href="#' + id + '" data-toggle="tab">' + name + '<span class="remove-buffer" onclick="remove_buffer(' + id + ')">X</span></a></li>');
+    $('.listbuffer').append('<li id="bufferid' + id + '"    ><a href="#' + id + '" data-toggle="tab">' + name + '<span class="remove-buffer" onclick="remove_buffer(' + id + ')">X</span></a></li>');
     $('.contentbuffer').append('<div class="tab-pane bufferchan" id="' + id + '"><table class="table table-striped allmsg"></table> <input type="hidden" class="current-nick" value="log" /></div>');
     $("#" + id + " .current-nick").val(nick);
     $.post("/ajx/backlog", {
@@ -308,7 +313,7 @@ var add_new_buffer = function(id, name, nick) {
             }
             $('.contentbuffer #' + id + ' .allmsg').append(html);
         }
-        check_all_inline_element();
+        //check_all_inline_element();
     });
 };
 
@@ -323,7 +328,9 @@ var nick_changed = function(oldnick, newnick, buffer) {
 
 var gen_html_new_message = function(nick, msg, time) {
     nick = nick.substr(0, 15);
+    nick = escape_html(nick);
     msg = escape_html(msg);
+    msg = check_inline_element(msg);
     if (msg.charAt(0) == '/') return;
     return '<tr class="msg"><td  class="pseudo nick-' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + time + '</td></tr>'
 }
@@ -334,11 +341,12 @@ var new_message = function(id_buffer, nick, msg, time) {
         time = get_timestamp_now();
     }
     nick = nick.substr(0, 15);
+    nick = escape_html(nick);
     msg = escape_html(msg);
-    console.log(msg);
     msg = check_inline_element(msg);
     if (msg.charAt(0) == '/') return;
     $('.contentbuffer #' + id_buffer + ' .allmsg').append('<tr class="msg"><td  class="pseudo nick-' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + time + '</td></tr>');
+    $(".message iframe").height($(".message iframe").width() / 1.77);
     $('#' + id_buffer).scrollTop($('#' + id_buffer)[0].scrollHeight);
 };
 
@@ -432,7 +440,7 @@ var check_inline_element = function(string) {
                 var clean_url = url.split("?")[0];
                 var yt = youtube_valid(url);
                 if (yt !== false) {
-                    return '<iframe width="90%" height="280%" src="http://www.youtube.com/embed/'+yt+'" frameborder="0" allowfullscreen></iframe>';
+                    return '<iframe width="100%" src="http://www.youtube.com/embed/'+yt+'" frameborder="0" allowfullscreen></iframe>';
                 }
                 if (clean_url.match(/\.(jpeg|jpg|gif|png)$/) !== null) {
                     var img = new Image();
@@ -528,10 +536,11 @@ $(document).ready(function() {
         InputPass: pass
     }).done(function(data) {
         $("#message-alert").html("");
-        button.removeAttr("disabled");
-        button.html("Submit");
         if (process_pool_error(data)) {
             window.location.href = "/";
+        } else {
+            button.removeAttr("disabled");
+            button.html("Submit");
         }
     });
 });
