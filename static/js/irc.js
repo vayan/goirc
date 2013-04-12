@@ -50,7 +50,7 @@ ws = new WebSocket("ws://" + host + ":1112/ws");
 
 
 ws.onopen = function() {
-    if ($("#yuid").val() != "") {
+    if ($("#yuid").val() !== "") {
         ws.send("co]" + $("#yuid").val());
     }
     $("#status-connexion").hide();
@@ -145,9 +145,9 @@ var load_irc = function() {
     });
 
     $('.listbuffer').on('shown', 'a[data-toggle="tab"]', function (e) {
-        var id = $(this).attr("href").substring(1)
+        var id = $(this).attr("href").substring(1);
         switch_buffer(id);
-    })
+    });
 
     $("#join-channel").click(function() {
         $("#idnetwork").html("");
@@ -232,7 +232,7 @@ var get_friends = function(id) {
 
 var add_user_list = function(name, color, id, buffer) {
     var html = ".nick-" + id + " {  color : " + color + " ; } ";
-    $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> <a class=\"btn dropdown-toggle nick-" + id + "\" data-toggle=\"dropdown\" href=\"#\"> " + name + " \<span class=\"caret\"></span> </a><ul class=\"dropdown-menu\"> <li><a href=\"#\">Block</a></li> <li><a onclick=\"add_friend("+buffer+",\'" + name + "\')\" href=\"#\">Add as friend</a></li> <li><a href=\"#\">Private Message</a></li> </ul></div>");
+    $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> <a class=\"btn dropdown-toggle nick-" + id + "\" data-toggle=\"dropdown\" href=\"#\"> " + name + " <span class=\"caret\"></span> </a><ul class=\"dropdown-menu\"> <li><a href=\"#\">Block</a></li> <li><a onclick=\"add_friend("+buffer+",\'" + name + "\')\" href=\"#\">Add as friend</a></li> <li><a href=\"#\">Private Message</a></li> </ul></div>");
     return html;
 };
 
@@ -263,7 +263,7 @@ var aff_user_list = function(id) {
 };
 
 var send_message = function() {
-    if ($(".inputtextirc").val() != '') {
+    if ($(".inputtextirc").val() !== '') {
         var buffer_id = $(".main-irc .active a").attr('href').substring(1);
         var txt = $(".inputtextirc").val();
         var msg = buffer_id + "]" + txt;
@@ -324,8 +324,8 @@ var gen_html_new_message = function(nick, msg, time) {
     msg = escape_html(msg);
     msg = check_inline_element(msg);
     if (msg.charAt(0) == '/') return;
-    return '<tr class="msg"><td  class="pseudo nick-' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + time + '</td></tr>'
-}
+    return '<tr class="msg"><td  class="pseudo nick-' + nick + '">' + nick + '</td><td class="message">' + msg + '</td><td class="time">' + time + '</td></tr>';
+};
 
 var new_message = function(id_buffer, nick, msg, time) {
     time = typeof time !== 'undefined' ? time : '';
@@ -352,7 +352,7 @@ var get_timestamp_now = function() {
 
 var disable_buffer = function(id) {
 
-}
+};
 
 var parse_irc = function(msg) {
     var buff = SplitN(msg, ']', 2);
@@ -483,7 +483,7 @@ var escape_html = function(str) {
 
 var notify_alert = function(div, message, type) {
     div.append("<div class=\"alert alert-"+type+"\"><button type=\"button\" class=\"close\" data-dismiss=\"alert\">&times;</button>"+ message +"</div>");
-}
+};
 
 var process_pool_error = function(data) {
     no_err = true;
@@ -497,7 +497,7 @@ var process_pool_error = function(data) {
         }
     }
     return no_err;
-}
+};
 
 $(document).ready(function() {
     var hash = window.location.hash.substring(1);
