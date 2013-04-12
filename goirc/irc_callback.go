@@ -19,6 +19,7 @@ func (user *User) add_all_callback(id_buffer int) {
 	user.on_whois(id_buffer)
 	user.on_error(id_buffer)
 	user.on_kick(id_buffer)
+	//QUIT
 }
 
 func (user *User) on_user_list(id_buffer int) {

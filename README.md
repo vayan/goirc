@@ -13,9 +13,9 @@
 * MySQL                  <[https://www.mysql.com/](https://www.mysql.com/)>
 
 
-## Comment setup le projet : 
+## Comment setup le projet :
 
-* Set un env GOPATH qui link à la racine du projet  
+* Set un env GOPATH qui link à la racine du projet
  (ex: `export GOPATH=/path/to/go/` )
 
 * dans votre dossier de projet :
@@ -28,7 +28,7 @@ mkdir src
 mkdir pkg
 ```
 
-* rajouter le dossier bin crée precedement a votre PATH 
+* rajouter le dossier bin crée precedement a votre PATH
  (ex : `export PATH=$PATH:/path/to/go/bin` )
 
 * Recuperer les dependances :
@@ -37,6 +37,7 @@ mkdir pkg
 #!shell
 
 go get code.google.com/p/go.net/websocket
+go get bitbucket.org/vayan/gomin
 go get github.com/gorilla/schema
 go get github.com/gorilla/mux
 go get github.com/gorilla/sessions
@@ -51,7 +52,7 @@ cd goirc
 
 * Done !
 
-## Comment lancer GO#IRC : 
+## Comment lancer GO#IRC :
 
 ```
 #!shell

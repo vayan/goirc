@@ -18,5 +18,6 @@ func main() {
 	connect_sql()
 	get_preference()
 	go restore_lost_server()
+	optimize_static_files()
 	start_http_server()
 }

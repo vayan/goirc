@@ -30,12 +30,14 @@ var open_settings = function() {
 var set_user_pref = function() {
     var notify = $("#settings-notify").bootstrapSwitch('status');
     var Save_session = $("#settings-savesession").bootstrapSwitch('status');
-
+    $("#form-settings .btn").attr("disabled", true).html("Saving...");
     $.post("/ajx/settings", {
         Notify: notify,
         Save_Session: Save_session
     }).done(function(data) {
         get_user_pref();
+        $("#form-settings .btn").attr("disabled", false).html("Save");
+        notify_alert($("#message-alert"), "Saved !", "success");
     });
 };
 
@@ -154,7 +156,7 @@ var load_irc = function() {
             if (data !== '') {
                 jsonres = JSON.parse(data);
                 for (var key in jsonres) {
-                    $("#idnetwork").append("<option "+select+" value='" + jsonres[key] + "'>" + key + "</option>")
+                    $("#idnetwork").append("<option "+select+" value='" + jsonres[key] + "'>" + key + "</option>");
                     select = "";
                 }
             }
@@ -230,17 +232,7 @@ var get_friends = function(id) {
 
 var add_user_list = function(name, color, id, buffer) {
     var html = ".nick-" + id + " {  color : " + color + " ; } ";
-    $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> \
-      <a class=\"btn dropdown-toggle nick-" + id + "\" data-toggle=\"dropdown\" href=\"#\"> \
-      " + name + " \
-      <span class=\"caret\"></span> \
-      </a> \
-      <ul class=\"dropdown-menu\"> \
-      <li><a href=\"#\">Block</a></li> \
-      <li><a onclick=\"add_friend("+buffer+",\'" + name + "\')\" href=\"#\">Add as friend</a></li> \
-      <li><a href=\"#\">Private Message</a></li> \
-      </ul> \
-      </div>");
+    $("#userlist-buffer" + buffer + ' .userlist-user').append("<div class=\"btn-group\"> <a class=\"btn dropdown-toggle nick-" + id + "\" data-toggle=\"dropdown\" href=\"#\"> " + name + " \<span class=\"caret\"></span> </a><ul class=\"dropdown-menu\"> <li><a href=\"#\">Block</a></li> <li><a onclick=\"add_friend("+buffer+",\'" + name + "\')\" href=\"#\">Add as friend</a></li> <li><a href=\"#\">Private Message</a></li> </ul></div>");
     return html;
 };
 

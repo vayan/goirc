@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bitbucket.org/vayan/gomin"
 	"crypto/md5"
 	"crypto/sha512"
 	"encoding/json"
@@ -9,11 +10,48 @@ import (
 	"io/ioutil"
 	"log"
 	"math/rand"
+	"os"
 	"strconv"
 	"strings"
 )
 
 //TODO : more flashy color and based on nick
+
+func get_content_files(filename string, size int) []byte {
+	file, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	file_r := make([]byte, size)
+	_, errs := file.Read(file_r)
+	if errs != nil {
+		log.Fatal(err)
+	}
+	return file_r
+}
+
+func write_files(filename string, content []byte) {
+	file, err := os.Create(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+	file.Write(content)
+}
+
+func optimize_static_files() {
+	min_css := gomin.MinCSS(get_content_files("static/css/bootstrap.css", 50000))
+	min_c := gomin.MinCSS(get_content_files("static/css/style.css", 50000))
+	write_files("static/css/style-min.css", []byte(string(min_css)+string(min_c)))
+
+	ircjs, err := gomin.MinJS(get_content_files("static/js/irc.js", 50000))
+	if err != nil {
+		log.Fatal(err)
+	}
+	write_files("static/js/irc-min.js", ircjs)
+}
+
 func GenerateColor() string {
 	var r, g, b int
 

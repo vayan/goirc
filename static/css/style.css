@@ -216,6 +216,7 @@ REGISER
 .settings {
 	margin-top: 20px;
 	margin-left: 20px;
+	margin-right: 20px;
 }
 
 .settings .control-label {
@@ -375,11 +376,11 @@ display: block;
 	position: absolute;
 	bottom: 0;
 	left: 280px;
-	right: 200px;
+	right: 425px;
 }
 
 .send-message .inputtextirc {
-	width: 82%;
+	width: 100%;
 }
 
 .formirc .add-on i {

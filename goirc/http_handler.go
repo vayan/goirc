@@ -47,7 +47,6 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	session.Save(r, w)
 	uid := session.Values["uid"]
-
 	p := &Page{
 		Title: "IRC in your browser",
 		Data: map[string]interface{}{
