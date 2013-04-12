@@ -15,6 +15,7 @@ func main() {
 	if !serv_set.Show_log {
 		log.SetOutput(ioutil.Discard)
 	}
+	log.SetFlags(log.Lshortfile)
 	connect_sql()
 	get_preference()
 	go restore_lost_server()

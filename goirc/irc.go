@@ -8,7 +8,7 @@ import (
 
 func (user *User) add_connexion(nick string, whois string, id_buffer int) {
 	con := irc.IRC(nick, serv_set.Hostname_irc)
-	con.VerboseCallbackHandler = false //true for debug
+	con.VerboseCallbackHandler = true //true for debug
 	if user.ircObj != nil {
 		user.ircObj[id_buffer] = &IrcConnec{con, ""}
 	}
@@ -16,14 +16,16 @@ func (user *User) add_connexion(nick string, whois string, id_buffer int) {
 }
 
 func (user *User) send_msg(server int, message string) {
-	if user.Buffers[server].connected == true {
-		user.ircObj[user.Buffers[server].id_serv].irc.Privmsg(user.Buffers[server].name, message)
-		go insert_new_message(user.id, user.Buffers[server].addr, user.ircObj[user.Buffers[server].id_serv].irc.GetNick(), message)
+	if buf, ok := user.Buffers[server]; ok && buf.connected == true {
+		if co, ok := user.ircObj[buf.id_serv]; ok && co.irc != nil {
+			co.irc.Privmsg(buf.name, message)
+			go insert_new_message(user.id, buf.addr, co.irc.GetNick(), message)
+		}
 	}
 }
 
 func (user *User) join_channel(server int, channel string) {
-	if user.Buffers[server].connected == true {
+	if buf, ok := user.Buffers[server]; ok && buf.connected == true {
 		user.ircObj[server].irc.Join(channel)
 	}
 }
@@ -34,13 +36,15 @@ func (user *User) connect_server(url string) {
 		url += ":6667"
 	}
 	if url != ":6667" {
+		for _, buf := range user.Buffers {
+			if buf.name == urlport[0] {
+				return
+			}
+		}
 		id_buffer := user.get_new_id_buffer()
 		if id_buffer != -1 {
 			user.connecting = true
-			if err := user.add_buffer(urlport[0], urlport[0], url, id_buffer, id_buffer); err != 0 {
-				user.connecting = false
-				return
-			}
+			user.add_buffer(urlport[0], urlport[0], url, id_buffer, id_buffer)
 			user.add_connexion(user.Nick, "test", id_buffer)
 			user.start_connexion(id_buffer, url)
 			user.add_all_callback(id_buffer)
@@ -52,7 +56,7 @@ func (user *User) connect_server(url string) {
 
 func (user *User) leave_channel(id_buffer_chan int, remove_session bool) {
 	buff, ok := user.Buffers[id_buffer_chan]
-	if !(ok) {
+	if !(ok) || (buff.id == buff.id_serv) {
 		return
 	}
 	id_ircobj := buff.id_serv

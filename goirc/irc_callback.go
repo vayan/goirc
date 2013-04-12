@@ -143,12 +143,12 @@ func (user *User) on_whois(id_buffer int) {
 
 func (user *User) on_error(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("ERROR", func(e *irc.Event) {
-		user.leave_channel(id_buffer, false)
+		//user.leave_channel(id_buffer, false)
 	})
 }
 
 func (user *User) on_kick(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("KICK", func(e *irc.Event) {
-		user.leave_channel(id_buffer, false)
+		//user.leave_channel(id_buffer, false)
 	})
 }

@@ -54,16 +54,11 @@ func (user *User) find_connected_server_by_channel(channel int) int {
 }
 
 //TODO : verif duplicate buffer
-func (user *User) add_buffer(name string, front_name string, addr string, id int, id_serv int) int {
+func (user *User) add_buffer(name string, front_name string, addr string, id int, id_serv int) {
 	// TODO : send new buffer to cl here, delete all other
 	name = strings.ToLower(name)
 	addr = strings.ToLower(addr)
 
-	for _, buf := range user.Buffers {
-		if buf.name == name && buf.id_serv == id_serv {
-			return -1
-		}
-	}
 	new_buffer := Buffer{list.New(), list.New(), name, front_name, addr, id, id_serv, false}
 	if user.Buffers != nil {
 		user.Buffers[id] = &new_buffer
@@ -79,7 +74,6 @@ func (user *User) add_buffer(name string, front_name string, addr string, id int
 			}
 		}
 	}
-	return 0
 }
 
 func (user *User) add_con_loop(id_buffer int) {

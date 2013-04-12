@@ -97,7 +97,9 @@ func parsemsg(id_user int, msg string) {
 			}
 			return
 		default:
-			if check_buffer_exist(buffer_id, id_user) {
+			//TODO : replace all check_buffer_exit by this stuff below
+			if buff, ok := all_users[id_user].Buffers[buffer_id]; ok && buff.connected == true {
+				log.Print("send msg")
 				go all_users[id_user].send_msg(buffer_id, buff_msg)
 			}
 			return
