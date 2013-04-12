@@ -55,7 +55,7 @@ func ActionLoginHandler(w http.ResponseWriter, r *http.Request) {
 	session.Values["mail"] = email
 	if len(uid) < 1 {
 		log.Print("UID never generate, generate new uid")
-		uid = generate_unique_uid(pseudo)
+		uid = generate_unique_uid(email)
 		set_uid(id, uid)
 	}
 	session.Values["uid"] = uid

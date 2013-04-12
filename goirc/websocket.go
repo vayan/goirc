@@ -37,7 +37,6 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 	if len(buf) > 200 {
 		return buf[0:200], erri
 	}
-	log.Printf("recv : '%s'", buf)
 	return buf, erri
 }
 

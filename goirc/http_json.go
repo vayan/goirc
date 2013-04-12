@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	_ "github.com/Go-SQL-Driver/MySQL"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -17,17 +18,18 @@ func GetStatsHandler(w http.ResponseWriter, r *http.Request) {
 func GetFriendsHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
 		session, _ := store.Get(r, serv_set.Cookie_session)
-		us := get_user_id(session.Values["id"].(int))
-		idbuffer := Atoi(r.FormValue("idbuffer"))
-		if val, ok := us.Buffers[idbuffer]; ok && us.Buffers[idbuffer].friends.Len() > 0 {
-			jsonres := "{ \"FriendList\":["
-			for e := val.friends.Front(); e != nil; e = e.Next() {
-				b, _ := json.Marshal(e.Value.(string))
-				jsonres += string(b) + ","
+		if us := get_user_id(session.Values["id"].(int)); us != nil {
+			idbuffer := Atoi(r.FormValue("idbuffer"))
+			if val, ok := us.Buffers[idbuffer]; ok && us.Buffers[idbuffer].friends.Len() > 0 {
+				jsonres := "{ \"FriendList\":["
+				for e := val.friends.Front(); e != nil; e = e.Next() {
+					b, _ := json.Marshal(e.Value.(string))
+					jsonres += string(b) + ","
+				}
+				jsonres = jsonres[:len(jsonres)-1]
+				jsonres += "]}"
+				fmt.Fprint(w, jsonres)
 			}
-			jsonres = jsonres[:len(jsonres)-1]
-			jsonres += "]}"
-			fmt.Fprint(w, jsonres)
 		}
 	}
 }
@@ -37,14 +39,16 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 		//TODO : test si ws active
 		var allserv = make(map[string]string)
 		session, _ := store.Get(r, serv_set.Cookie_session)
-		us := get_user_id(session.Values["id"].(int))
-		for _, irco := range us.Buffers {
-			if irco.id == irco.id_serv {
-				allserv[irco.name] = strconv.Itoa(irco.id)
+
+		if us := get_user_id(session.Values["id"].(int)); us != nil {
+			for _, irco := range us.Buffers {
+				if irco.id == irco.id_serv {
+					allserv[irco.name] = strconv.Itoa(irco.id)
+				}
 			}
+			b, _ := json.Marshal(allserv)
+			fmt.Fprint(w, string(b))
 		}
-		b, _ := json.Marshal(allserv)
-		fmt.Fprint(w, string(b))
 	}
 }
 
@@ -73,16 +77,18 @@ func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 		jsonres := "{ \"UserList\":["
 		id := Atoi(r.FormValue("channel"))
 		session, _ := store.Get(r, serv_set.Cookie_session)
-		us := get_user_id(session.Values["id"].(int))
+		log.Print("USER ID : ", session.Values["id"].(int))
+		if us := get_user_id(session.Values["id"].(int)); us != nil {
 
-		if _, ok := us.Buffers[id]; ok && us.Buffers[id].users.Len() > 0 {
-			for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
-				b, _ := json.Marshal(e.Value.(ChannelUser))
-				jsonres += string(b) + ","
+			if _, ok := us.Buffers[id]; ok && us.Buffers[id].users.Len() > 0 {
+				for e := us.Buffers[id].users.Front(); e != nil; e = e.Next() {
+					b, _ := json.Marshal(e.Value.(ChannelUser))
+					jsonres += string(b) + ","
+				}
+				jsonres = jsonres[:len(jsonres)-1]
+				jsonres += "]}"
+				fmt.Fprint(w, jsonres)
 			}
-			jsonres = jsonres[:len(jsonres)-1]
-			jsonres += "]}"
-			fmt.Fprint(w, jsonres)
 		}
 	}
 }
