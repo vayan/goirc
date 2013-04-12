@@ -22,10 +22,13 @@ func (user *User) update_data_user() {
 
 // Retourne un ID pas utiliser pour buffer
 func (user *User) get_new_id_buffer() int {
-	if len(user.Buffers) == 0 {
-		return 0
+	if user.Buffers != nil {
+		if len(user.Buffers) == 0 {
+			return 0
+		}
+		return len(user.Buffers) + 1
 	}
-	return len(user.Buffers) + 1
+	return -1
 }
 
 // Retourne ID buffer base sur son nom + id server
@@ -40,37 +43,55 @@ func (user *User) find_id_buffer(channel string, server int) int {
 	return -1
 }
 
-// Retour l'id du serveur base sur l'id channel
-func (user *User) find_server_by_channel(channel int) int {
-	return user.Buffers[channel].id_serv
+// Retour l'id du serveur connecte base sur l'id channel
+func (user *User) find_connected_server_by_channel(channel int) int {
+	if buf, ok := user.Buffers[channel]; ok {
+		if buf.connected == true {
+			return buf.id_serv
+		}
+	}
+	return -1
 }
 
 //TODO : verif duplicate buffer
-func (user *User) add_buffer(name string, front_name string, addr string, id int, id_serv int) {
+func (user *User) add_buffer(name string, front_name string, addr string, id int, id_serv int) int {
 	// TODO : send new buffer to cl here, delete all other
 	name = strings.ToLower(name)
 	addr = strings.ToLower(addr)
-	new_buffer := Buffer{list.New(), list.New(), name, front_name, addr, id, id_serv, false}
-	user.Buffers[id] = &new_buffer
 
-	//Restore friends
-	server_buffer := user.Buffers[user.Buffers[id].id_serv]
-	if session := user.raw_session[server_buffer.name]; session != nil {
-		bff := strings.Split(session.friends, ",")
-		for _, f := range bff {
-			if len(f) > 0 {
-				user.Buffers[id].friends.PushBack(f)
+	for _, buf := range user.Buffers {
+		if buf.name == name && buf.id_serv == id_serv {
+			return -1
+		}
+	}
+	new_buffer := Buffer{list.New(), list.New(), name, front_name, addr, id, id_serv, false}
+	if user.Buffers != nil {
+		user.Buffers[id] = &new_buffer
+
+		//Restore friends
+		server_buffer := user.Buffers[user.Buffers[id].id_serv]
+		if session := user.raw_session[server_buffer.name]; session != nil {
+			bff := strings.Split(session.friends, ",")
+			for _, f := range bff {
+				if len(f) > 0 {
+					user.Buffers[id].friends.PushBack(f)
+				}
 			}
 		}
 	}
+	return 0
 }
 
 func (user *User) add_con_loop(id_buffer int) {
-	user.ircObj[id_buffer].irc.Loop()
+	if co, ok := user.ircObj[id_buffer]; ok {
+		co.irc.Loop()
+	}
 }
 
 func (user *User) start_connexion(id_buffer int, url string) {
-	user.ircObj[id_buffer].irc.Connect(url)
+	if co, ok := user.ircObj[id_buffer]; ok {
+		co.irc.Connect(url)
+	}
 }
 
 func (user *User) send_all_buffer() {
@@ -98,10 +119,12 @@ func (user *User) send_change_nick(id_buffer int, old_nick string, new_nick stri
 }
 
 func (user *User) close_buffer(id_buffer int) {
-	if user.Buffers[id_buffer].id_serv == id_buffer {
-		user.leave_network(id_buffer)
-	} else {
-		user.leave_channel(id_buffer, true)
+	if buf, ok := user.Buffers[id_buffer]; ok && buf.connected == true {
+		if buf.id_serv == id_buffer {
+			user.leave_network(id_buffer)
+		} else {
+			user.leave_channel(id_buffer, true)
+		}
 	}
 }
 

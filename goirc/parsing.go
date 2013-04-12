@@ -55,13 +55,15 @@ func parsemsg(id_user int, msg string) {
 
 		switch buff[0] {
 		case "/connect":
-			if len(buff[1]) > 0 {
+			if len(buff[1]) > 0 && all_users[id_user].connecting == false {
 				go all_users[id_user].connect_server(buff[1])
 			}
 			return
 		case "/join":
 			if len(buff[1]) > 0 {
-				go all_users[id_user].join_channel(user.find_server_by_channel(buffer_id), buff[1])
+				if id_ch := user.find_connected_server_by_channel(buffer_id); id_ch != -1 {
+					go all_users[id_user].join_channel(id_ch, buff[1])
+				}
 			}
 			return
 		case "/msg":

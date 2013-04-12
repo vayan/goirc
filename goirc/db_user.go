@@ -99,7 +99,9 @@ func get_restore_sessions() []*RestoreSession {
 	db := connect_sql()
 	defer db.Close()
 	rows, err := db.Query("SELECT id_user, server, channel, friends FROM session_save")
-	HandleErrorSql(err)
+	if err != nil {
+		return nil
+	}
 	restoresessions := make([]*RestoreSession, 0, 10)
 	var server, channel, friends string
 	var id_user int
@@ -151,7 +153,6 @@ func insert_new_server_session(id_user int, server string) {
 	db := connect_sql()
 	defer db.Close()
 	var sserver string
-
 	row := db.QueryRow("SELECT server FROM session_save WHERE id_user = ? AND server = ? ", id_user, server)
 	err := row.Scan(&sserver)
 	if len(sserver) < 1 {

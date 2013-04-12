@@ -37,13 +37,14 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 	if len(buf) > 200 {
 		return buf[0:200], erri
 	}
+	log.Printf("recv: '%s'", buf)
 	return buf, erri
 }
 
 func WsHandle(ws *websocket.Conn) {
 	log.Printf("Nouveau client %s", ws.Request().RemoteAddr)
 	newid := get_new_id_user()
-	us := &User{"nil", 0, newid, "Anon3123123123", false, UserSettings{false, true}, nil, nil, ws, nil}
+	us := &User{"nil", 0, newid, "Anon3123123123", false, false, UserSettings{false, true}, nil, nil, ws, nil}
 	all_users[newid] = us
 	for {
 

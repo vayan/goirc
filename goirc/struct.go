@@ -17,6 +17,7 @@ type User struct {
 	key         int
 	Nick        string
 	online      bool
+	connecting  bool
 	Settings    UserSettings
 	ircObj      map[int]*IrcConnec
 	Buffers     map[int]*Buffer

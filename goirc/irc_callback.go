@@ -40,13 +40,15 @@ func (user *User) on_user_list(id_buffer int) {
 
 func (user *User) on_connect(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("001", func(e *irc.Event) {
-		user.Buffers[id_buffer].connected = true
-		ws_send("buffer]"+strconv.Itoa(id_buffer)+"]"+user.Buffers[id_buffer].name+" "+user.ircObj[id_buffer].Nick, user.ws)
-		user.ircObj[id_buffer].Nick = user.ircObj[id_buffer].irc.GetNick()
-		ws_send("nick]"+strconv.Itoa(id_buffer)+"]"+user.ircObj[id_buffer].irc.GetNick(), user.ws)
-		user.ircObj[id_buffer].Nick = user.Nick
-		go insert_new_server_session(user.id, user.Buffers[id_buffer].name)
-		go restore_lost_channels(user.Buffers[id_buffer].name, user.Buffers[id_buffer].id_serv, user.key)
+		if buff, ok := user.Buffers[id_buffer]; ok {
+			buff.connected = true
+			ws_send("buffer]"+strconv.Itoa(id_buffer)+"]"+buff.name+" "+user.ircObj[id_buffer].Nick, user.ws)
+			user.ircObj[id_buffer].Nick = user.ircObj[id_buffer].irc.GetNick()
+			ws_send("nick]"+strconv.Itoa(id_buffer)+"]"+user.ircObj[id_buffer].irc.GetNick(), user.ws)
+			user.ircObj[id_buffer].Nick = user.Nick
+			go insert_new_server_session(user.id, buff.name)
+			go restore_lost_channels(buff.name, buff.id_serv, user.key)
+		}
 	})
 }
 
@@ -114,10 +116,14 @@ func (user *User) on_join(id_buffer int) {
 
 func (user *User) on_nick_change(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("NICK", func(e *irc.Event) {
-		if user.ircObj[user.Buffers[id_buffer].id_serv].Nick == e.Nick {
-			user.ircObj[user.Buffers[id_buffer].id_serv].Nick = e.Message
+		if chane, ok := user.Buffers[id_buffer]; ok {
+			if serv, ok := user.ircObj[chane.id_serv]; ok {
+				if serv.Nick == e.Nick {
+					serv.Nick = e.Message
+				}
+				go user.send_change_nick(id_buffer, e.Nick, e.Message)
+			}
 		}
-		go user.send_change_nick(id_buffer, e.Nick, e.Message)
 	})
 }
 
