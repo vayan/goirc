@@ -54,17 +54,17 @@ func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, serv_set.Cookie_session)
 
 	if need_perm(REGIST, r) {
-		user := get_user_id(session.Values["id"].(int))
-		buffers := user.Buffers
-		for _, buff := range buffers {
-			if buff.id == idbuffer {
-				backlog := get_backlog(user.id, user.Buffers[idbuffer].addr)
-				b, _ := json.Marshal(backlog)
-				fmt.Fprint(w, string(b))
-				return
+		if user := get_user_id(session.Values["id"].(int)); user != nil {
+			buffers := user.Buffers
+			for _, buff := range buffers {
+				if buff.id == idbuffer {
+					backlog := get_backlog(user.id, user.Buffers[idbuffer].addr)
+					b, _ := json.Marshal(backlog)
+					fmt.Fprint(w, string(b))
+					return
+				}
 			}
 		}
-
 	}
 }
 
