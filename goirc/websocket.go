@@ -10,7 +10,7 @@ func ws_send(buf string, ws *websocket.Conn) {
 	if ws == nil || len(buf) == 0 {
 		return
 	}
-	if err := websocket.Message.Send(ws, buf); err != nil {
+	if err := websocket.Message.Send(ws, string(buf)); err != nil {
 		log.Println(err)
 	}
 	log.Printf("send : '%s'", buf)
@@ -44,7 +44,7 @@ func ws_recv(ws *websocket.Conn) (string, int) {
 func WsHandle(ws *websocket.Conn) {
 	log.Printf("Nouveau client %s", ws.Request().RemoteAddr)
 	newid := get_new_id_user()
-	us := &User{"nil", 0, newid, "Anon3123123123", false, UserSettings{true, true}, nil, nil, ws, nil}
+	us := &User{"nil", 0, newid, "Anon3123123123", false, UserSettings{false, true}, nil, nil, ws, nil}
 	all_users[newid] = us
 	for {
 
