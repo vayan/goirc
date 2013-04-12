@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	_ "github.com/Go-SQL-Driver/MySQL"
-	"log"
 	"net/http"
 	"strconv"
 )
@@ -77,7 +76,6 @@ func UsersListHandler(w http.ResponseWriter, r *http.Request) {
 		jsonres := "{ \"UserList\":["
 		id := Atoi(r.FormValue("channel"))
 		session, _ := store.Get(r, serv_set.Cookie_session)
-		log.Print("USER ID : ", session.Values["id"].(int))
 		if us := get_user_id(session.Values["id"].(int)); us != nil {
 
 			if _, ok := us.Buffers[id]; ok && us.Buffers[id].users.Len() > 0 {

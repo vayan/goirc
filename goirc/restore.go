@@ -24,9 +24,11 @@ func restore_lost_server() {
 		} else {
 			keyuser = get_key_allusers_by_id(session.id_user)
 		}
-		go all_users[keyuser].connect_server(session.server)
-		all_users[keyuser].raw_session[session.server] = session
-		log.Print("RESTORING : ", pseudo, " reconnecting on ", session.server)
+		if use, ok := all_users[keyuser]; ok {
+			go use.connect_server(session.server)
+			use.raw_session[session.server] = session
+			log.Print("RESTORING : ", pseudo, " reconnecting on ", session.server)
+		}
 	}
 
 }
@@ -43,7 +45,7 @@ func restore_lost_channels(server string, server_id int, user_key int) {
 			channels := strings.Split(session.channel, ",")
 			for _, channel := range channels {
 				if len(channel) > 1 {
-					all_users[user_key].join_channel(server_id, channel)
+					go all_users[user_key].join_channel(server_id, channel)
 				}
 			}
 			return

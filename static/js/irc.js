@@ -136,7 +136,6 @@ var send_new_join_chan = function() {
 
 var load_irc = function() {
     var irc = $("#clientirc").html();
-    console.log("load irc");
     $('.content').html(irc);
     $(".inputtextirc").keyup(function(event) {
         if (event.keyCode == 13) {
