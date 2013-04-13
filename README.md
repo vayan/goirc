@@ -42,7 +42,7 @@ go get github.com/gorilla/schema
 go get github.com/gorilla/mux
 go get github.com/gorilla/sessions
 go get github.com/thoj/go-ircevent
-go get github.com/Go-SQL-Driver/MySQL
+go get github.com/go-sql-driver/mysql
 cd src
 git clone git@bitbucket.org:vayan/goirc.git
 cd goirc
