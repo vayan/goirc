@@ -24,7 +24,9 @@ func get_backlog(id_user int, buffer string) []BackLog {
 	db := connect_sql()
 	defer db.Close()
 	rows, err := db.Query("SELECT nick, message, time FROM logirc WHERE id_user = ? AND buffer = ? ORDER BY time ASC", id_user, buffer)
-	HandleErrorSql(err)
+	if err != nil {
+		return nil
+	}
 	backlog := make([]BackLog, 0, 10)
 	var nick, message, timesql string
 	for rows.Next() {
@@ -58,7 +60,9 @@ func get_preference() {
 	var max_lenght_pseudo string
 
 	ar, err := db.Query("SELECT * FROM preference")
-	HandleErrorSql(err)
+	if err != nil {
+		return
+	}
 	ar.Next()
 	err = ar.Scan(&name, &descr, &short_descr, &long_descr, &base_url, &max_lenght_pseudo)
 	Pref = Preference{name: name, descr: descr, short_descr: short_descr, long_descr: long_descr, base_url: base_url, max_lenght_pseudo: Atoi(max_lenght_pseudo)}
@@ -87,10 +91,9 @@ func update_settings(user User) {
 
 	row := db.QueryRow("SELECT id FROM users_settings WHERE id_user = ? ", user.id)
 	err := row.Scan(&id)
-	HandleErrorSql(err)
 	if err == sql.ErrNoRows {
 		create_settings(user)
-	} else {
+	} else if err == nil {
 		_, err = db.Exec(
 			"UPDATE users_settings SET notify = ?, save_session = ? WHERE id_user = ?",
 			user.Settings.Notify,

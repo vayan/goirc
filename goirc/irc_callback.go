@@ -107,7 +107,6 @@ func (user *User) on_join(id_buffer int) {
 		if id_buffer_chan = user.find_id_buffer(e.Message, id_buffer); id_buffer_chan == -1 {
 			return
 		}
-		log.Print("join user add to list")
 		chanuser := ChannelUser{e.Nick, strings.Replace(e.Nick, "@", "", 1), GenerateColor()}
 		user.Buffers[id_buffer_chan].users.PushBack(chanuser)
 		go ws_send("join]"+strconv.Itoa(id_buffer_chan)+"]"+e.Nick, user.ws)
@@ -143,12 +142,14 @@ func (user *User) on_whois(id_buffer int) {
 
 func (user *User) on_error(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("ERROR", func(e *irc.Event) {
+		user.Buffers[id_buffer].connected = false
 		//user.leave_channel(id_buffer, false)
 	})
 }
 
 func (user *User) on_kick(id_buffer int) {
 	user.ircObj[id_buffer].irc.AddCallback("KICK", func(e *irc.Event) {
+		user.Buffers[id_buffer].connected = false
 		//user.leave_channel(id_buffer, false)
 	})
 }

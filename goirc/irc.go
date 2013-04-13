@@ -8,7 +8,7 @@ import (
 
 func (user *User) add_connexion(nick string, whois string, id_buffer int) {
 	con := irc.IRC(nick, serv_set.Hostname_irc)
-	con.VerboseCallbackHandler = true //true for debug
+	con.VerboseCallbackHandler = false //true for debug
 	if user.ircObj != nil {
 		user.ircObj[id_buffer] = &IrcConnec{con, ""}
 	}

@@ -35,7 +35,6 @@ func GetFriendsHandler(w http.ResponseWriter, r *http.Request) {
 
 func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 	if need_perm(REGIST, r) {
-		//TODO : test si ws active
 		var allserv = make(map[string]string)
 		session, _ := store.Get(r, serv_set.Cookie_session)
 
@@ -52,7 +51,6 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
-	//TODO : check id correct
 	idbuffer := Atoi(r.FormValue("idbuffer"))
 	session, _ := store.Get(r, serv_set.Cookie_session)
 
@@ -61,9 +59,10 @@ func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 			buffers := user.Buffers
 			for _, buff := range buffers {
 				if buff.id == idbuffer {
-					backlog := get_backlog(user.id, user.Buffers[idbuffer].addr)
-					b, _ := json.Marshal(backlog)
-					fmt.Fprint(w, string(b))
+					if backlog := get_backlog(user.id, user.Buffers[idbuffer].addr); backlog != nil {
+						b, _ := json.Marshal(backlog)
+						fmt.Fprint(w, string(b))
+					}
 					return
 				}
 			}
