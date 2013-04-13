@@ -302,6 +302,7 @@ var add_new_buffer = function(id, name, nick) {
             for (var key in jsonres) {
                 html += gen_html_new_message(jsonres[key].Nick, jsonres[key].Message, jsonres[key].Time);
             }
+            html += "<tr class'sephist'><td colspan='3'></td></tr> "
             $('.contentbuffer #' + id + ' .allmsg').append(html);
         }
         //check_all_inline_element();
