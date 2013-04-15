@@ -1,5 +1,6 @@
 {
     "root_web": "templates/",
+    "go_path": "",
     "port_http": "1112",
     "cookie_session" : "ZebraLion",
     "db_server" : "69.85.88.161",

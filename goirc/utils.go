@@ -94,7 +94,7 @@ func EncryptPass(pass string) string {
 }
 
 func get_config_file() {
-	content, err := ioutil.ReadFile("conf.json")
+	content, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		log.Panicln("conf.json error : ", err)
 	}

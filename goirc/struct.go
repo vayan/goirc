@@ -60,6 +60,7 @@ type Buffer struct {
 
 type Server_Settings struct {
 	Root_web        string
+	Go_path         string
 	Port_http       string
 	Cookie_session  string
 	DB_server       string

@@ -9,14 +9,17 @@ import (
 )
 
 func main() {
-	os.Chdir(os.Getenv("GOPATH") + "/src/goirc")
 	rand.Seed(time.Now().UnixNano())
 	get_config_file()
+	if serv_set.Go_path == "" {
+		log.Fatal("No path in config file")
+	}
+	os.Chdir(serv_set.Go_path)
 	if !serv_set.Show_log {
 		log.SetOutput(ioutil.Discard)
 	}
 	log.SetFlags(log.Lshortfile)
-	connect_sql()
+	test_sql()
 	get_preference()
 	go restore_lost_server()
 	optimize_static_files()

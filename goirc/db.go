@@ -14,8 +14,20 @@ func HandleErrorSql(er error) bool {
 	return false
 }
 
+func test_sql() {
+	log.Print("=== TEST SQL ===")
+	_, err := sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
+	if err != nil {
+		log.Fatal(err)
+	}
+	log.Print("=== GOOD ===")
+}
+
 func connect_sql() *sql.DB {
-	db, _ := sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
+	db, err := sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
+	if err != nil {
+		log.Print(err)
+	}
 	return db
 }
 
