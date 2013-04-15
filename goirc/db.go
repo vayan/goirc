@@ -23,7 +23,8 @@ func connect_sql() *sql.DB {
 func get_backlog(id_user int, buffer string) []BackLog {
 	db := connect_sql()
 	defer db.Close()
-	rows, err := db.Query("SELECT nick, message, time FROM logirc WHERE id_user = ? AND buffer = ? ORDER BY time ASC", id_user, buffer)
+	//TODO : fix backlog time
+	rows, err := db.Query("SELECT nick, message, time FROM logirc WHERE id_user = ? AND buffer = ? ORDER BY time ASC LIMIT 0, 100", id_user, buffer)
 	if err != nil {
 		return nil
 	}
