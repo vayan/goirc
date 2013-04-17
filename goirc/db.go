@@ -16,7 +16,12 @@ func HandleErrorSql(er error) bool {
 
 func test_sql() {
 	log.Print("=== TEST SQL ===")
-	_, err := sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
+	db, err := sql.Open("mysql", serv_set.DB_user+":"+serv_set.DB_pass+"@("+serv_set.DB_server+":3306)/"+serv_set.DB_name+"?charset=utf8")
+	defer db.Close()
+	if err != nil {
+		log.Fatal(err)
+	}
+	_, err = db.Query("SELECT * FROM logirc ")
 	if err != nil {
 		log.Fatal(err)
 	}

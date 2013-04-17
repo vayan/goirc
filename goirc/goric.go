@@ -11,10 +11,13 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	get_config_file()
-	if serv_set.Go_path == "" {
+	if serv_set.Go_path == "env" {
+		os.Chdir(os.Getenv("GOPATH") + "/goirc")
+	} else if serv_set.Go_path == "" {
 		log.Fatal("No path in config file")
+	} else {
+		os.Chdir(serv_set.Go_path)
 	}
-	os.Chdir(serv_set.Go_path)
 	if !serv_set.Show_log {
 		log.SetOutput(ioutil.Discard)
 	}

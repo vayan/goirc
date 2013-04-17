@@ -94,14 +94,18 @@ func EncryptPass(pass string) string {
 }
 
 func get_config_file() {
+	if len(os.Args) <= 0 {
+		log.Panic("Usage : goirc conf.json")
+	}
 	content, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
-		log.Panicln("conf.json error : ", err)
+		log.Panic("conf.json error : ", err)
 	}
 	err = json.Unmarshal(content, &serv_set)
 	if err != nil {
-		log.Panicln("Error in conf.json : ", err)
+		log.Panic("Error in conf.json : ", err)
 	}
+	log.Print("dbname ", serv_set.DB_name)
 }
 
 func get_mail_hash(mail string) string {
