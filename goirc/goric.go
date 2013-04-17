@@ -8,6 +8,11 @@ import (
 	"time"
 )
 
+//
+// if go_path in conf.json is "env" the GOPATH env is used
+//
+//
+
 func main() {
 	rand.Seed(time.Now().UnixNano())
 	get_config_file()
@@ -24,6 +29,7 @@ func main() {
 	log.SetFlags(log.Lshortfile)
 	test_sql()
 	get_preference()
+	get_network()
 	go restore_lost_server()
 	optimize_static_files()
 	start_http_server()

@@ -105,7 +105,6 @@ func get_config_file() {
 	if err != nil {
 		log.Panic("Error in conf.json : ", err)
 	}
-	log.Print("dbname ", serv_set.DB_name)
 }
 
 func get_mail_hash(mail string) string {

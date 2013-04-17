@@ -36,6 +36,28 @@ func connect_sql() *sql.DB {
 	return db
 }
 
+func get_network() {
+	db := connect_sql()
+	defer db.Close()
+
+	rows, err := db.Query("SELECT * FROM network")
+	if err != nil {
+		return
+	}
+	net := make([]*Network, 0, 1)
+	var name, adress string
+	var id, port, limit int
+
+	for rows.Next() {
+		err = rows.Scan(&id, &name, &adress, &port, &limit)
+		if err != nil {
+			// TODO : Handle error
+		}
+		net = append(net, &Network{id, name, adress, port, limit, 0})
+	}
+	network = net
+}
+
 // Get backlog from channel
 func get_backlog(id_user int, buffer string) []BackLog {
 	db := connect_sql()
@@ -45,7 +67,7 @@ func get_backlog(id_user int, buffer string) []BackLog {
 	if err != nil {
 		return nil
 	}
-	backlog := make([]BackLog, 0, 10)
+	backlog := make([]BackLog, 0, 1)
 	var nick, message, timesql string
 	for rows.Next() {
 		err = rows.Scan(&nick, &message, &timesql)

@@ -107,3 +107,12 @@ type UserStats struct {
 	CloudWords      string
 	MsgSend         int
 }
+
+type Network struct {
+	id                int
+	name              string
+	adress            string
+	port              int
+	limit             int
+	current_connected int
+}

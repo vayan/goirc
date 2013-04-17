@@ -41,16 +41,23 @@ func (user *User) connect_server(url string) {
 				return
 			}
 		}
-		id_buffer := user.get_new_id_buffer()
-		if id_buffer != -1 {
-			user.connecting = true
-			user.add_buffer(urlport[0], urlport[0], url, id_buffer, id_buffer)
-			user.add_connexion(user.Nick, "test", id_buffer)
-			user.start_connexion(id_buffer, url)
-			user.add_all_callback(id_buffer)
-			user.connecting = false
-			user.add_con_loop(id_buffer)
+		for _, net := range network {
+			if urlport[0] == net.adress && net.current_connected < net.limit {
+				id_buffer := user.get_new_id_buffer()
+				if id_buffer != -1 {
+					user.connecting = true
+					net.current_connected = net.current_connected + 1
+					user.add_buffer(urlport[0], urlport[0], url, id_buffer, id_buffer)
+					user.add_connexion(user.Nick, "test", id_buffer)
+					user.start_connexion(id_buffer, url)
+					user.add_all_callback(id_buffer)
+					user.connecting = false
+					user.add_con_loop(id_buffer)
+				}
+				return
+			}
 		}
+		user.connecting = false
 	}
 }
 
@@ -75,6 +82,16 @@ func (user *User) leave_network(id_buffer_chan int) {
 	//TODO : remove all buffer channel
 	id_ircobj := user.Buffers[id_buffer_chan].id_serv
 	if co, ok := user.Buffers[id_ircobj]; ok {
+		for _, net := range network {
+			if user.Buffers[id_ircobj].name == net.adress {
+				//free space
+				net.current_connected = net.current_connected - 1
+				if net.current_connected < 0 {
+					net.current_connected = 0
+				}
+				break
+			}
+		}
 		co.connected = false
 		remove_server_session(user.id, co.name)
 		user.ircObj[id_ircobj].irc.Quit()

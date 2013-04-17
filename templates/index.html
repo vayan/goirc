@@ -76,7 +76,7 @@
 
       <div class="menu-irc btn-toolbar unselect">
         <div class="btn-group">
-          <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+          <a id="connectnetwork" class="btn dropdown-toggle" data-toggle="dropdown" href="#">
             Connect to new server
             <span class="caret"></span>
           </a>
@@ -84,8 +84,9 @@
           <li>
             <span class="form-inline" id="formsetserv">
               <form>
-                <input required type="text" name="adressserv" id="adressserv" placeholder="Server's adress" /> <span class="sepport"> : </span>
-                <input type="text" class="fourdigit" name="portserv" id="portserv" value="6667"/>
+                <select id="selectnetwork">
+
+                </select>
                 <button type="submit" class="btn" name="sendserv" id="sendserv">Connect</button>
               </form>
             </span>

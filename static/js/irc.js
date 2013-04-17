@@ -119,9 +119,9 @@ var ChangePage = function(page) {
 };
 
 var send_new_co_serv = function() {
-    var msg = "log]/connect " + $("#adressserv").val() + ":" + $("#portserv").val();
+    var msg = "log]/connect " + $("#selectnetwork").val();
     ws.send(msg);
-    new_message("log", "log", "Connecting to " + $("#adressserv").val() + "...");
+    new_message("log", "log", "Connecting to " + $("#selectnetwork").val() + "...");
     $(".menu-irc > .selected").click();
 };
 
@@ -156,6 +156,20 @@ var load_irc = function() {
                 jsonres = JSON.parse(data);
                 for (var key in jsonres) {
                     $("#idnetwork").append("<option "+select+" value='" + jsonres[key] + "'>" + key + "</option>");
+                    select = "";
+                }
+            }
+        });
+    });
+
+    $("#connectnetwork").click(function() {
+        $("#selectnetwork").html("");
+        var select = "selected=\"selected\"";
+        $.ajax({url: "ajx/set-server"}).done(function(data){
+            if (data !== '') {
+                jsonres = JSON.parse(data);
+                for (var key in jsonres) {
+                    $("#selectnetwork").append("<option "+select+" value='" + jsonres[key] + "'>" + key + "</option>");
                     select = "";
                 }
             }

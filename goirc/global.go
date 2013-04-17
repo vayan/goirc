@@ -13,8 +13,9 @@ const (
 
 var (
 	all_users = make(map[int]*User)
-	Pref      Preference
 	decoder   = schema.NewDecoder()
 	store     = sessions.NewCookieStore([]byte("supersecretkeydelamortquitue"))
 	serv_set  Server_Settings
+	network   []*Network
+	Pref      Preference
 )

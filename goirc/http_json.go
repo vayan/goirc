@@ -50,6 +50,23 @@ func SetChanHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func SetServHandler(w http.ResponseWriter, r *http.Request) {
+	if need_perm(REGIST, r) {
+		var allnet = make(map[string]string)
+		session, _ := store.Get(r, serv_set.Cookie_session)
+
+		if us := get_user_id(session.Values["id"].(int)); us != nil {
+			for _, net := range network {
+				if net.current_connected < net.limit {
+					allnet[net.name] = net.adress
+				}
+			}
+			b, _ := json.Marshal(allnet)
+			fmt.Fprint(w, string(b))
+		}
+	}
+}
+
 func ActionBacklogHandler(w http.ResponseWriter, r *http.Request) {
 	idbuffer := Atoi(r.FormValue("idbuffer"))
 	session, _ := store.Get(r, serv_set.Cookie_session)
