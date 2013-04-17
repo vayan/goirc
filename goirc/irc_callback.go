@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bitbucket.org/vayan/gouri"
 	"github.com/thoj/go-ircevent"
 	"log"
 	"strconv"
@@ -13,6 +14,7 @@ func (user *User) add_all_callback(id_buffer int) {
 	user.on_message(id_buffer)
 	user.on_user_list(id_buffer)
 	user.on_nick_used(id_buffer)
+	user.on_nick_err(id_buffer)
 	user.on_nick_change(id_buffer)
 	user.on_part(id_buffer)
 	user.on_join(id_buffer)
@@ -127,10 +129,18 @@ func (user *User) on_nick_change(id_buffer int) {
 }
 
 func (user *User) on_nick_used(id_buffer int) {
-	//TODO : randomize random pseudo
 	user.ircObj[id_buffer].irc.AddCallback("433", func(e *irc.Event) {
-		user.change_nick(id_buffer, "_"+user.Nick)
-		user.Nick = "_" + user.Nick
+		randomstring := gouri.New(5)
+		user.change_nick(id_buffer, user.Nick+randomstring)
+		user.Nick = user.Nick + randomstring
+	})
+}
+
+func (user *User) on_nick_err(id_buffer int) {
+	user.ircObj[id_buffer].irc.AddCallback("432", func(e *irc.Event) {
+		randomstring := gouri.New(5)
+		user.change_nick(id_buffer, randomstring)
+		user.Nick = randomstring
 	})
 }
 

@@ -8,7 +8,7 @@ import (
 
 func (user *User) add_connexion(nick string, whois string, id_buffer int) {
 	con := irc.IRC(nick, serv_set.Hostname_irc)
-	con.VerboseCallbackHandler = false //true for debug
+	con.VerboseCallbackHandler = serv_set.Show_log_irc //true for debug
 	if user.ircObj != nil {
 		user.ircObj[id_buffer] = &IrcConnec{con, ""}
 	}
@@ -119,7 +119,7 @@ func (user *User) send_me(id_buffer int, msg string) {
 }
 
 func (user *User) change_nick(id_buffer int, newnick string) {
-	if buf, ok := user.Buffers[id_buffer]; ok && buf.connected == true {
-		user.ircObj[user.Buffers[id_buffer].id_serv].irc.Nick(newnick)
+	if buf, ok := user.Buffers[id_buffer]; ok {
+		user.ircObj[buf.id_serv].irc.Nick(newnick)
 	}
 }

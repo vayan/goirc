@@ -69,6 +69,7 @@ type Server_Settings struct {
 	DB_pass         string
 	Restore_session bool
 	Show_log        bool
+	Show_log_irc    bool
 	Log_in_file     bool
 	Hostname_irc    string
 }
