@@ -10,6 +10,11 @@ import (
 	"strconv"
 )
 
+type Page struct {
+	Title string
+	Data  map[string]interface{}
+}
+
 func need_perm(need_defcon int, r *http.Request) bool {
 	defcon := ANON
 
